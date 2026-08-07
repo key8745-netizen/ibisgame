@@ -1,0 +1,570 @@
+/* ── Variables ──────────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: dark;
+  --ink:    #f8f5e8;
+  --muted:  #aeb6ce;
+  --panel:  #111629;
+  --gold:   #f6d365;
+  --cyan:   #67d8e5;
+  --shadow: #080b15;
+  --fg: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", "Noto Sans TC", monospace;
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { min-height: 100%; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(70,87,146,.45), transparent 45%),
+              linear-gradient(180deg, #111629 0%, #080b15 100%);
+  color: var(--ink);
+  font-family: var(--mono);
+  overflow-x: hidden;
+}
+
+button, kbd { font: inherit; }
+
+/* ── Shell ──────────────────────────────────────────────────────────────────── */
+.shell {
+  width: min(1920px, 100%);
+  margin: 0 auto;
+  padding: 18px clamp(8px, 2vw, 30px) 28px;
+}
+
+/* ── Topbar ─────────────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: .19em;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(18px, 2.5vw, 30px);
+  letter-spacing: .08em;
+  text-shadow: 0 3px 0 #080b15;
+}
+.top-actions { display: flex; gap: 8px; }
+.icon-button {
+  border: 1px solid #4a557d;
+  border-radius: 5px;
+  background: #202847;
+  color: var(--ink);
+  padding: 8px 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #080b15;
+}
+.icon-button:hover,
+.icon-button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ── Game wrapper ───────────────────────────────────────────────────────────── */
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* ── Game frame (canvas + overlays) ────────────────────────────────────────── */
+.game-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 3px solid #56638d;
+  border-radius: 7px;
+  background: #080b15;
+  box-shadow: 0 0 0 3px #111629, 0 18px 45px rgba(0,0,0,.55);
+  isolation: isolate;
+}
+
+canvas#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  touch-action: none;
+}
+
+/* ── Loading card ───────────────────────────────────────────────────────────── */
+.loading-card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  background: #111629;
+  z-index: 5;
+  transition: opacity .25s ease;
+}
+.loading-card.hidden { opacity: 0; pointer-events: none; }
+.star-loader {
+  color: var(--gold);
+  font-size: 34px;
+  animation: pulse 1s steps(4) infinite;
+}
+@keyframes pulse { 50% { transform: scale(1.2) rotate(45deg); opacity: .55; } }
+
+/* ── DOM UI overlay base ────────────────────────────────────────────────────── */
+.ui-layer {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Character HUD (top-left) ───────────────────────────────────────────────── */
+#ui-char-hud { top: 0; left: 0; padding: clamp(4px, 1.2%, 8px); }
+
+.char-hud-box {
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 1.2%, 8px);
+  background: rgba(10, 15, 36, 0.90);
+  border: 2px solid var(--char-color, #40e0d0);
+  border-radius: 5px;
+  padding: clamp(4px, 0.9%, 7px) clamp(6px, 1.4%, 10px);
+  backdrop-filter: blur(4px);
+  min-width: clamp(100px, 24%, 170px);
+}
+
+.char-portrait {
+  width:  clamp(22px, 4.8%, 32px);
+  height: clamp(22px, 4.8%, 32px);
+  border-radius: 3px;
+  border: 1.5px solid var(--char-color, #40e0d0);
+  flex-shrink: 0;
+  background: #181e38;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.char-portrait::after {
+  content: '';
+  display: block;
+  width: 55%;
+  height: 70%;
+  border-radius: 3px 3px 2px 2px;
+  background: var(--char-color, #40e0d0);
+  opacity: 0.6;
+}
+
+.char-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.char-name {
+  font-family: var(--fg);
+  font-size: clamp(11px, 2.4%, 18px);
+  font-weight: 800;
+  color: var(--char-color, #40e0d0);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.char-role {
+  font-family: var(--fg);
+  font-size: clamp(9px, 1.6%, 13px);
+  font-weight: 600;
+  color: rgba(174, 182, 206, 0.85);
+  white-space: nowrap;
+}
+
+/* ── Mission HUD (top-right) ────────────────────────────────────────────────── */
+#ui-mission-hud { top: 0; right: 0; padding: clamp(4px, 1.2%, 8px); }
+
+.mission-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(10, 15, 36, 0.90);
+  border: 2px solid #505878;
+  border-radius: 5px;
+  padding: clamp(4px, 0.9%, 7px) clamp(6px, 1.4%, 10px);
+  backdrop-filter: blur(4px);
+  min-width: clamp(80px, 20%, 140px);
+}
+.mission-label {
+  font-family: var(--fg);
+  font-size: clamp(9px, 1.6%, 14px);
+  font-weight: 700;
+  color: var(--gold);
+}
+.mission-icons {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: nowrap;
+}
+.mission-node {
+  width:  clamp(7px, 1.5%, 10px);
+  height: clamp(7px, 1.5%, 10px);
+  border: 1.5px solid var(--node-color, #40e0d0);
+  border-radius: 1px;
+  background: transparent;
+  flex-shrink: 0;
+}
+.mission-node.done { background: var(--node-color, #40e0d0); }
+.mission-sep {
+  width: 1px;
+  height: clamp(9px, 1.8%, 14px);
+  background: #303450;
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+.mission-person {
+  width:  clamp(5px, 1%, 8px);
+  height: clamp(8px, 1.8%, 13px);
+  border-radius: 3px 3px 1px 1px;
+  background: var(--person-color, #f6d365);
+  opacity: 0.35;
+  flex-shrink: 0;
+  transition: opacity .2s;
+}
+.mission-person.rescued { opacity: 1; }
+.mission-bar-track {
+  height: 3px;
+  background: #202438;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mission-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.35s ease;
+}
+
+/* ── Wrong-char / co-op hint (top centre) ───────────────────────────────────── */
+#ui-top-hint {
+  top: clamp(6px, 2%, 18px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.hint-box {
+  font-family: var(--fg);
+  font-size: clamp(11px, 2.4%, 14px);
+  font-weight: 800;
+  color: var(--hint-color, #40e0d0);
+  background: rgba(6, 10, 22, 0.92);
+  border: 2px solid var(--hint-color, #40e0d0);
+  border-radius: 5px;
+  padding: clamp(3px, 0.7%, 5px) clamp(10px, 2%, 16px);
+  backdrop-filter: blur(4px);
+}
+
+/* ── Interaction prompt (bottom centre) ─────────────────────────────────────── */
+#ui-prompt {
+  bottom: clamp(8px, 2.5%, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.prompt-box {
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 1%, 8px);
+  font-family: var(--fg);
+  font-size: clamp(10px, 2.2%, 14px);
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(10, 15, 36, 0.92);
+  border: 2px solid var(--gold);
+  border-radius: 5px;
+  padding: clamp(3px, 0.7%, 5px) clamp(10px, 2%, 16px);
+  backdrop-filter: blur(4px);
+}
+.prompt-box kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid #4a557d;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: #202847;
+  font-size: inherit;
+  color: var(--ink);
+}
+
+/* ── Dialogue overlay (desktop: bottom of game-frame) ───────────────────────── */
+#ui-dialogue { bottom: 0; left: 0; right: 0; }
+
+.dlg-box {
+  margin: clamp(5px, 1.2%, 10px);
+  background: rgba(10, 15, 40, 0.95);
+  border: 2px solid #6068a0;
+  border-radius: 6px;
+  padding: clamp(7px, 1.6%, 12px) clamp(10px, 2%, 16px);
+  backdrop-filter: blur(6px);
+}
+.dlg-speaker {
+  font-family: var(--fg);
+  font-size: clamp(13px, 2.8%, 18px);
+  font-weight: 800;
+  margin-bottom: clamp(3px, 0.6%, 5px);
+  line-height: 1.2;
+}
+.dlg-body {
+  font-family: var(--fg);
+  font-size: clamp(13px, 2.6%, 16px);
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.dlg-advance {
+  text-align: right;
+  font-size: clamp(9px, 1.5%, 12px);
+  color: var(--gold);
+  margin-top: 3px;
+  animation: blink-dlg .65s steps(2) infinite;
+}
+@keyframes blink-dlg { 50% { opacity: 0; } }
+
+/* ── Mode overlays (title / pause / win) ────────────────────────────────────── */
+#ui-title,
+#ui-pause,
+#ui-win {
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(3, 5, 14, 0.82);
+}
+
+/* Title */
+.title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(5px, 1.4%, 12px);
+  padding: clamp(10px, 2.5%, 24px);
+}
+.title-studio {
+  font-family: var(--fg);
+  font-size: clamp(9px, 1.7%, 13px);
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: var(--gold);
+}
+.title-main {
+  margin: 0;
+  font-family: var(--fg);
+  font-size: clamp(18px, 5%, 42px);
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-shadow: 0 4px 0 #080b15;
+  color: var(--ink);
+}
+.title-sub {
+  font-family: var(--fg);
+  font-size: clamp(11px, 2.2%, 16px);
+  font-weight: 600;
+  color: var(--cyan);
+}
+.title-desc {
+  background: rgba(8, 16, 30, 0.92);
+  border: 1px solid #4a5280;
+  border-radius: 5px;
+  padding: clamp(6px, 1.4%, 14px) clamp(12px, 2.5%, 26px);
+}
+.title-desc p {
+  margin: 0 0 4px;
+  font-family: var(--fg);
+  font-size: clamp(11px, 2%, 15px);
+  font-weight: 600;
+  color: var(--ink);
+}
+.title-desc p:last-child { margin: 0; }
+.title-start {
+  font-family: var(--fg);
+  font-size: clamp(13px, 2.8%, 20px);
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: .04em;
+}
+.title-start.blink { color: #c8a840; }
+.title-controls {
+  font-family: var(--fg);
+  font-size: clamp(9px, 1.5%, 13px);
+  color: rgba(96, 112, 160, 0.9);
+}
+
+/* Pause */
+.pause-screen {
+  background: rgba(8, 16, 30, 0.96);
+  border: 2px solid #6068a0;
+  border-radius: 8px;
+  padding: clamp(16px, 4%, 36px) clamp(24px, 6%, 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(7px, 1.6%, 14px);
+}
+.pause-title {
+  margin: 0;
+  font-family: var(--fg);
+  font-size: clamp(18px, 4.5%, 30px);
+  font-weight: 800;
+  color: var(--gold);
+}
+.pause-screen p {
+  margin: 0;
+  font-family: var(--fg);
+  font-size: clamp(13px, 2.6%, 20px);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Win */
+.win-screen {
+  background: rgba(8, 16, 30, 0.96);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: clamp(16px, 4%, 40px) clamp(24px, 6%, 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2%, 16px);
+  max-width: clamp(260px, 72%, 500px);
+}
+.win-title {
+  margin: 0;
+  font-family: var(--fg);
+  font-size: clamp(22px, 5.5%, 38px);
+  font-weight: 800;
+  color: var(--gold);
+  text-shadow: 0 3px 0 #080b15;
+}
+.win-body p {
+  margin: 0 0 4px;
+  font-family: var(--fg);
+  font-size: clamp(12px, 2.3%, 16px);
+  font-weight: 600;
+  color: var(--ink);
+}
+.win-stage {
+  font-family: var(--fg);
+  font-size: clamp(11px, 2%, 15px);
+  font-weight: 700;
+  color: var(--cyan);
+}
+.win-prompt {
+  font-family: var(--fg);
+  font-size: clamp(12px, 2.3%, 16px);
+  font-weight: 700;
+  color: var(--gold);
+  animation: blink-dlg .9s steps(2) infinite;
+}
+.win-prompt.blink { color: #c8a840; }
+
+/* ── Mobile: dialogue below canvas ─────────────────────────────────────────── */
+.dialogue-ext {
+  display: none; /* shown only on touch devices via .open class */
+  background: rgba(10, 15, 40, 0.98);
+  border: 2px solid #6068a0;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
+.dialogue-ext.open { display: block; }
+.dialogue-ext .dlg-box { margin: 0; border: none; border-radius: 0; backdrop-filter: none; }
+
+/* ── Touch controls (outside game-frame) ────────────────────────────────────── */
+.touch-controls {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: rgba(11, 14, 28, 0.92);
+  border-top: 1px solid rgba(86, 99, 141, 0.4);
+  pointer-events: none;
+}
+.touch-controls button {
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(17, 22, 41, .72);
+  color: white;
+  box-shadow: 0 3px 0 rgba(0,0,0,.45);
+}
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 3px;
+}
+.dpad button { border-radius: 8px; }
+.dpad .up    { grid-column: 2; grid-row: 1; }
+.dpad .left  { grid-column: 1; grid-row: 2; }
+.dpad .down  { grid-column: 2; grid-row: 3; }
+.dpad .right { grid-column: 3; grid-row: 2; }
+.action-pad { display: flex; align-items: center; gap: 14px; }
+.action-pad button { border-radius: 50%; font-weight: 700; font-size: 14px; }
+.action-pad .action { width: 70px; height: 70px; background: rgba(155,54,81,.78); }
+.action-pad .switch { width: 54px; height: 54px; background: rgba(35,113,130,.78); }
+.dpad button.is-pressed,
+.action-pad button.is-pressed {
+  background: rgba(64,224,208,0.3);
+  transform: scale(0.9);
+  transition: transform .05s ease;
+}
+
+/* ── Instructions ───────────────────────────────────────────────────────────── */
+.instructions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 18px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+kbd {
+  display: inline-block;
+  min-width: 24px;
+  padding: 2px 5px;
+  border: 1px solid #4a557d;
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  background: #202847;
+  color: var(--ink);
+  text-align: center;
+}
+
+/* ── Mobile overrides ───────────────────────────────────────────────────────── */
+@media (hover: none), (pointer: coarse) {
+  /* Touch controls visible */
+  .touch-controls { display: flex; }
+  /* Mobile: no overlay dialogue inside game-frame; use .dialogue-ext below */
+  #ui-dialogue { display: none !important; }
+  .instructions { font-size: 10px; }
+}
+
+@media (max-width: 680px) {
+  .shell { padding: 6px 6px 10px; }
+  .topbar { align-items: center; margin-bottom: 4px; }
+  .eyebrow { display: none; }
+  h1 { font-size: 16px; }
+  .icon-button { padding: 6px 8px; font-size: 11px; }
+  .instructions { display: none; }
+  .game-frame { border-width: 2px; border-radius: 3px 3px 0 0; }
+  .dialogue-ext { border-radius: 0; }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .star-loader { animation: none; }
+  .loading-card { transition: none; }
+  .dpad button.is-pressed,
+  .action-pad button.is-pressed { transform: none; }
+  .dlg-advance, .win-prompt { animation: none; }
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>C01 可達性測試</title>
+  <style>
+    body { font-family: monospace; background: #0a0f20; color: #d0d8f0; padding: 24px; }
+    h1 { color: #f0d040; margin-bottom: 4px; }
+    .subtitle { color: #8090b0; font-size: 13px; margin-bottom: 24px; }
+    .result { font-size: 16px; font-weight: bold; margin: 16px 0 8px; }
+    .pass { color: #60e090; }
+    .fail { color: #e06040; }
+    pre { background: #111829; padding: 14px; border-radius: 5px; font-size: 12px;
+          white-space: pre-wrap; max-height: 420px; overflow-y: auto; color: #b0c0e0; }
+    .verdict { margin-top: 20px; font-size: 20px; font-weight: bold; padding: 12px 20px;
+               display: inline-block; border-radius: 6px; }
+    .verdict.pass { background: #0c3020; color: #60e090; border: 2px solid #60e090; }
+    .verdict.fail { background: #300c0c; color: #e06040; border: 2px solid #e06040; }
+  </style>
+</head>
+<body>
+  <h1>C01 · 轉運橋救援  — 可達性測試</h1>
+  <p class="subtitle">驗證 24 種節點修復順序 + 6 種救援順序均可完成，無自我封鎖</p>
+  <div id="output">執行中…</div>
+  <script type="module" src="./c01-reachability.js"></script>
+</body>
+</html>

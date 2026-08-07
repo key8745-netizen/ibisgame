@@ -24,7 +24,7 @@ const YOHANI = {
 };
 
 // 像素圖：珊妮（紫粉系）
-const SHANI = {
+const SANI = {
   hair: '#2c1c38',
   hairHL: '#4a3060',
   skin: '#c88a68',
@@ -127,7 +127,7 @@ export class Character {
     this.walkFrame = 0;
     this.stepTimer = 0;
     this.glow = 0;         // 0..1 切換後的閃光殘留
-    this.pal = id === 'yohani' ? YOHANI : SHANI;
+    this.pal = id === 'yohani' ? YOHANI : SANI;
   }
 
   get center() { return { x: this.x + this.w / 2, y: this.y + this.h / 2 }; }

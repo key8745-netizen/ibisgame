@@ -7,7 +7,7 @@ import {
   TILE, WORLD_W, WORLD_H, isWalkable, getBakedMap,
 } from './world/map.js';
 import {
-  NODE_DEFS, RESCUEE_DEFS, YOHANI_START, SHANI_START,
+  NODE_DEFS, RESCUEE_DEFS, YOHANI_START, SANI_START,
   SAVE_KEY, SAVE_VERSION, WALKABLE, validateSave, isVictory,
   BOTH_RESCUE_RADIUS,
 } from './c01-level.js';
@@ -52,7 +52,7 @@ class Game {
 
     this.chars = [
       new Character('yohani', YOHANI_START.x, YOHANI_START.y),
-      new Character('shani',  SHANI_START.x,  SHANI_START.y),
+      new Character('sani',   SANI_START.x,   SANI_START.y),
     ];
     this.activeIdx = 0;
     this.chars[0].activate();
@@ -179,8 +179,8 @@ class Game {
       }
       if (rescuee.requirement === 'both') {
         const yohaniNear = dist(this.chars[0].center, rescuee.center) <= BOTH_RESCUE_RADIUS;
-        const shaniNear  = dist(this.chars[1].center, rescuee.center) <= BOTH_RESCUE_RADIUS;
-        if (!yohaniNear || !shaniNear) {
+        const saniNear   = dist(this.chars[1].center, rescuee.center) <= BOTH_RESCUE_RADIUS;
+        if (!yohaniNear || !saniNear) {
           this.dialogue.say('迷路的孩子', '可以讓你們兩個都靠近我嗎？我怕走散。', 'system');
           audio.deny();
           return;
@@ -320,7 +320,7 @@ class Game {
       '轉運橋的正式結構與地下例外道路同時崩解。切換尤哈尼（藍）與珊妮（粉），讓兩條路重新接上。',
       'system');
     this.dialogue.say('尤哈尼', '我先穩住橋面。珊妮，你找得到下面的路嗎？', 'yohani');
-    this.dialogue.say('珊妮',   '找得到。但別替我決定走哪裡。需要改路，我會告訴你。', 'shani');
+    this.dialogue.say('珊妮',   '找得到。但別替我決定走哪裡。需要改路，我會告訴你。', 'sani');
   }
 
   // ── 相機 ──────────────────────────────────────────────────────────────────

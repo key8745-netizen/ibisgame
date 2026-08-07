@@ -20,14 +20,14 @@ export const WALKABLE = {
 };
 
 export const YOHANI_START = { x: 10 * TILE, y: 14 * TILE };
-export const SHANI_START  = { x: 10 * TILE, y: 24 * TILE };
+export const SANI_START   = { x: 10 * TILE, y: 24 * TILE };
 
 // 修復節點——全部在 tx ≤ 38，確保任何修復順序都不會自我封鎖
 export const NODE_DEFS = [
   { id: 'support-west', x: 20 * TILE, y: 14 * TILE, type: 'console', required: 'yohani', label: '西側橋梁支撐' },
   { id: 'support-east', x: 38 * TILE, y: 14 * TILE, type: 'console', required: 'yohani', label: '東側橋梁支撐' },
-  { id: 'seal-lower',   x: 22 * TILE, y: 24 * TILE, type: 'seal',    required: 'shani',  label: '地下例外道路' },
-  { id: 'seal-upper',   x: 38 * TILE, y: 24 * TILE, type: 'seal',    required: 'shani',  label: '上層封鎖標記' },
+  { id: 'seal-lower',   x: 22 * TILE, y: 24 * TILE, type: 'seal',    required: 'sani',  label: '地下例外道路' },
+  { id: 'seal-upper',   x: 38 * TILE, y: 24 * TILE, type: 'seal',    required: 'sani',  label: '上層封鎖標記' },
 ];
 
 // 破損阻擋區——全部在 tx ≥ 44，位於所有修復節點以東
@@ -41,7 +41,7 @@ export const BREACH_DEFS = [
 // 受困者——在東側，只有所有節點修復後才可抵達
 export const RESCUEE_DEFS = [
   { id: 'formal',      x: 67 * TILE, y: 14 * TILE, name: '橋面居民',   requirement: 'yohani' },
-  { id: 'underground', x: 67 * TILE, y: 24 * TILE, name: '地下同行者', requirement: 'shani'  },
+  { id: 'underground', x: 67 * TILE, y: 24 * TILE, name: '地下同行者', requirement: 'sani'  },
   { id: 'child',       x: 72 * TILE, y: 19 * TILE, name: '迷路的孩子', requirement: 'both'   },
 ];
 

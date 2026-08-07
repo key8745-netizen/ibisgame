@@ -41,7 +41,7 @@ function wrapText(ctx, text, x, y, maxW, lineH, color = C.text) {
 function portrait(ctx, x, y, id) {
   ctx.fillStyle = '#181e38';
   ctx.fillRect(x, y, 30, 30);
-  ctx.fillStyle = id === 'yohani' ? C.glow_cyan : id === 'shani' ? C.glow_pink : '#a0a0b0';
+  ctx.fillStyle = id === 'yohani' ? C.glow_cyan : id === 'sani' ? C.glow_pink : '#a0a0b0';
   ctx.fillRect(x,      y,      30, 2);
   ctx.fillRect(x,      y,      2,  30);
   ctx.fillRect(x + 28, y,      2,  30);
@@ -53,7 +53,7 @@ function portrait(ctx, x, y, id) {
     ctx.fillStyle = '#4a6898'; ctx.fillRect(x + 6, y + 18, 18, 9);
     ctx.fillStyle = '#101828'; ctx.fillRect(x + 11, y + 13, 2, 2); ctx.fillRect(x + 17, y + 13, 2, 2);
     ctx.fillStyle = '#6a88b8'; ctx.fillRect(x + 8, y + 18, 14, 2);
-  } else if (id === 'shani') {
+  } else if (id === 'sani') {
     ctx.fillStyle = '#2c1c38'; ctx.fillRect(x + 6, y + 3,  18, 10);
     ctx.fillStyle = '#c88a68'; ctx.fillRect(x + 8, y + 9,  14, 10);
     ctx.fillStyle = '#8c4870'; ctx.fillRect(x + 6, y + 18, 18, 9);
@@ -127,7 +127,7 @@ export class DialogueBox {
     portrait(ctx, x + 7, y + 7, this.current.portraitId);
 
     ctx.fillStyle = this.current.portraitId === 'yohani' ? C.glow_cyan
-                  : this.current.portraitId === 'shani'  ? C.glow_pink
+                  : this.current.portraitId === 'sani'  ? C.glow_pink
                   : C.glow_gold;
     ctx.font = 'bold 8px monospace';
     ctx.fillText(this.current.speaker, x + 44, y + 16);
@@ -206,7 +206,7 @@ export function drawMissionHUD(ctx, nodes, rescuees, objective, viewW) {
   // 3 個受困者人物圖示
   for (const r of rescuees) {
     const color = r.requirement === 'yohani' ? C.glow_cyan
-                : r.requirement === 'shani'  ? C.glow_pink
+                : r.requirement === 'sani'  ? C.glow_pink
                 : C.glow_gold;
     drawPersonIcon(ctx, dotX, dotY - 1, color, r.rescued);
     dotX += 8 + dotPad;

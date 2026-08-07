@@ -2,7 +2,7 @@
 import {
   TILE, MAP_COLS, MAP_ROWS, WORLD_W, WORLD_H,
   NODE_DEFS, BREACH_DEFS, RESCUEE_DEFS,
-  YOHANI_START, SHANI_START, BOTH_RESCUE_RADIUS,
+  YOHANI_START, SANI_START, BOTH_RESCUE_RADIUS,
   isWalkable, validateSave, SAVE_VERSION,
 } from '../src/c01-level.js';
 
@@ -61,7 +61,7 @@ function testNodeOrderings() {
 
     for (const nodeIdx of perm) {
       const node = NODE_DEFS[nodeIdx];
-      const start = node.required === 'yohani' ? YOHANI_START : SHANI_START;
+      const start = node.required === 'yohani' ? YOHANI_START : SANI_START;
 
       if (!bfsCanReach(start.x, start.y, node.x, node.y, repairedSet)) {
         failures.push(`順序 [${perm.map((i) => NODE_DEFS[i].id).join(' → ')}] 卡關於 ${node.id}`);
@@ -91,14 +91,14 @@ function testRescueOrderings() {
           failures.push(`救援順序 [${perm.map((i) => RESCUEE_DEFS[i].id).join(' → ')}]：尤哈尼無法抵達 ${r.id}`);
           break;
         }
-      } else if (r.requirement === 'shani') {
-        if (!bfsCanReach(SHANI_START.x, SHANI_START.y, r.x, r.y, allRepaired)) {
+      } else if (r.requirement === 'sani') {
+        if (!bfsCanReach(SANI_START.x, SANI_START.y, r.x, r.y, allRepaired)) {
           failures.push(`救援順序 [${perm.map((i) => RESCUEE_DEFS[i].id).join(' → ')}]：珊妮無法抵達 ${r.id}`);
           break;
         }
       } else if (r.requirement === 'both') {
         const yOk = bfsCanReach(YOHANI_START.x, YOHANI_START.y, r.x, r.y, allRepaired);
-        const sOk = bfsCanReach(SHANI_START.x,  SHANI_START.y,  r.x, r.y, allRepaired);
+        const sOk = bfsCanReach(SANI_START.x,  SANI_START.y,  r.x, r.y, allRepaired);
         if (!yOk || !sOk) {
           failures.push(`救援順序 [${perm.map((i) => RESCUEE_DEFS[i].id).join(' → ')}]：` +
             `${!yOk ? '尤哈尼' : '珊妮'} 無法抵達 ${r.id}`);
@@ -188,7 +188,7 @@ function testConnectors() {
   const child = RESCUEE_DEFS.find((r) => r.requirement === 'both');
   if (!bfsCanReach(YOHANI_START.x, YOHANI_START.y, child.x, child.y, allRepaired))
     failures.push('尤哈尼全修復後無法抵達迷路的孩子');
-  if (!bfsCanReach(SHANI_START.x,  SHANI_START.y,  child.x, child.y, allRepaired))
+  if (!bfsCanReach(SANI_START.x,  SANI_START.y,  child.x, child.y, allRepaired))
     failures.push('珊妮全修復後無法抵達迷路的孩子');
 
   return { label: '連接梯道雙向可達 + 孩子可達', failures };
@@ -200,7 +200,7 @@ function testSaveValidationExtended() {
   const failures = [];
   const basePos  = [
     { x: YOHANI_START.x, y: YOHANI_START.y },
-    { x: SHANI_START.x,  y: SHANI_START.y  },
+    { x: SANI_START.x,  y: SANI_START.y  },
   ];
   const base = { version: SAVE_VERSION, objective: 0, repaired: [], rescued: [], positions: basePos };
 
@@ -219,11 +219,11 @@ function testSaveValidationExtended() {
   if (oobMaxX && oobMaxX.positions !== null) failures.push('x>=WORLD_W 應使 positions=null');
 
   // OOB — y < 0
-  const oobNegY = validateSave({ ...base, positions: [basePos[0], { x: SHANI_START.x, y: -1 }] });
+  const oobNegY = validateSave({ ...base, positions: [basePos[0], { x: SANI_START.x, y: -1 }] });
   if (oobNegY && oobNegY.positions !== null) failures.push('y<0 應使 positions=null');
 
   // OOB — y >= WORLD_H
-  const oobMaxY = validateSave({ ...base, positions: [basePos[0], { x: SHANI_START.x, y: WORLD_H }] });
+  const oobMaxY = validateSave({ ...base, positions: [basePos[0], { x: SANI_START.x, y: WORLD_H }] });
   if (oobMaxY && oobMaxY.positions !== null) failures.push('y>=WORLD_H 應使 positions=null');
 
   // Infinity

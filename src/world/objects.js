@@ -33,7 +33,7 @@ export class RepairNode {
     this.x = x;
     this.y = y;
     this.type = type;       // 'console' | 'seal'
-    this.required = required; // 'yohani' | 'shani'
+    this.required = required; // 'yohani' | 'sani'
     this.label = label;
     this.done = false;
     this.pulse = hash2(x, y) * Math.PI * 2;
@@ -120,7 +120,7 @@ export class RepairNode {
 
 const RESCUEE_PALETTES = {
   yohani: { coat: '#4a6098', coatHigh: '#6a80b8', hair: '#3a2838', skin: '#d0a070' },
-  shani:  { coat: '#904878', coatHigh: '#b06898', hair: '#2a1830', skin: '#c08060' },
+  sani:   { coat: '#904878', coatHigh: '#b06898', hair: '#2a1830', skin: '#c08060' },
   both:   { coat: '#8a7030', coatHigh: '#c0a040', hair: '#1a2030', skin: '#d8a878' },
 };
 

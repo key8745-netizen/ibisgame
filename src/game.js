@@ -178,8 +178,9 @@ class Game {
         return;
       }
       if (rescuee.requirement === 'both') {
-        const d = dist(this.chars[0].center, this.chars[1].center);
-        if (d > BOTH_RESCUE_RADIUS) {
+        const yohaniNear = dist(this.chars[0].center, rescuee.center) <= BOTH_RESCUE_RADIUS;
+        const shaniNear  = dist(this.chars[1].center, rescuee.center) <= BOTH_RESCUE_RADIUS;
+        if (!yohaniNear || !shaniNear) {
           this.dialogue.say('迷路的孩子', '可以讓你們兩個都靠近我嗎？我怕走散。', 'system');
           audio.deny();
           return;
@@ -199,6 +200,17 @@ class Game {
   }
 
   allNodesRepaired() { return this.nodes.every((n) => n.done); }
+
+  getBothRescueHintState() {
+    if (!this.allNodesRepaired()) return null;
+    const child = this.rescuees.find((r) => r.requirement === 'both' && !r.rescued);
+    if (!child) return null;
+    const yNear = dist(this.chars[0].center, child.center) <= BOTH_RESCUE_RADIUS;
+    const sNear = dist(this.chars[1].center, child.center) <= BOTH_RESCUE_RADIUS;
+    if (yNear === sNear) return null;
+    if (yNear) return { text: '等珊妮',   color: '#e040a0', worldX: this.chars[1].x, worldY: this.chars[1].y };
+    return           { text: '等尤哈尼', color: '#40e0d0', worldX: this.chars[0].x, worldY: this.chars[0].y };
+  }
 
   checkObjective() {
     const repaired = this.nodes.filter((n) => n.done).length;
@@ -415,6 +427,15 @@ class Game {
         const arrowTargets = this.getOffscreenTargets();
         if (arrowTargets.length) {
           drawOffscreenArrows(c, arrowTargets, { x: cx, y: cy }, VIEW_W, VIEW_H);
+        }
+
+        // 合作救援持續提示（一人在場一人未到時）
+        if (!this.wrongCharHint) {
+          const coopHint = this.getBothRescueHintState();
+          if (coopHint) {
+            drawWrongCharHint(c, coopHint.text, coopHint.color, VIEW_W, VIEW_H);
+            drawOffscreenArrows(c, [{ worldX: coopHint.worldX, worldY: coopHint.worldY, color: coopHint.color }], { x: cx, y: cy }, VIEW_W, VIEW_H);
+          }
         }
       }
     }

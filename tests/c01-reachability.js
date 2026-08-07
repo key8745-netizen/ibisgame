@@ -1,6 +1,6 @@
-// C01 可達性測試——BFS 驗證 24 種節點順序 + 6 種救援順序。無外部依賴。
+// C01 可達性測試——BFS 驗證 24 種節點順序 + 6 種救援順序 + 連接梯道 + 存檔強化。無外部依賴。
 import {
-  TILE, MAP_COLS, MAP_ROWS,
+  TILE, MAP_COLS, MAP_ROWS, WORLD_W, WORLD_H,
   NODE_DEFS, BREACH_DEFS, RESCUEE_DEFS,
   YOHANI_START, SHANI_START, BOTH_RESCUE_RADIUS,
   isWalkable, validateSave, SAVE_VERSION,
@@ -161,6 +161,97 @@ function testNoSelfBlock() {
   return { label: '節點不在破損區內', failures };
 }
 
+// ── 測試：連接梯道雙向可達 ────────────────────────────────────────────────────
+
+function testConnectors() {
+  const failures    = [];
+  const noRepairs   = new Set();
+  const allRepaired = new Set(NODE_DEFS.map((n) => n.id));
+
+  // 西連接梯道：無修復即可上下互通
+  const wUpX = 7 * TILE + TILE / 2;  const wUpY  = 14 * TILE + TILE / 2;
+  const wDnX = 7 * TILE + TILE / 2;  const wDnY  = 24 * TILE + TILE / 2;
+  if (!bfsCanReach(wUpX, wUpY, wDnX, wDnY, noRepairs))
+    failures.push('西連接梯道：上層→地道 無修復時不可達');
+  if (!bfsCanReach(wDnX, wDnY, wUpX, wUpY, noRepairs))
+    failures.push('西連接梯道：地道→上層 無修復時不可達');
+
+  // 東連接梯道：需全修復方可上下互通
+  const eUpX = 72 * TILE + TILE / 2; const eUpY  = 14 * TILE + TILE / 2;
+  const eDnX = 72 * TILE + TILE / 2; const eDnY  = 24 * TILE + TILE / 2;
+  if (!bfsCanReach(eUpX, eUpY, eDnX, eDnY, allRepaired))
+    failures.push('東連接梯道：上層→地道 全修復後不可達');
+  if (!bfsCanReach(eDnX, eDnY, eUpX, eUpY, allRepaired))
+    failures.push('東連接梯道：地道→上層 全修復後不可達');
+
+  // 兩個角色都能抵達迷路的孩子（全修復）
+  const child = RESCUEE_DEFS.find((r) => r.requirement === 'both');
+  if (!bfsCanReach(YOHANI_START.x, YOHANI_START.y, child.x, child.y, allRepaired))
+    failures.push('尤哈尼全修復後無法抵達迷路的孩子');
+  if (!bfsCanReach(SHANI_START.x,  SHANI_START.y,  child.x, child.y, allRepaired))
+    failures.push('珊妮全修復後無法抵達迷路的孩子');
+
+  return { label: '連接梯道雙向可達 + 孩子可達', failures };
+}
+
+// ── 測試：存檔驗證（擴充）────────────────────────────────────────────────────
+
+function testSaveValidationExtended() {
+  const failures = [];
+  const basePos  = [
+    { x: YOHANI_START.x, y: YOHANI_START.y },
+    { x: SHANI_START.x,  y: SHANI_START.y  },
+  ];
+  const base = { version: SAVE_VERSION, objective: 0, repaired: [], rescued: [], positions: basePos };
+
+  // 起始點座標應通過
+  const valid = validateSave(base);
+  if (!valid || valid.positions === null)
+    failures.push('起始點座標應為有效 positions');
+
+  // OOB — x < 0：positions 設為 null，整份存檔仍有效
+  const oobNegX = validateSave({ ...base, positions: [{ x: -1, y: YOHANI_START.y }, basePos[1]] });
+  if (!oobNegX)               failures.push('x<0 不應拒絕整份存檔');
+  if (oobNegX && oobNegX.positions !== null) failures.push('x<0 應使 positions=null');
+
+  // OOB — x >= WORLD_W
+  const oobMaxX = validateSave({ ...base, positions: [{ x: WORLD_W, y: YOHANI_START.y }, basePos[1]] });
+  if (oobMaxX && oobMaxX.positions !== null) failures.push('x>=WORLD_W 應使 positions=null');
+
+  // OOB — y < 0
+  const oobNegY = validateSave({ ...base, positions: [basePos[0], { x: SHANI_START.x, y: -1 }] });
+  if (oobNegY && oobNegY.positions !== null) failures.push('y<0 應使 positions=null');
+
+  // OOB — y >= WORLD_H
+  const oobMaxY = validateSave({ ...base, positions: [basePos[0], { x: SHANI_START.x, y: WORLD_H }] });
+  if (oobMaxY && oobMaxY.positions !== null) failures.push('y>=WORLD_H 應使 positions=null');
+
+  // Infinity
+  const infPos = validateSave({ ...base, positions: [{ x: Infinity, y: YOHANI_START.y }, basePos[1]] });
+  if (infPos && infPos.positions !== null) failures.push('Infinity 座標應使 positions=null');
+
+  // 非可行走區域（所有區域外）
+  const nonWalk = validateSave({ ...base, positions: [{ x: 50 * TILE, y: 5 * TILE }, basePos[1]] });
+  if (nonWalk && nonWalk.positions !== null) failures.push('不可行走區域座標應使 positions=null');
+
+  // 破損區（未修復）— support-west: tx:44-48, ty:12-16
+  const breachX = 45 * TILE, breachY = 14 * TILE;
+  const inBreach = validateSave({ ...base, repaired: [], positions: [{ x: breachX, y: breachY }, basePos[1]] });
+  if (inBreach && inBreach.positions !== null)
+    failures.push('破損區（未修復）座標應使 positions=null');
+
+  // 破損區（已修復）— 應為有效
+  const fixedBreach = validateSave({ ...base, repaired: ['support-west'], positions: [{ x: breachX, y: breachY }, basePos[1]] });
+  if (!fixedBreach || fixedBreach.positions === null)
+    failures.push('修復後破損區座標應為有效 positions');
+
+  // 無效位置不應拒絕整份存檔——repaired/rescued 應保留
+  if (!oobNegX || !Array.isArray(oobNegX.repaired))
+    failures.push('positions 無效時 repaired 應仍被保留');
+
+  return { label: '存檔驗證（擴充）', failures };
+}
+
 // ── 渲染結果 ──────────────────────────────────────────────────────────────────
 
 function render(suites) {
@@ -191,6 +282,8 @@ const suites = [
   testNodeOrderings(),
   testRescueOrderings(),
   testSaveValidation(),
+  testConnectors(),
+  testSaveValidationExtended(),
 ];
 
 render(suites);

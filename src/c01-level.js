@@ -8,6 +8,8 @@ export const WORLD_W = MAP_COLS * TILE;
 export const WORLD_H = MAP_ROWS * TILE;
 export const SAVE_VERSION = 2;
 export const SAVE_KEY = 'ibisgame-c01-v2';
+export const CHAR_W = 14;
+export const CHAR_H = 14;
 
 // 可行走區域（圖塊座標，含邊界）
 export const WALKABLE = {
@@ -68,6 +70,17 @@ export function isWalkable(worldX, worldY, repaired) {
   return true;
 }
 
+function _positionValid(x, y, repairedSet) {
+  if (x < 0 || x >= WORLD_W || y < 0 || y >= WORLD_H) return false;
+  const corners = [
+    [x + 2,          y + CHAR_H - 2],
+    [x + CHAR_W - 2, y + CHAR_H - 2],
+    [x + 2,          y + CHAR_H + 2],
+    [x + CHAR_W - 2, y + CHAR_H + 2],
+  ];
+  return corners.every(([cx, cy]) => isWalkable(cx, cy, repairedSet));
+}
+
 export function validateSave(raw) {
   if (!raw || typeof raw !== 'object') return null;
   if (raw.version !== SAVE_VERSION) return null;
@@ -77,6 +90,7 @@ export function validateSave(raw) {
   const rescued = Array.isArray(raw.rescued)
     ? raw.rescued.filter((id) => VALID_RESCUEE_IDS.has(id))
     : [];
+  const repairedSet = new Set(repaired);
   let positions = null;
   if (Array.isArray(raw.positions) && raw.positions.length === 2) {
     const ps = raw.positions.map((p) =>
@@ -85,7 +99,9 @@ export function validateSave(raw) {
         ? { x: p.x | 0, y: p.y | 0 }
         : null,
     );
-    if (ps.every(Boolean)) positions = ps;
+    if (ps.every(Boolean) && ps.every((pos) => _positionValid(pos.x, pos.y, repairedSet))) {
+      positions = ps;
+    }
   }
   return {
     version:   SAVE_VERSION,

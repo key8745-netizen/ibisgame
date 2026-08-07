@@ -1,0 +1,8 @@
+{
+  "scene": "Title with reduced motion",
+  "viewport": "1280×720",
+  "dpr": 1,
+  "reducedMotion": true,
+  "commit": "ef3b73f",
+  "timestamp": "2026-08-07T14:42:46.326Z"
+}

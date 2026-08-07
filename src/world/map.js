@@ -51,6 +51,11 @@ export const C = {
   dangerCrack: '#8a2030', warnOrange: '#cc6820', warnYellow: '#cca820',
   patchBlue: '#2a4a6a', patchEdge: '#3a6a8a',
 
+  // Environment polish additions
+  moss: '#2c4428', mossHigh: '#3c5c36',
+  damp: '#121c28', dampGlow: '#1e3448',
+  tunnelFloor: '#1a1006',
+
   glow_cyan: '#40e0d0', glow_pink: '#e040a0', glow_gold: '#f0d040',
   lamp: '#ffe860', lampPost: '#303450', lampGlow: 'rgba(255,240,100,0.18)',
 
@@ -141,29 +146,59 @@ function drawBridgeStructure(p, repaired) {
 
   // 橋墩（每 16 格一根）
   for (let px = BRIDGE_TX0 * TILE; px <= BRIDGE_TX1 * TILE; px += 16 * TILE) {
-    const pw       = 10;
-    const pillarX  = px + TILE / 2 - pw / 2;
+    const pw        = 10;
+    const pillarX   = px + TILE / 2 - pw / 2;
     const pillarTop = deckBot;
     const pillarBot = LOWER_TY1 * TILE + TILE;
     p.rect(pillarX, pillarTop, pw, pillarBot - pillarTop, C.pillar0);
     p.vline(pillarX,          pillarTop, pillarBot - pillarTop, C.pillarEdge);
     p.vline(pillarX + pw - 1, pillarTop, pillarBot - pillarTop, C.pillarEdge);
     p.rect(pillarX - 2, pillarTop, pw + 4, 3, C.pillarTop);
+    // Rust dots
     for (let ry = pillarTop + 5; ry < pillarBot; ry += 7) {
       if (hash2(px, ry) > 0.78) p.rect(pillarX + 2, ry, 3, 2, C.rust);
     }
+    // Rust streaks (variation)
+    for (let ry = pillarTop + 3; ry < pillarBot - 4; ry += 14) {
+      if (hash2(px + 7, ry) > 0.68) {
+        const sl = 4 + (hash2(px + 7, ry + 1) * 9 | 0);
+        p.vline(pillarX + 3, ry, sl, C.rust);
+        if (hash2(px + 9, ry) > 0.5) p.vline(pillarX + 6, ry + 2, sl - 2, C.rust);
+      }
+    }
   }
 
+  // 橋面鋪板
   p.rect(BRIDGE_TX0 * TILE, deckTop, (BRIDGE_TX1 - BRIDGE_TX0) * TILE, deckH, C.deck1);
   for (let ty = deckTop + 4; ty < deckBot - 4; ty += 3) {
     p.hline(BRIDGE_TX0 * TILE, ty, (BRIDGE_TX1 - BRIDGE_TX0) * TILE, C.deckPlank);
   }
-  p.rect(BRIDGE_TX0 * TILE, deckTop,      (BRIDGE_TX1 - BRIDGE_TX0) * TILE, 3, C.deckEdge);
-  p.rect(BRIDGE_TX0 * TILE, deckBot - 3,  (BRIDGE_TX1 - BRIDGE_TX0) * TILE, 3, C.deck0);
+  p.rect(BRIDGE_TX0 * TILE, deckTop,     (BRIDGE_TX1 - BRIDGE_TX0) * TILE, 3, C.deckEdge);
+  p.rect(BRIDGE_TX0 * TILE, deckBot - 3, (BRIDGE_TX1 - BRIDGE_TX0) * TILE, 3, C.deck0);
 
+  // 欄杆立柱
   for (let gx = BRIDGE_TX0 * TILE; gx <= BRIDGE_TX1 * TILE; gx += 12) {
     p.rect(gx, deckTop - 6, 2, 8, C.steel);
     p.hline(gx - 6, deckTop - 5, 14, C.cable);
+  }
+
+  // 水平橫梁（桁架，加強工業感）
+  for (let px = BRIDGE_TX0 * TILE; px < BRIDGE_TX1 * TILE; px += 16 * TILE) {
+    const beamEnd = Math.min(px + 16 * TILE, BRIDGE_TX1 * TILE);
+    p.hline(px, deckBot - 4, beamEnd - px, C.steel);
+    p.hline(px, deckBot - 3, beamEnd - px, C.pillarEdge);
+  }
+
+  // 破損區邊緣警示條紋（黃黑相間）
+  for (const { ty0: by0, tx0: bx0, tx1: bx1 } of BREACH_DEFS) {
+    if (by0 >= LOWER_TY0) continue;
+    const zxStart = Math.max(BRIDGE_TX0 * TILE, bx0 * TILE - 4);
+    const zxEnd   = Math.min(BRIDGE_TX1 * TILE, (bx1 + 1) * TILE + 4);
+    for (let hx = zxStart; hx < zxEnd; hx += 8) {
+      const col = (((hx - zxStart) / 8) | 0) % 2 === 0 ? C.warnYellow : '#181010';
+      p.rect(hx, deckTop, Math.min(4, zxEnd - hx), 3, col);
+      p.rect(hx, deckBot - 3, Math.min(4, zxEnd - hx), 3, col);
+    }
   }
 
   drawCables(p, deckTop);
@@ -202,22 +237,34 @@ function drawBridgeBreaches(p, repaired, deckTop, deckBot) {
     const worldY = by0 * TILE;
     const worldH = (by1 - by0 + 1) * TILE;
     if (repaired.has(id)) {
+      // 修復：結構補丁＋狀態燈
       p.rect(worldX, worldY, worldW, worldH, C.patchBlue);
       p.frame(worldX, worldY, worldW, worldH, C.patchEdge);
-      for (let cy = worldY + 3; cy < worldY + worldH - 3; cy += 4) {
-        p.hline(worldX + 3, cy, worldW - 6, C.deckPlank);
+      for (let cy = worldY + 4; cy < worldY + worldH - 4; cy += 5) {
+        p.hline(worldX + 4, cy, worldW - 8, C.deckPlank);
       }
+      // 十字加固紋
+      p.vline(worldX + worldW / 2 | 0, worldY + 4, worldH - 8, C.patchEdge);
+      // 綠色狀態燈（靜態，動態閃爍在 game.js 疊加）
+      p.rect(worldX + worldW - 7, worldY + 2, 5, 5, '#124028');
+      p.rect(worldX + worldW - 6, worldY + 3, 3, 3, '#20e070');
     } else {
+      // 損毀：虛空＋警示條紋
       p.rect(worldX, worldY, worldW, worldH, C.sky0);
+      // 兩側警示帶（黃黑）
+      for (let s = 0; s < worldH; s += 7) {
+        const col = ((s / 7 | 0) % 2 === 0) ? C.warnYellow : '#201010';
+        p.rect(worldX, worldY + s, 4, Math.min(4, worldH - s), col);
+        p.rect(worldX + worldW - 4, worldY + s, 4, Math.min(4, worldH - s), col);
+      }
       p.frame(worldX, worldY, worldW, worldH, C.dangerCrack);
+      // 裂縫紋路
       for (let i = 0; i < 5; i += 1) {
-        const cx  = worldX + 3 + Math.floor(hash2(bx0 * 10 + i, 8) * (worldW - 6));
-        const cy0 = worldY + Math.floor(hash2(bx0 * 10 + i, 9) * worldH * 0.4);
-        const cy1 = cy0 + 4 + Math.floor(hash2(bx0 * 10 + i, 10) * 10);
+        const cx  = worldX + 5 + (hash2(bx0 * 10 + i, 8) * (worldW - 10) | 0);
+        const cy0 = worldY + (hash2(bx0 * 10 + i, 9) * worldH * 0.4 | 0);
+        const cy1 = cy0 + 4 + (hash2(bx0 * 10 + i, 10) * 10 | 0);
         p.vline(cx, cy0, cy1 - cy0, C.dangerCrack);
       }
-      p.rect(worldX, worldY, 3, worldH, '#331010');
-      p.rect(worldX + worldW - 3, worldY, 3, worldH, '#331010');
     }
   }
 }
@@ -264,28 +311,69 @@ function drawTunnelSection(p, repaired) {
   const tx1 = (BRIDGE_TX1 + 1) * TILE;
   const h   = ty1 - ty0;
 
-  // 主體（琥珀底）
+  // 主體（琥珀棕底）
   p.rect(tx0, ty0, tx1 - tx0, h, C.tunnel1);
-  // 天花板
-  p.rect(tx0, ty0, tx1 - tx0, 4, C.tunnel2);
+
+  // 天花板（重壓感）
+  p.rect(tx0, ty0, tx1 - tx0, 5, C.tunnel2);
+  p.hline(tx0, ty0, tx1 - tx0, C.tunnelEdge);
+
   // 地板
-  p.rect(tx0, ty1 - 4, tx1 - tx0, 4, C.tunnel0);
+  p.rect(tx0, ty1 - 5, tx1 - tx0, 5, C.tunnel0);
+  p.hline(tx0, ty1 - 5, tx1 - tx0, C.tunnelEdge);
 
   // 壁面橫紋
-  for (let ty = ty0 + 6; ty < ty1 - 4; ty += 9) {
+  for (let ty = ty0 + 7; ty < ty1 - 5; ty += 9) {
     p.hline(tx0, ty, tx1 - tx0, C.tunnel2);
   }
 
   // 管道（鐵鏽紅框＋苔綠高光）
   for (let px = tx0 + 28; px < tx1; px += 48) {
-    p.rect(px, ty0 + 4, 6, 6, C.tunnelPipe);
-    p.hline(px, ty0 + 4, 6, C.tunnelPipeHigh);
-    p.hline(px, ty0 + 10, 6, C.tunnel0);
+    p.rect(px, ty0 + 5, 6, 6, C.tunnelPipe);
+    p.hline(px, ty0 + 5, 6, C.tunnelPipeHigh);
+    p.hline(px, ty0 + 11, 6, C.tunnel0);
   }
 
-  // 側邊框
+  // 側邊牆框
   p.rect(tx0, ty0, 4, h, C.tunnelEdge);
   p.rect(tx1 - 4, ty0, 4, h, C.tunnelEdge);
+
+  // 苔蘚斑（兩側壁面）
+  for (let ty = ty0 + 10; ty < ty1 - 10; ty += 18) {
+    if (hash2(tx0 * 3 + 1, ty) > 0.38) {
+      const mw = 4 + (hash2(tx0, ty) * 8 | 0);
+      p.rect(tx0 + 4, ty, mw, 4, C.moss);
+      p.hline(tx0 + 4, ty, mw, C.mossHigh);
+    }
+    if (hash2(tx1 * 3 - 1, ty) > 0.38) {
+      const mw = 4 + (hash2(tx1, ty) * 8 | 0);
+      p.rect(tx1 - 4 - mw, ty, mw, 4, C.moss);
+      p.hline(tx1 - 4 - mw, ty, mw, C.mossHigh);
+    }
+  }
+
+  // 滲水痕跡（從天花板向下的滲漏紋）
+  for (let dx = tx0 + 14; dx < tx1; dx += 30) {
+    if (hash2(dx, ty0 * 5) > 0.46) {
+      const dl = 6 + (hash2(dx, ty0 * 5 + 1) * 16 | 0);
+      p.vline(dx, ty0 + 5, dl, C.damp);
+      if (hash2(dx + 1, ty0 * 5) > 0.5) p.px(dx + 1, ty0 + 5 + dl, C.damp);
+    }
+  }
+
+  // 地面路徑痕跡（中心磨損紋）
+  const midX = (tx0 + tx1) / 2 | 0;
+  const pathW = (tx1 - tx0) * 5 / 8 | 0;
+  p.rect(midX - pathW / 2 | 0, ty1 - 5, pathW, 2, C.tunnelFloor);
+
+  // 水坑反光（地面局部積水）
+  for (let px = tx0 + 45; px < tx1 - 45; px += 78) {
+    if (hash2(px, ty1 * 2) > 0.40) {
+      const pw = 12 + (hash2(px, ty1 * 2 + 1) * 20 | 0);
+      p.rect(px, ty1 - 7, pw, 2, C.damp);
+      p.hline(px + 2, ty1 - 7, pw - 4, C.dampGlow);
+    }
+  }
 
   // 地道破損
   drawTunnelBreaches(p, repaired);
@@ -299,17 +387,32 @@ function drawTunnelBreaches(p, repaired) {
     const worldY = by0 * TILE;
     const worldH = (by1 - by0 + 1) * TILE;
     if (repaired.has(id)) {
+      // 修復：網格補丁＋狀態燈
       p.rect(worldX, worldY, worldW, worldH, C.patchBlue);
       p.frame(worldX, worldY, worldW, worldH, C.patchEdge);
+      for (let cy = worldY + 5; cy < worldY + worldH - 5; cy += 7) {
+        p.hline(worldX + 5, cy, worldW - 10, C.patchEdge);
+      }
+      p.vline(worldX + worldW / 2 | 0, worldY + 5, worldH - 10, C.patchEdge);
+      // 狀態燈
+      p.rect(worldX + worldW - 7, worldY + 2, 5, 5, '#124028');
+      p.rect(worldX + worldW - 6, worldY + 3, 3, 3, '#20e070');
     } else {
+      // 損毀：黑洞＋橙黑警示帶＋驚嘆號
       p.rect(worldX, worldY, worldW, worldH, C.tunnel0);
+      // 兩側警示帶（橙黑）
+      for (let s = 0; s < worldH; s += 7) {
+        const col = ((s / 7 | 0) % 2 === 0) ? C.warnOrange : '#1a0c06';
+        p.rect(worldX, worldY + s, 4, Math.min(4, worldH - s), col);
+        p.rect(worldX + worldW - 4, worldY + s, 4, Math.min(4, worldH - s), col);
+      }
       p.frame(worldX, worldY, worldW, worldH, C.dangerCrack);
-      const cx = worldX + Math.floor(worldW / 2);
-      const cy = worldY + Math.floor(worldH / 2);
-      p.rect(cx - 5, cy - 5, 10, 10, C.warnOrange);
-      p.rect(cx - 3, cy - 3, 6, 6, C.tunnel0);
-      p.vline(cx, cy - 2, 5, C.warnOrange);
-      p.rect(cx - 1, cy + 2, 3, 1, C.warnOrange);
+      // 驚嘆號（更大、更清晰）
+      const cx = worldX + (worldW / 2 | 0);
+      const cy = worldY + (worldH / 2 | 0);
+      p.rect(cx - 3, cy - 10, 7, 2, C.warnOrange);
+      p.rect(cx - 2, cy - 8, 5, 8, C.warnOrange);
+      p.rect(cx - 2, cy + 2, 5, 4, C.warnOrange);
     }
   }
 }

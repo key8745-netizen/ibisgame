@@ -9,7 +9,7 @@ import {
 import {
   NODE_DEFS, RESCUEE_DEFS, YOHANI_START, SANI_START,
   SAVE_KEY, SAVE_VERSION, WALKABLE, validateSave, isVictory,
-  BOTH_RESCUE_RADIUS,
+  BOTH_RESCUE_RADIUS, BREACH_DEFS,
 } from './c01-level.js';
 import { RepairNode, Rescuee } from './world/objects.js';
 import { Character } from './world/characters.js';
@@ -141,6 +141,7 @@ class Game {
       }
       node.done = true;
       this.repaired.add(node.id);
+      player.triggerInteract();
       if (!prefersReducedMotion) this.camera.shake = 0.6;
       this.particles.repairFlash(
         node.x + TILE / 2, node.y + TILE / 2,
@@ -184,6 +185,7 @@ class Game {
         }
       }
       rescuee.rescued = true;
+      player.triggerInteract();
       this.particles.rescueFlash(rescuee.x + 6, rescuee.y + 6);
       if (!prefersReducedMotion) this.camera.shake = 0.4;
       audio.fanfare();
@@ -397,6 +399,9 @@ class Game {
     // 水面動態波紋（每幀疊加）
     this.drawWaterAnimation(p);
 
+    // 破損區動態效果（火花 / 狀態燈）
+    this.drawBreachEffects(p, cx, cy);
+
     // 雲層
     this.drawClouds(p);
 
@@ -426,6 +431,57 @@ class Game {
     }
 
     ctx.drawImage(offscreen, 0, 0);
+  }
+
+  // ── 破損區動態效果（火花 / 狀態燈）──────────────────────────────────────────
+  drawBreachEffects(p, cx, cy) {
+    if (prefersReducedMotion) return;
+    const t = this.time;
+    for (const { id, tx0: bx0, tx1: bx1, ty0: by0, ty1: by1 } of BREACH_DEFS) {
+      const wx = bx0 * TILE;
+      const ww = (bx1 - bx0 + 1) * TILE;
+      const wy = by0 * TILE;
+      const wh = (by1 - by0 + 1) * TILE;
+      const sx = (wx - cx) | 0;
+      const sy = (wy - cy) | 0;
+      if (sx + ww < 0 || sx > VIEW_W || sy + wh < 0 || sy > VIEW_H) continue;
+
+      if (this.repaired.has(id)) {
+        // 修復：狀態燈緩慢閃爍
+        const on = Math.sin(t * 1.8) > 0.15;
+        if (on) {
+          p.ctx.fillStyle = '#20e070';
+          p.ctx.globalAlpha = 0.95;
+          p.ctx.fillRect(sx + ww - 6, sy + 3, 3, 3);
+          p.ctx.globalAlpha = 0.22;
+          p.ctx.fillRect(sx + ww - 10, sy - 1, 11, 11);
+          p.ctx.globalAlpha = 1;
+        }
+      } else {
+        // 損毀：火花閃爍
+        for (let i = 0; i < 3; i += 1) {
+          const phase = (t * 11.3 + i * 2.7) % (Math.PI * 2);
+          if (Math.sin(phase) > 0.52) {
+            const spx = sx + 5 + ((Math.sin(t * 3.1 + i * 4.2) * 0.5 + 0.5) * (ww - 10) | 0);
+            const spy = sy + 4 + ((Math.sin(t * 5.7 + i * 2.1) * 0.5 + 0.5) * (wh - 8) | 0);
+            p.ctx.fillStyle = Math.sin(phase) > 0.72 ? '#ffe060' : '#cc6820';
+            p.ctx.fillRect(spx, spy, 2, 2);
+          }
+        }
+        // 煙霧上升
+        for (let i = 0; i < 2; i += 1) {
+          const drift = ((t * 14 + i * 6) % (wh + 6)) | 0;
+          const wispX = sx + (ww * (0.28 + i * 0.34) | 0);
+          const wispY = sy + wh - drift;
+          if (wispY >= sy && wispY <= sy + wh) {
+            p.ctx.globalAlpha = 0.15;
+            p.ctx.fillStyle = '#7080a0';
+            p.ctx.fillRect(wispX, wispY, 3, 5);
+            p.ctx.globalAlpha = 1;
+          }
+        }
+      }
+    }
   }
 
   drawClouds(p) {

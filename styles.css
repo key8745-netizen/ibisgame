@@ -29,7 +29,7 @@ button, kbd { font: inherit; }
 
 /* ── Shell ──────────────────────────────────────────────────────────────────── */
 .shell {
-  width: min(1920px, 100%);
+  width: min(3840px, 100%);
   margin: 0 auto;
   padding: 18px clamp(8px, 2vw, 30px) 28px;
 }
@@ -50,7 +50,7 @@ button, kbd { font: inherit; }
 }
 h1 {
   margin: 0;
-  font-size: clamp(18px, 2.5vw, 30px);
+  font-size: clamp(18px, 1.6vw, 30px);
   letter-spacing: .08em;
   text-shadow: 0 3px 0 #080b15;
 }
@@ -71,13 +71,24 @@ h1 {
 .game-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;   /* centre the game-frame when narrower than shell */
 }
 
-/* ── Game frame (canvas + overlays) ────────────────────────────────────────── */
+/* ── Game frame (canvas + overlays) — INTEGER SCALING ──────────────────────── */
+/*
+ * Internal canvas: 480×270.  Target display sizes:
+ *   ≥480px:   fill up to 1× max (480px) — handled by width:100% below
+ *   ≥1920px:  4×  → 1920×1080
+ *   ≥2560px:  5×  → 2400×1350
+ *   ≥3840px:  8×  → 3840×2160
+ *
+ * Between breakpoints width:100% gives smooth non-integer scaling,
+ * which is fine. `image-rendering: pixelated` prevents blurring.
+ */
 .game-frame {
   position: relative;
   width: 100%;
+  max-width: 1920px;    /* 4× cap for common 1080p/1440p monitors */
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border: 3px solid #56638d;
@@ -86,6 +97,8 @@ h1 {
   box-shadow: 0 0 0 3px #111629, 0 18px 45px rgba(0,0,0,.55);
   isolation: isolate;
 }
+@media (min-width: 2560px) { .game-frame { max-width: 2400px; } }
+@media (min-width: 3840px) { .game-frame { max-width: 3840px; } }
 
 canvas#game {
   display: block;
@@ -123,24 +136,33 @@ canvas#game {
   z-index: 3;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * TYPOGRAPHY LOCK
+ * All critical Chinese gameplay text uses explicit px values + vw scaling.
+ * No percentage-based preferred values in font-size: clamp() — those resolve
+ * relative to the parent font size, not the viewport.
+ * Mobile overrides are in the @media block at the bottom of this file.
+ * Minimums: critical text ≥14px, secondary text ≥12px.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
 /* ── Character HUD (top-left) ───────────────────────────────────────────────── */
-#ui-char-hud { top: 0; left: 0; padding: clamp(4px, 1.2%, 8px); }
+#ui-char-hud { top: 0; left: 0; padding: clamp(4px, 0.5vw, 8px); }
 
 .char-hud-box {
   display: flex;
   align-items: center;
-  gap: clamp(5px, 1.2%, 8px);
+  gap: clamp(5px, 0.5vw, 8px);
   background: rgba(10, 15, 36, 0.90);
   border: 2px solid var(--char-color, #40e0d0);
   border-radius: 5px;
-  padding: clamp(4px, 0.9%, 7px) clamp(6px, 1.4%, 10px);
+  padding: clamp(4px, 0.4vw, 7px) clamp(6px, 0.6vw, 10px);
   backdrop-filter: blur(4px);
-  min-width: clamp(100px, 24%, 170px);
+  min-width: clamp(110px, 14vw, 170px);
 }
 
 .char-portrait {
-  width:  clamp(22px, 4.8%, 32px);
-  height: clamp(22px, 4.8%, 32px);
+  width:  clamp(24px, 2.5vw, 32px);
+  height: clamp(24px, 2.5vw, 32px);
   border-radius: 3px;
   border: 1.5px solid var(--char-color, #40e0d0);
   flex-shrink: 0;
@@ -152,8 +174,7 @@ canvas#game {
 .char-portrait::after {
   content: '';
   display: block;
-  width: 55%;
-  height: 70%;
+  width: 55%; height: 70%;
   border-radius: 3px 3px 2px 2px;
   background: var(--char-color, #40e0d0);
   opacity: 0.6;
@@ -161,24 +182,26 @@ canvas#game {
 
 .char-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 
+/* LOCKED: ≥16px desktop */
 .char-name {
   font-family: var(--fg);
-  font-size: clamp(11px, 2.4%, 18px);
+  font-size: clamp(16px, 1.4vw, 22px);
   font-weight: 800;
   color: var(--char-color, #40e0d0);
   white-space: nowrap;
   line-height: 1.2;
 }
+/* secondary text — minimum 12px */
 .char-role {
   font-family: var(--fg);
-  font-size: clamp(9px, 1.6%, 13px);
+  font-size: clamp(12px, 0.9vw, 14px);
   font-weight: 600;
   color: rgba(174, 182, 206, 0.85);
   white-space: nowrap;
 }
 
 /* ── Mission HUD (top-right) ────────────────────────────────────────────────── */
-#ui-mission-hud { top: 0; right: 0; padding: clamp(4px, 1.2%, 8px); }
+#ui-mission-hud { top: 0; right: 0; padding: clamp(4px, 0.5vw, 8px); }
 
 .mission-box {
   display: flex;
@@ -187,13 +210,14 @@ canvas#game {
   background: rgba(10, 15, 36, 0.90);
   border: 2px solid #505878;
   border-radius: 5px;
-  padding: clamp(4px, 0.9%, 7px) clamp(6px, 1.4%, 10px);
+  padding: clamp(4px, 0.4vw, 7px) clamp(6px, 0.6vw, 10px);
   backdrop-filter: blur(4px);
-  min-width: clamp(80px, 20%, 140px);
+  min-width: clamp(80px, 10vw, 140px);
 }
+/* LOCKED: ≥14px (Objective) */
 .mission-label {
   font-family: var(--fg);
-  font-size: clamp(9px, 1.6%, 14px);
+  font-size: clamp(14px, 1.1vw, 16px);
   font-weight: 700;
   color: var(--gold);
 }
@@ -204,8 +228,8 @@ canvas#game {
   flex-wrap: nowrap;
 }
 .mission-node {
-  width:  clamp(7px, 1.5%, 10px);
-  height: clamp(7px, 1.5%, 10px);
+  width:  clamp(7px, 0.8vw, 10px);
+  height: clamp(7px, 0.8vw, 10px);
   border: 1.5px solid var(--node-color, #40e0d0);
   border-radius: 1px;
   background: transparent;
@@ -214,14 +238,14 @@ canvas#game {
 .mission-node.done { background: var(--node-color, #40e0d0); }
 .mission-sep {
   width: 1px;
-  height: clamp(9px, 1.8%, 14px);
+  height: clamp(9px, 1vw, 14px);
   background: #303450;
   margin: 0 2px;
   flex-shrink: 0;
 }
 .mission-person {
-  width:  clamp(5px, 1%, 8px);
-  height: clamp(8px, 1.8%, 13px);
+  width:  clamp(5px, 0.6vw, 8px);
+  height: clamp(8px, 0.9vw, 13px);
   border-radius: 3px 3px 1px 1px;
   background: var(--person-color, #f6d365);
   opacity: 0.35;
@@ -243,42 +267,44 @@ canvas#game {
 
 /* ── Wrong-char / co-op hint (top centre) ───────────────────────────────────── */
 #ui-top-hint {
-  top: clamp(6px, 2%, 18px);
+  top: clamp(6px, 0.8vw, 18px);
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
 }
+/* LOCKED: ≥14px (Wrong-char hint / Co-op hint) */
 .hint-box {
   font-family: var(--fg);
-  font-size: clamp(11px, 2.4%, 14px);
+  font-size: clamp(14px, 1.1vw, 18px);
   font-weight: 800;
   color: var(--hint-color, #40e0d0);
   background: rgba(6, 10, 22, 0.92);
   border: 2px solid var(--hint-color, #40e0d0);
   border-radius: 5px;
-  padding: clamp(3px, 0.7%, 5px) clamp(10px, 2%, 16px);
+  padding: clamp(3px, 0.4vw, 5px) clamp(10px, 1vw, 16px);
   backdrop-filter: blur(4px);
 }
 
 /* ── Interaction prompt (bottom centre) ─────────────────────────────────────── */
 #ui-prompt {
-  bottom: clamp(8px, 2.5%, 20px);
+  bottom: clamp(8px, 1vw, 20px);
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
 }
+/* LOCKED: ≥14px (Interaction hint) */
 .prompt-box {
   display: flex;
   align-items: center;
-  gap: clamp(5px, 1%, 8px);
+  gap: clamp(5px, 0.5vw, 8px);
   font-family: var(--fg);
-  font-size: clamp(10px, 2.2%, 14px);
+  font-size: clamp(14px, 1.1vw, 18px);
   font-weight: 700;
   color: var(--gold);
   background: rgba(10, 15, 36, 0.92);
   border: 2px solid var(--gold);
   border-radius: 5px;
-  padding: clamp(3px, 0.7%, 5px) clamp(10px, 2%, 16px);
+  padding: clamp(3px, 0.4vw, 5px) clamp(10px, 1vw, 16px);
   backdrop-filter: blur(4px);
 }
 .prompt-box kbd {
@@ -296,30 +322,32 @@ canvas#game {
 #ui-dialogue { bottom: 0; left: 0; right: 0; }
 
 .dlg-box {
-  margin: clamp(5px, 1.2%, 10px);
+  margin: clamp(5px, 0.6vw, 10px);
   background: rgba(10, 15, 40, 0.95);
   border: 2px solid #6068a0;
   border-radius: 6px;
-  padding: clamp(7px, 1.6%, 12px) clamp(10px, 2%, 16px);
+  padding: clamp(7px, 0.8vw, 12px) clamp(10px, 1vw, 16px);
   backdrop-filter: blur(6px);
 }
+/* LOCKED: Speaker ≥18px desktop / ≥16px mobile */
 .dlg-speaker {
   font-family: var(--fg);
-  font-size: clamp(13px, 2.8%, 18px);
+  font-size: clamp(18px, 1.5vw, 26px);
   font-weight: 800;
-  margin-bottom: clamp(3px, 0.6%, 5px);
+  margin-bottom: clamp(3px, 0.3vw, 5px);
   line-height: 1.2;
 }
+/* LOCKED: Dialogue body ≥16px */
 .dlg-body {
   font-family: var(--fg);
-  font-size: clamp(13px, 2.6%, 16px);
+  font-size: clamp(16px, 1.3vw, 22px);
   font-weight: 600;
   line-height: 1.55;
   color: var(--ink);
 }
 .dlg-advance {
   text-align: right;
-  font-size: clamp(9px, 1.5%, 12px);
+  font-size: clamp(11px, 0.9vw, 14px);
   color: var(--gold);
   margin-top: 3px;
   animation: blink-dlg .65s steps(2) infinite;
@@ -343,12 +371,12 @@ canvas#game {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(5px, 1.4%, 12px);
-  padding: clamp(10px, 2.5%, 24px);
+  gap: clamp(5px, 0.8vw, 12px);
+  padding: clamp(10px, 1.5vw, 24px);
 }
 .title-studio {
   font-family: var(--fg);
-  font-size: clamp(9px, 1.7%, 13px);
+  font-size: clamp(11px, 0.85vw, 14px);
   font-weight: 700;
   letter-spacing: .14em;
   color: var(--gold);
@@ -356,7 +384,7 @@ canvas#game {
 .title-main {
   margin: 0;
   font-family: var(--fg);
-  font-size: clamp(18px, 5%, 42px);
+  font-size: clamp(22px, 3.5vw, 48px);
   font-weight: 800;
   letter-spacing: .04em;
   text-shadow: 0 4px 0 #080b15;
@@ -364,7 +392,7 @@ canvas#game {
 }
 .title-sub {
   font-family: var(--fg);
-  font-size: clamp(11px, 2.2%, 16px);
+  font-size: clamp(14px, 1.2vw, 20px);
   font-weight: 600;
   color: var(--cyan);
 }
@@ -372,19 +400,19 @@ canvas#game {
   background: rgba(8, 16, 30, 0.92);
   border: 1px solid #4a5280;
   border-radius: 5px;
-  padding: clamp(6px, 1.4%, 14px) clamp(12px, 2.5%, 26px);
+  padding: clamp(6px, 0.8vw, 14px) clamp(12px, 1.5vw, 26px);
 }
 .title-desc p {
   margin: 0 0 4px;
   font-family: var(--fg);
-  font-size: clamp(11px, 2%, 15px);
+  font-size: clamp(14px, 1.1vw, 18px);
   font-weight: 600;
   color: var(--ink);
 }
 .title-desc p:last-child { margin: 0; }
 .title-start {
   font-family: var(--fg);
-  font-size: clamp(13px, 2.8%, 20px);
+  font-size: clamp(16px, 1.4vw, 24px);
   font-weight: 800;
   color: var(--gold);
   letter-spacing: .04em;
@@ -392,52 +420,52 @@ canvas#game {
 .title-start.blink { color: #c8a840; }
 .title-controls {
   font-family: var(--fg);
-  font-size: clamp(9px, 1.5%, 13px);
+  font-size: clamp(11px, 0.85vw, 14px);
   color: rgba(96, 112, 160, 0.9);
 }
 
-/* Pause */
+/* LOCKED: Pause options ≥20px desktop */
 .pause-screen {
   background: rgba(8, 16, 30, 0.96);
   border: 2px solid #6068a0;
   border-radius: 8px;
-  padding: clamp(16px, 4%, 36px) clamp(24px, 6%, 56px);
+  padding: clamp(16px, 2.5vw, 36px) clamp(24px, 3.5vw, 56px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(7px, 1.6%, 14px);
+  gap: clamp(7px, 0.9vw, 14px);
 }
 .pause-title {
   margin: 0;
   font-family: var(--fg);
-  font-size: clamp(18px, 4.5%, 30px);
+  font-size: clamp(24px, 2.4vw, 38px);
   font-weight: 800;
   color: var(--gold);
 }
 .pause-screen p {
   margin: 0;
   font-family: var(--fg);
-  font-size: clamp(13px, 2.6%, 20px);
+  font-size: clamp(18px, 1.5vw, 24px);
   font-weight: 600;
   color: var(--ink);
 }
 
-/* Win */
+/* LOCKED: Win title ≥28px desktop */
 .win-screen {
   background: rgba(8, 16, 30, 0.96);
   border: 2px solid var(--gold);
   border-radius: 8px;
-  padding: clamp(16px, 4%, 40px) clamp(24px, 6%, 64px);
+  padding: clamp(16px, 2.5vw, 40px) clamp(24px, 3.5vw, 64px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(8px, 2%, 16px);
-  max-width: clamp(260px, 72%, 500px);
+  gap: clamp(8px, 1vw, 16px);
+  max-width: clamp(260px, 50vw, 560px);
 }
 .win-title {
   margin: 0;
   font-family: var(--fg);
-  font-size: clamp(22px, 5.5%, 38px);
+  font-size: clamp(28px, 2.5vw, 44px);
   font-weight: 800;
   color: var(--gold);
   text-shadow: 0 3px 0 #080b15;
@@ -445,19 +473,19 @@ canvas#game {
 .win-body p {
   margin: 0 0 4px;
   font-family: var(--fg);
-  font-size: clamp(12px, 2.3%, 16px);
+  font-size: clamp(15px, 1.2vw, 20px);
   font-weight: 600;
   color: var(--ink);
 }
 .win-stage {
   font-family: var(--fg);
-  font-size: clamp(11px, 2%, 15px);
+  font-size: clamp(13px, 1.0vw, 16px);
   font-weight: 700;
   color: var(--cyan);
 }
 .win-prompt {
   font-family: var(--fg);
-  font-size: clamp(12px, 2.3%, 16px);
+  font-size: clamp(15px, 1.2vw, 20px);
   font-weight: 700;
   color: var(--gold);
   animation: blink-dlg .9s steps(2) infinite;
@@ -466,11 +494,12 @@ canvas#game {
 
 /* ── Mobile: dialogue below canvas ─────────────────────────────────────────── */
 .dialogue-ext {
-  display: none; /* shown only on touch devices via .open class */
+  display: none;
   background: rgba(10, 15, 40, 0.98);
   border: 2px solid #6068a0;
   border-top: none;
   border-radius: 0 0 6px 6px;
+  width: 100%;
 }
 .dialogue-ext.open { display: block; }
 .dialogue-ext .dlg-box { margin: 0; border: none; border-radius: 0; backdrop-filter: none; }
@@ -485,6 +514,7 @@ canvas#game {
   background: rgba(11, 14, 28, 0.92);
   border-top: 1px solid rgba(86, 99, 141, 0.4);
   pointer-events: none;
+  width: 100%;
 }
 .touch-controls button {
   pointer-events: auto;
@@ -542,9 +572,8 @@ kbd {
 
 /* ── Mobile overrides ───────────────────────────────────────────────────────── */
 @media (hover: none), (pointer: coarse) {
-  /* Touch controls visible */
   .touch-controls { display: flex; }
-  /* Mobile: no overlay dialogue inside game-frame; use .dialogue-ext below */
+  /* Mobile dialogue: use .dialogue-ext below canvas, not overlay */
   #ui-dialogue { display: none !important; }
   .instructions { font-size: 10px; }
 }
@@ -558,6 +587,24 @@ kbd {
   .instructions { display: none; }
   .game-frame { border-width: 2px; border-radius: 3px 3px 0 0; }
   .dialogue-ext { border-radius: 0; }
+
+  /* Mobile typography locks */
+  .dlg-speaker  { font-size: 16px; }   /* spec: 16px mobile */
+  .dlg-body     { font-size: 16px; }   /* spec: 16px */
+  .hint-box     { font-size: 14px; }   /* spec: 14px */
+  .prompt-box   { font-size: 14px; }   /* spec: 14px */
+  .mission-label { font-size: 14px; } /* spec: 14px (Objective) */
+  .char-name    { font-size: 14px; }   /* compact HUD on small screen */
+  .char-role    { font-size: 12px; }
+  .win-title    { font-size: 22px; }   /* prevent overflow in small frame */
+  .win-body p   { font-size: 14px; }
+  .win-prompt   { font-size: 14px; }
+  .pause-title  { font-size: 22px; }
+  .pause-screen p { font-size: 16px; }
+  .title-main   { font-size: 24px; }
+  .title-start  { font-size: 16px; }
+  .title-sub    { font-size: 14px; }
+  .title-desc p { font-size: 14px; }
 }
 
 /* ── Reduced motion ─────────────────────────────────────────────────────────── */
@@ -567,4 +614,7 @@ kbd {
   .dpad button.is-pressed,
   .action-pad button.is-pressed { transform: none; }
   .dlg-advance, .win-prompt { animation: none; }
+  /* Sprite switch/glow effect suppressed via JS (prefersReducedMotion flag) */
+  .mission-bar-fill { transition: none; }
+  .mission-person { transition: none; }
 }

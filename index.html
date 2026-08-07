@@ -21,25 +21,42 @@
       </div>
     </header>
 
-    <section class="game-frame" id="gameFrame">
-      <canvas id="game" width="480" height="270" aria-label="像素冒險遊戲畫面"></canvas>
-      <div id="loading" class="loading-card" role="status">
-        <span class="star-loader" aria-hidden="true">✦</span>
-        <strong>正在整理星路……</strong>
-      </div>
+    <div class="game-wrapper">
+      <section class="game-frame" id="gameFrame">
+        <canvas id="game" width="480" height="270" aria-label="像素冒險遊戲畫面"></canvas>
+        <div id="loading" class="loading-card" role="status">
+          <span class="star-loader" aria-hidden="true">✦</span>
+          <strong>正在整理星路……</strong>
+        </div>
+
+        <!-- DOM UI overlays — all positioned inside game-frame, synced from game state -->
+        <div id="ui-char-hud"    class="ui-layer" aria-live="polite"    hidden></div>
+        <div id="ui-mission-hud" class="ui-layer" aria-live="polite"    hidden></div>
+        <div id="ui-top-hint"    class="ui-layer" aria-live="assertive" hidden></div>
+        <div id="ui-prompt"      class="ui-layer"                        hidden></div>
+        <div id="ui-dialogue"    class="ui-layer" aria-live="polite"    hidden></div>
+        <div id="ui-title"       class="ui-layer"                        hidden></div>
+        <div id="ui-pause"       class="ui-layer"                        hidden></div>
+        <div id="ui-win"         class="ui-layer"                        hidden></div>
+      </section>
+
+      <!-- Mobile: dialogue shown below canvas so touch controls don't overlay gameplay -->
+      <div id="ui-dialogue-ext" class="dialogue-ext" aria-live="polite"></div>
+
+      <!-- Touch controls live outside game-frame — never overlays gameplay image -->
       <div class="touch-controls" aria-label="觸控操作">
         <div class="dpad">
-          <button data-key="ArrowUp" class="up" aria-label="向上">▲</button>
-          <button data-key="ArrowLeft" class="left" aria-label="向左">◀</button>
-          <button data-key="ArrowDown" class="down" aria-label="向下">▼</button>
+          <button data-key="ArrowUp"    class="up"    aria-label="向上">▲</button>
+          <button data-key="ArrowLeft"  class="left"  aria-label="向左">◀</button>
+          <button data-key="ArrowDown"  class="down"  aria-label="向下">▼</button>
           <button data-key="ArrowRight" class="right" aria-label="向右">▶</button>
         </div>
         <div class="action-pad">
-          <button data-key="KeyX" class="switch" aria-label="切換角色">換</button>
-          <button data-key="Space" class="action" aria-label="互動">行動</button>
+          <button data-key="KeyX"  class="switch" aria-label="切換角色">換</button>
+          <button data-key="Space" class="action"  aria-label="互動">行動</button>
         </div>
       </div>
-    </section>
+    </div>
 
     <section class="instructions" aria-label="操作說明">
       <span><kbd>方向鍵</kbd>／<kbd>WASD</kbd> 移動</span>

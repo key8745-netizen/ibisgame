@@ -14,11 +14,8 @@ import {
 import { RepairNode, Rescuee } from './world/objects.js';
 import { Character } from './world/characters.js';
 import { ParticleSystem } from './ui/particles.js';
-import {
-  DialogueBox, drawCharHUD, drawMissionHUD, drawPrompt,
-  drawTitle, drawPause, drawWin,
-  drawWrongCharHint, drawOffscreenArrows,
-} from './ui/hud.js';
+import { DialogueBox, drawOffscreenArrows } from './ui/hud.js';
+import { syncPresentation } from './ui/dom-ui.js';
 
 // ── Canvas 設定 ─────────────────────────────────────────────────────────────
 const canvas    = document.querySelector('#game');
@@ -414,41 +411,19 @@ class Game {
     this.particles.draw(c, { x: cx, y: cy });
     c.restore();
 
-    // HUD（不受搖晃影響）
-    if (this.mode !== 'title') {
-      drawCharHUD(c, this.active, VIEW_W);
-      drawMissionHUD(c, this.nodes, this.rescuees, this.objective, VIEW_W);
-
-      if (!this.dialogue.isOpen && this.mode === 'play') {
-        const prompt = this.nearbyPrompt();
-        if (prompt) drawPrompt(c, prompt, VIEW_W, VIEW_H);
-
-        // 離屏方向箭頭
-        const arrowTargets = this.getOffscreenTargets();
-        if (arrowTargets.length) {
-          drawOffscreenArrows(c, arrowTargets, { x: cx, y: cy }, VIEW_W, VIEW_H);
-        }
-
-        // 合作救援持續提示（一人在場一人未到時）
-        if (!this.wrongCharHint) {
-          const coopHint = this.getBothRescueHintState();
-          if (coopHint) {
-            drawWrongCharHint(c, coopHint.text, coopHint.color, VIEW_W, VIEW_H);
-            drawOffscreenArrows(c, [{ worldX: coopHint.worldX, worldY: coopHint.worldY, color: coopHint.color }], { x: cx, y: cy }, VIEW_W, VIEW_H);
-          }
+    // 離屏方向箭頭（仍在 canvas 上，跟隨世界坐標）
+    if (this.mode === 'play' && !this.dialogue.isOpen) {
+      const arrowTargets = this.getOffscreenTargets();
+      if (arrowTargets.length) {
+        drawOffscreenArrows(c, arrowTargets, { x: cx, y: cy }, VIEW_W, VIEW_H);
+      }
+      if (!this.wrongCharHint) {
+        const coopHint = this.getBothRescueHintState();
+        if (coopHint) {
+          drawOffscreenArrows(c, [{ worldX: coopHint.worldX, worldY: coopHint.worldY, color: coopHint.color }], { x: cx, y: cy }, VIEW_W, VIEW_H);
         }
       }
     }
-
-    // 錯誤角色小提示
-    if (this.wrongCharHint) {
-      drawWrongCharHint(c, this.wrongCharHint.text, this.wrongCharHint.color, VIEW_W, VIEW_H);
-    }
-
-    this.dialogue.draw(c, VIEW_W, VIEW_H);
-    if (this.mode === 'title') drawTitle(c, this.time, VIEW_W, VIEW_H);
-    if (this.mode === 'pause') drawPause(c, VIEW_W, VIEW_H);
-    if (this.mode === 'win')   drawWin(c, this.time, VIEW_W, VIEW_H);
 
     ctx.drawImage(offscreen, 0, 0);
   }
@@ -549,6 +524,7 @@ function frame(now) {
     accumulator -= STEP;
   }
   game.draw();
+  syncPresentation(game);
   requestAnimationFrame(frame);
 }
 

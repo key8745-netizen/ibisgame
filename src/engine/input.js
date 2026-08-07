@@ -1,4 +1,5 @@
 // 輸入層。按鍵事件在固定步長迴圈裡被消費，避免在高更新率螢幕上遺失輸入。
+// 觸控：Map<pointerId, key> 追蹤每根手指對應的按鍵，防止多指互相干擾。
 
 const ALIAS = new Map([
   ['KeyW', 'ArrowUp'], ['KeyA', 'ArrowLeft'], ['KeyS', 'ArrowDown'], ['KeyD', 'ArrowRight'],
@@ -13,8 +14,7 @@ export const normalize = (code) => ALIAS.get(code) ?? code;
 
 class Input {
   constructor() {
-    this.held = new Set();
-    /** 尚未被任何一次 update 消費的「本次按下」。 */
+    this.held    = new Set();
     this.pressed = new Set();
     this.anyInputSeen = false;
   }
@@ -30,14 +30,9 @@ class Input {
     }
   }
 
-  isDown(key) {
-    return this.held.has(key);
-  }
+  isDown(key) { return this.held.has(key); }
 
-  /** 只有真的跑了一次模擬步進才清空，0 步的畫格不會吃掉玩家的按鍵。 */
-  endStep() {
-    if (this.pressed.size) this.pressed.clear();
-  }
+  endStep() { if (this.pressed.size) this.pressed.clear(); }
 
   clearAll() {
     this.held.clear();
@@ -45,21 +40,20 @@ class Input {
   }
 
   axis() {
-    let x = 0;
-    let y = 0;
-    if (this.held.has('ArrowLeft')) x -= 1;
+    let x = 0, y = 0;
+    if (this.held.has('ArrowLeft'))  x -= 1;
     if (this.held.has('ArrowRight')) x += 1;
-    if (this.held.has('ArrowUp')) y -= 1;
-    if (this.held.has('ArrowDown')) y += 1;
-    if (x && y) {
-      x *= Math.SQRT1_2;
-      y *= Math.SQRT1_2;
-    }
+    if (this.held.has('ArrowUp'))    y -= 1;
+    if (this.held.has('ArrowDown'))  y += 1;
+    if (x && y) { x *= Math.SQRT1_2; y *= Math.SQRT1_2; }
     return { x, y };
   }
 }
 
 export const input = new Input();
+
+// 每根手指 (pointerId) 對應的按鍵 key 及其 button 元素
+const _pointerKeys = new Map();
 
 export function bindInput(root = document) {
   window.addEventListener('keydown', (event) => {
@@ -75,21 +69,27 @@ export function bindInput(root = document) {
 
   root.querySelectorAll('[data-key]').forEach((button) => {
     const code = button.dataset.key;
-    const press = (event) => {
+
+    button.addEventListener('pointerdown', (event) => {
       event.preventDefault();
       try { button.setPointerCapture(event.pointerId); } catch { /* 不支援時忽略 */ }
       button.classList.add('is-pressed');
+      _pointerKeys.set(event.pointerId, { key: code, button });
       input.set(code, true);
-    };
+    });
+
     const release = (event) => {
-      event.preventDefault();
-      button.classList.remove('is-pressed');
-      input.set(code, false);
+      const entry = _pointerKeys.get(event.pointerId);
+      if (entry?.key === code) {
+        button.classList.remove('is-pressed');
+        _pointerKeys.delete(event.pointerId);
+        input.set(code, false);
+      }
     };
-    button.addEventListener('pointerdown', press);
-    button.addEventListener('pointerup', release);
-    button.addEventListener('pointercancel', release);
-    button.addEventListener('lostpointercapture', release);
-    button.addEventListener('contextmenu', (event) => event.preventDefault());
+
+    button.addEventListener('pointerup',           release);
+    button.addEventListener('pointercancel',        release);
+    button.addEventListener('lostpointercapture',   release);
+    button.addEventListener('contextmenu', (e) => e.preventDefault());
   });
 }

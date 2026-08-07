@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111629" />
+  <meta name="description" content="《未完成的星路》— 給孩子玩的像素冒險遊戲。" />
+  <title>未完成的星路｜轉運橋救援</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell" aria-label="未完成的星路遊戲">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">IBI PRODUCTIONS</p>
+        <h1>未完成的星路</h1>
+      </div>
+      <div class="top-actions">
+        <button id="soundButton" class="icon-button" type="button" aria-pressed="true">聲音：開</button>
+        <button id="fullscreenButton" class="icon-button" type="button">全螢幕</button>
+      </div>
+    </header>
+
+    <section class="game-frame" id="gameFrame">
+      <canvas id="game" width="480" height="270" aria-label="像素冒險遊戲畫面"></canvas>
+      <div id="loading" class="loading-card" role="status">
+        <span class="star-loader" aria-hidden="true">✦</span>
+        <strong>正在整理星路……</strong>
+      </div>
+      <div class="touch-controls" aria-label="觸控操作">
+        <div class="dpad">
+          <button data-key="ArrowUp" class="up" aria-label="向上">▲</button>
+          <button data-key="ArrowLeft" class="left" aria-label="向左">◀</button>
+          <button data-key="ArrowDown" class="down" aria-label="向下">▼</button>
+          <button data-key="ArrowRight" class="right" aria-label="向右">▶</button>
+        </div>
+        <div class="action-pad">
+          <button data-key="KeyX" class="switch" aria-label="切換角色">換</button>
+          <button data-key="Space" class="action" aria-label="互動">行動</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="instructions" aria-label="操作說明">
+      <span><kbd>方向鍵</kbd>／<kbd>WASD</kbd> 移動</span>
+      <span><kbd>空白</kbd>／<kbd>Z</kbd> 行動</span>
+      <span><kbd>X</kbd>／<kbd>Shift</kbd> 切換角色</span>
+      <span><kbd>Esc</kbd> 暫停</span>
+    </section>
+  </main>
+  <noscript>這款遊戲需要啟用 JavaScript。</noscript>
+  <script type="module" src="src/game.js"></script>
+</body>
+</html>

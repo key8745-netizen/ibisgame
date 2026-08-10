@@ -50,6 +50,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening playable lead: **Yohani first** — the opening begins with `yohani` as the sole playable character; `sani` joins during the early opening sequence.
 - Opening inciting structure: **ordinary life disrupted by an anomaly** — Yohani begins with a simple, concrete everyday objective; an abnormal event encountered during that task gradually opens the adventure.
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
+- Opening everyday task type: **village errand** — Yohani's first concrete objective is an ordinary task performed within the familiar village, giving the player a reason to move through the settlement and meet normal village life before the anomaly interrupts it.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -529,7 +530,7 @@ Design implication:
 
 Explicitly still OPEN:
 
-- Yohani's immediate opening objective / motivation
+- exact village errand content (resolved only at type level by GD-029)
 - exact starting location and social context
 - exact event that leads to Sani's introduction
 - how long the solo Yohani segment lasts
@@ -560,7 +561,7 @@ Design implication:
 
 Explicitly still OPEN:
 
-- exact everyday task / errand
+- exact village errand content (resolved only at type level by GD-029)
 - exact starting location and social context
 - exact nature and presentation of the anomaly
 - whether the anomaly directly involves Star Roads, magic or monsters
@@ -598,7 +599,7 @@ Explicitly still OPEN:
 - population size and exact NPC count
 - exact buildings, shops and services present
 - Yohani's household / family arrangement
-- exact everyday task performed inside or around the village
+- exact village errand content (type resolved by GD-029)
 - where and how the anomaly first appears
 - Sani's relationship to the village before her introduction
 
@@ -828,6 +829,39 @@ Explicitly still OPEN:
 - exact convergence scene after the Sani segment
 - whether any leader-buff or field-leader mechanics are taught before or only after convergence
 
+### GD-029 — Opening Village Errand
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani's first concrete everyday objective is an ordinary errand performed within the home village.**
+
+Opening-task model:
+
+1. The first objective keeps Yohani inside the familiar village long enough for the player to move through ordinary community space before the abnormal event expands the adventure.
+2. The errand should naturally create one or more understandable reasons to interact with residents, homes, services or recognizable village landmarks.
+3. The task must feel like a believable part of Yohani's normal life rather than an artificial tutorial checklist.
+4. The errand may teach basic movement, interaction, dialogue and objective-following through normal play.
+5. The anomaly interrupts, complicates or becomes visible during or immediately around this ordinary errand, preserving the locked `ordinary life → anomaly` contrast.
+6. This decision defines the task category only; it does not define the item, recipient, number of stops or anomaly content.
+
+Design implication:
+
+- The player learns the village by doing something that makes sense inside the fiction rather than walking through a detached tutorial route.
+- Familiar NPCs and places can be established before the player is asked to recognize that something has changed.
+- The opening can teach basic JRPG exploration grammar without requiring combat or lore exposition immediately.
+- The errand should remain short and purposeful; it must not turn the opening village into a mandatory exhaustive NPC tour.
+
+Explicitly still OPEN:
+
+- exact errand item / message / purpose
+- who gives Yohani the errand
+- exact recipient or destination
+- number of required stops
+- whether optional conversations exist along the route
+- exact location where the anomaly first becomes noticeable
+- whether completing the errand is interrupted, completed before the anomaly, or resumed later
+- exact transition from Yohani's errand into the playable Sani segment
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -871,11 +905,12 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
+Status: **PARTIAL — OPENING TASK + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
 
 Locked so far:
 
 - the first controllable character is Yohani
+- Yohani's first concrete objective is an ordinary village errand that establishes familiar local life before the anomaly
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
@@ -888,4 +923,4 @@ Locked so far:
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 - leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
 
-Still requiring explicit decisions include the exact ordinary opening task, opening clue / anomaly / convergence content, protagonist-specific leader-buff effects, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the opening anomaly / clue / convergence content, protagonist-specific leader-buff effects, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

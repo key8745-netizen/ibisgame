@@ -53,6 +53,8 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Initial protagonist combat identities: **Yohani = stable front-line physical anchor; Sani = agile magic/support responder**; exact stats, equipment, spells, skills and special commands remain OPEN.
+- Field leader model: **free switching during normal exploration with explicit story/tutorial exceptions** — after multiple eligible party members are available, the player may normally change the controlled field leader; specific scenes, tutorials or designed sequences may temporarily lock the leader.
+- Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, while exact effects, scope, values and tuning remain OPEN.
 
 ## Existing C01 Boundary
 
@@ -694,6 +696,70 @@ Explicitly still OPEN:
 - exact resource costs and status-effect capabilities
 - whether either protagonist later gains substantial abilities outside the initial role emphasis
 
+### GD-025 — Field Leader Switching
+
+Status: **LOCKED**
+
+Decision: **Option C — normal exploration allows free field-leader switching, while explicit story, tutorial or designed sequences may temporarily lock the leader.**
+
+Field-leader model:
+
+1. After multiple eligible party members are available, normal exploration allows the player to choose which eligible character is the controlled field leader.
+2. Changing field leader changes the character directly controlled in the world.
+3. A story scene, tutorial or deliberately authored gameplay sequence may temporarily require a specific leader when the restriction is clearly communicated.
+4. A temporary leader lock is an exception to the normal rule and must not silently become the default exploration model.
+5. Changing field leader does not by itself add or remove characters from the active battle party.
+
+Design implication:
+
+- The dual-protagonist structure remains visible during ordinary exploration rather than existing only in dialogue and battle menus.
+- The system can later support additional playable party members without requiring Yohani to remain the permanent overworld avatar.
+- Leader choice becomes a meaningful preparation decision because it is connected to the locked leader-buff system in GD-026.
+- Any temporary restriction must be clear enough that an independently playing 8–10-year-old understands why switching is unavailable.
+
+Explicitly still OPEN:
+
+- exact switching input / UI
+- exact contexts in which switching is disabled
+- whether switching is allowed everywhere in towns, routes and dungeons
+- whether reserve members may ever be designated field leader
+- exact visual formation / follower behavior behind the leader
+- whether specific field interactions or abilities depend on the current leader
+
+### GD-026 — Character Leader Buff System
+
+Status: **LOCKED**
+
+Decision: **Each playable party character who can be assigned as leader has a distinct passive leader buff; the currently designated leader determines the active leader buff.**
+
+Leader-buff model:
+
+1. A leader-eligible playable party character has an authored leader buff that is distinct from other characters' leader buffs.
+2. The buff becomes the active leader effect when that character is designated as the current leader.
+3. Changing the designated leader changes the active leader buff wherever leader switching is currently permitted.
+4. Non-leader characters do not simultaneously contribute their own leader buffs merely by being present in the party; the baseline is one currently designated leader and one active leader buff.
+5. The leader buff is a passive system effect and does not replace the character's normal battle commands, skills, magic, equipment or future character-specific command.
+6. The active leader buff and its practical effect must be clearly visible and understandable to the intended 8–10-year-old player rather than relying on hidden formulas.
+
+Design implication:
+
+- Field-leader choice has gameplay meaning instead of being purely cosmetic.
+- Different characters can contribute strategic identity even before exact skills, equipment and special commands are fully defined.
+- Leader choice can become part of preparation before difficult routes, dungeons or bosses without creating a separate class/build system.
+- The buff system must remain simple enough that switching leaders is an understandable trade-off rather than an opaque optimization puzzle.
+
+Explicitly still OPEN:
+
+- whether leader buffs affect combat, exploration or both
+- exact leader buff for `yohani`
+- exact leader buff for `sani`
+- exact leader buffs for future playable characters
+- numerical magnitude and formulas
+- whether leader buffs scale, upgrade or change through story / level progression
+- when a changed leader buff takes effect relative to battle entry or other events
+- whether any special scripted sequence temporarily suppresses or overrides a leader buff
+- exact UI presentation and comparison flow for leader buffs
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -737,7 +803,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE + SIBLING RELATIONSHIP + SANI INDEPENDENT ENTRY + INITIAL COMBAT IDENTITIES LOCKED**
+Status: **PARTIAL — OPENING + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF BASELINE LOCKED**
 
 Locked so far:
 
@@ -749,5 +815,7 @@ Locked so far:
 - Yohani and Sani are siblings: Yohani is the older brother and Sani is the younger sister
 - before joining Yohani, Sani is already independently investigating or responding to her own clue / problem; their lines converge and they continue together
 - initial combat identities: Yohani is the stable front-line physical anchor; Sani is the faster magic/support-oriented flexible responder
+- normal exploration supports free switching among eligible field leaders, with explicit story/tutorial exceptions
+- each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 
-Still requiring explicit decisions include field-control / protagonist-switching semantics, the exact opening clue / convergence content, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the exact opening clue / convergence content, leader-buff scope and protagonist-specific leader-buff effects, plus other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

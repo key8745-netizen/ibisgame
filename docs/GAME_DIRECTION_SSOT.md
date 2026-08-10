@@ -68,6 +68,8 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - First shared sibling battle enemy state: **1 familiar local monster in unmistakable panic / disorientation, visibly abnormal before battle** — the enemy is a monster the protagonists / local community can recognize, and exactly one such monster appears in this first shared battle. Its panic / disorientation is already readable on the exploration field before combat begins. The locked transition is **panic-driven rush → direct contact with the siblings → battle**: the monster rushes toward Yohani and Sani as part of its loss of control rather than as a clearly deliberate hunt. Exact species, concrete field animation, rush distance / path, player-control lock timing, cause and relationship to the reverse-flow anomaly remain OPEN.
 - Opening tutorial-battle monster relationship: **same familiar local monster species, different individual creatures across the two opening battles** — the normal enemy in Yohani's first solo battle and the panicked enemy in the first shared sibling battle are the same species but explicitly different specimens, so the player can compare ordinary versus abnormal behavior without implying that the first individual later became panicked; the exact species, name and detailed visual design remain OPEN within the small-quadruped body archetype locked by GD-056.
 - Opening tutorial-battle monster body archetype: **small quadrupedal fantasy creature** — both opening specimens use the same small four-legged body plan, chosen so posture and locomotion can clearly contrast controlled territorial vigilance with panic / disorientation. Exact species identity, name, surface anatomy, coloration and decorative fantasy traits remain OPEN.
+- Opening tutorial-battle monster visual language: **fantasy hybrid** — the species should not read primarily as a literal dog, fox, cat, lizard or other single real-world animal; its final design may combine compatible animal-like and invented fantasy traits while remaining one coherent original species. Exact feature mix remains OPEN.
+- Opening tutorial-battle monster visual tone: **neutral wild** — the species should read as a believable wild local monster with alertness and defensive capacity, neither primarily mascot-cute nor primarily vicious / evil-looking. Exact facial features, proportions, coloration and threat cues remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -2022,6 +2024,84 @@ Explicitly still OPEN:
 - exact ecology and social grouping
 - exact causal relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
 
+### GD-057 — Opening Tutorial Monster Fantasy-Hybrid Visual Language
+
+Status: **LOCKED**
+
+Decision: **Option C — within the small-quadruped body archetype, the shared opening monster species uses a fantasy-hybrid visual language rather than reading primarily as one literal real-world animal.**
+
+Visual-language model:
+
+1. GD-056 remains controlling for the body plan: the creature is still a small four-legged fantasy creature.
+2. The final species may combine compatible mammalian, reptilian or other animal-like cues with invented fantasy traits, but the result must read as one coherent species rather than a collage of unrelated parts.
+3. No single real-world animal analogue is required to dominate the silhouette or identity; agents must not silently collapse the design into `basically a dog`, `basically a fox`, `basically a cat` or `basically a lizard` without a later explicit decision.
+4. The visual language must remain original and must not copy a recognizable *Dragon Quest* monster, another game's creature design or another copyrighted character.
+5. `Fantasy hybrid` is a visual-design direction only. It does **not** establish that the creature is literally a magical chimera, artificially created, crossbred, Star-Road-born or otherwise hybrid in world lore.
+6. Exact fur / scales / skin balance, ears, horns, tail, face, markings, coloration, fantasy appendages and proportions remain OPEN.
+7. GD-058 separately locks the creature's overall first-impression tone as **neutral wild**.
+
+Design implication:
+
+- The opening monster can become recognizable as an original 《未完成的星路》 species while preserving the readable four-legged motion language needed by GD-055 and GD-049 / GD-052.
+- The design remains free to use a few strong fantasy traits without sacrificing a simple silhouette readable at pixel-art scale.
+- Avoiding a one-to-one real-animal analogue reduces the risk that the monster feels like an ordinary dog / fox / lizard with only superficial decoration.
+
+Resolution note:
+
+- GD-057 resolves the `mammal vs reptile vs hybrid` direction left OPEN by GD-056 at the high-level visual-language level as **fantasy hybrid**.
+- Where GD-056 still lists the strongest real-animal resemblance as OPEN, GD-057 supersedes that question only by establishing that no single literal real-animal analogue should dominate by default.
+- Exact species identity and concrete feature mix remain OPEN.
+
+Explicitly still OPEN:
+
+- exact species identity and name
+- exact combination and proportion of animal-like / invented fantasy traits
+- exact fur / scales / skin treatment
+- exact ears / horns / tail / face / markings / coloration / fantasy appendages
+- exact body proportions within the small-quadruped range
+- exact field and battle sprite design
+- exact ecology, taxonomy and lore origin
+- exact causal relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
+
+### GD-058 — Opening Tutorial Monster Neutral-Wild Visual Tone
+
+Status: **LOCKED**
+
+Decision: **Option B — the shared opening monster species has a neutral-wild first-impression tone: clearly a wild local monster with natural caution and defensive capability, but neither primarily cute / harmless nor primarily vicious / evil-looking.**
+
+Visual-tone model:
+
+1. At a glance, the creature should read as a **wild creature that deserves respect and caution**, not as a domesticated pet or comic mascot.
+2. Its baseline design should also avoid communicating inherent cruelty, corruption or predatory evil merely through exaggerated fangs, permanent rage or horror styling.
+3. The neutral-wild baseline must support GD-055's normal territorial behavior: a player can believe that an ordinary specimen warns and defends its space without interpreting that behavior as supernatural malice.
+4. The same baseline must leave room for GD-049 / GD-051 / GD-052 to make the second specimen's panic visibly abnormal through posture and locomotion rather than by redesigning the creature into a more monstrous form.
+5. `Neutral wild` governs the species' ordinary first impression, not every frame or emotional state; an individual can still look threatening while defending itself or distressed while panicking.
+6. This tone does not establish moral alignment, intelligence, tamability, monster-recruitment rules, diet or ecological role.
+7. Exact eye shape, mouth / fang prominence, horn size, ear shape, proportions, coloration, markings and other threat-versus-appeal cues remain OPEN inside the neutral-wild boundary.
+
+Design implication:
+
+- The first encounter can communicate `normal wild-animal-style territorial danger` without making the species look villainous.
+- The second encounter gains a stronger behavioral contrast because the player is not primed to read every aggressive movement as simply `this monster is always vicious`.
+- The creature can remain memorable and appealing to the 8–10 target player without being reduced to mascot cuteness or horror intimidation.
+
+Resolution note:
+
+- GD-058 resolves the `cute / neutral / fierce` first-impression question left OPEN by GD-056 as **neutral wild**.
+- Where GD-056 still lists `cute-versus-threatening visual tone` as OPEN, GD-058 supersedes that high-level tone question. Exact visual cues used to achieve the tone remain OPEN.
+- GD-057 continues to govern the fantasy-hybrid visual language; GD-058 does not select the detailed feature mix.
+
+Explicitly still OPEN:
+
+- exact species identity and name
+- exact facial construction and expression range
+- exact eye / mouth / fang / horn / ear / tail emphasis
+- exact body proportions within the small-quadruped range
+- exact coloration / markings / fur / scales / skin balance
+- exact field and battle sprite design
+- exact ecology, temperament outside the authored opening encounters and social grouping
+- exact causal relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -2065,7 +2145,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + FIRST SOLO BATTLE NORMAL TERRITORIAL BEHAVIOR + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + FIRST SHARED BATTLE ENEMY STATE + FIRST SHARED BATTLE PANIC/DISORIENTATION BEHAVIOR + FIRST SHARED BATTLE ENEMY COUNT + FIRST SHARED BATTLE PRE-BATTLE FIELD ABNORMALITY + FIRST SHARED BATTLE PANIC-DRIVEN RUSH TRIGGER + OPENING TWO-BATTLE SAME-SPECIES CONTRAST + OPENING TWO-BATTLE DIFFERENT-INDIVIDUAL RELATIONSHIP + OPENING SHARED MONSTER SMALL-QUADRUPED BODY ARCHETYPE + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + FIRST SOLO BATTLE NORMAL TERRITORIAL BEHAVIOR + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + FIRST SHARED BATTLE ENEMY STATE + FIRST SHARED BATTLE PANIC/DISORIENTATION BEHAVIOR + FIRST SHARED BATTLE ENEMY COUNT + FIRST SHARED BATTLE PRE-BATTLE FIELD ABNORMALITY + FIRST SHARED BATTLE PANIC-DRIVEN RUSH TRIGGER + OPENING TWO-BATTLE SAME-SPECIES CONTRAST + OPENING TWO-BATTLE DIFFERENT-INDIVIDUAL RELATIONSHIP + OPENING SHARED MONSTER SMALL-QUADRUPED BODY ARCHETYPE + OPENING SHARED MONSTER FANTASY-HYBRID VISUAL LANGUAGE + OPENING SHARED MONSTER NEUTRAL-WILD VISUAL TONE + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -2087,7 +2167,7 @@ Locked so far:
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
 - when the siblings converge and connect their clues, the anomaly immediately escalates into their first formal two-character battle before normal shared exploration resumes
 - the first shared sibling battle contains **exactly 1 familiar local monster in unmistakable panic / disorientation**, and that panic / disorientation is **visibly readable on the field before combat begins**; the panicked creature then **rushes directly toward Yohani and Sani, and direct contact triggers the battle**. The rush is framed as loss of control rather than a clearly deliberate hunt. Exact concrete animation, rush path / distance / speed, feared stimulus and causal relationship to the reverse-flow anomaly remain OPEN
-- the **same familiar local monster species is used in both opening teaching battles, but they are different individual creatures**, and that species has a **small quadrupedal fantasy-creature body archetype**: the solo encounter establishes the controlled normal territorial-behavior reference, while the shared encounter uses another specimen of the same species to make its panic / disorientation visibly comparative. Exact species identity, name and detailed visual design remain OPEN inside the small-quadruped constraint
+- the **same familiar local monster species is used in both opening teaching battles, but they are different individual creatures**. The species has a **small quadrupedal fantasy-creature body archetype**, a **fantasy-hybrid visual language** that does not default to one literal real-world animal, and a **neutral-wild visual tone** that is neither mascot-cute nor inherently vicious. The solo encounter establishes controlled normal territorial behavior; the shared encounter uses another specimen of the same species to make panic / disorientation visibly comparative. Exact species identity, name and detailed feature mix remain OPEN within these constraints
 - the first shared sibling battle does not yet use field-leader switching or leader buffs; those systems unlock immediately after the battle in a safer exploration context
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
@@ -2102,4 +2182,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include exact evidence details and convergence presentation, exact shared opening monster species / name / detailed visual design within the locked small-quadruped body archetype, exact territorial-warning presentation / map geometry for the opening solo battle, exact concrete panic animation / rush geometry for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include exact evidence details and convergence presentation, exact shared opening monster species / name / detailed feature mix within the locked small-quadruped + fantasy-hybrid + neutral-wild constraints, exact territorial-warning presentation / map geometry for the opening solo battle, exact concrete panic animation / rush geometry for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

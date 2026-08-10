@@ -54,7 +54,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Initial protagonist combat identities: **Yohani = stable front-line physical anchor; Sani = agile magic/support responder**; exact stats, equipment, spells, skills and special commands remain OPEN.
 - Field leader model: **free switching during normal exploration with explicit story/tutorial exceptions** — after multiple eligible party members are available, the player may normally change the controlled field leader; specific scenes, tutorials or designed sequences may temporarily lock the leader.
-- Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, while exact effects, scope, values and tuning remain OPEN.
+- Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, and leader buffs may affect both combat and exploration while remaining clearly readable and character-themed.
 
 ## Existing C01 Boundary
 
@@ -750,7 +750,6 @@ Design implication:
 
 Explicitly still OPEN:
 
-- whether leader buffs affect combat, exploration or both
 - exact leader buff for `yohani`
 - exact leader buff for `sani`
 - exact leader buffs for future playable characters
@@ -759,6 +758,39 @@ Explicitly still OPEN:
 - when a changed leader buff takes effect relative to battle entry or other events
 - whether any special scripted sequence temporarily suppresses or overrides a leader buff
 - exact UI presentation and comparison flow for leader buffs
+
+### GD-027 — Leader Buff Scope
+
+Status: **LOCKED**
+
+Decision: **Option C — leader buffs may affect both combat and exploration.**
+
+Scope model:
+
+1. A character's leader buff may provide a combat-facing effect, an exploration-facing effect, or a coherent combination of both when that character is the current leader.
+2. Combat-facing effects must integrate with the existing classic JRPG rules rather than creating a separate hidden combat system.
+3. Exploration-facing effects may influence ordinary adventure play, but required progression must not become impossible merely because the player has the "wrong" leader unless an explicit authored sequence clearly communicates a temporary requirement.
+4. Each character's leader-buff package should read as one recognizable character theme rather than a collection of unrelated hidden bonuses.
+5. The practical effect must remain visible and understandable to the intended 8–10-year-old player.
+
+Design implication:
+
+- Leader selection can matter before both battles and exploration segments, giving field-leader switching persistent gameplay meaning.
+- Future characters can express identity through the same simple leader system without requiring separate field and combat leadership mechanics.
+- Exploration benefits must preserve discovery and convenience without turning leader switching into constant compulsory micromanagement.
+- Exact effects and tuning remain separate design decisions and must not be invented from this scope decision alone.
+
+Explicitly still OPEN:
+
+- exact leader buff for `yohani`
+- exact leader buff for `sani`
+- exact leader buffs for future playable characters
+- exact combat/exploration split for each character
+- numerical magnitude and formulas
+- whether buffs scale or upgrade
+- exact activation timing
+- scripted suppression / override rules
+- exact UI presentation
 
 ## Gate Status
 
@@ -803,7 +835,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF BASELINE LOCKED**
+Status: **PARTIAL — OPENING + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
 
 Locked so far:
 
@@ -817,5 +849,6 @@ Locked so far:
 - initial combat identities: Yohani is the stable front-line physical anchor; Sani is the faster magic/support-oriented flexible responder
 - normal exploration supports free switching among eligible field leaders, with explicit story/tutorial exceptions
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
+- leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
 
-Still requiring explicit decisions include the exact opening clue / convergence content, leader-buff scope and protagonist-specific leader-buff effects, plus other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the exact opening clue / convergence content, protagonist-specific leader-buff effects, whether Sani receives a directly playable pre-convergence segment, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

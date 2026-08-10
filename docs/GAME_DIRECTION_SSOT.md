@@ -40,6 +40,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Battle command flow: **classic party-wide round selection** — choose commands for all active party members first, confirm the round, then resolve actions according to battle order rules.
 - Party defeat semantics: **classic Dragon Quest-style consequence** — on full-party defeat, return to the most recent designated revival / recovery point, retain earned EXP and carried items, and lose a portion of currently held money.
 - Save semantics: **classic ritual + modern safety layer** — formal saves occur at designated locations, while autosave and suspend/continue protect real-life interruption without replacing the formal JRPG save structure.
+- Character growth model: **classic fixed growth** — level-ups automatically increase character stats, and character-specific skills / magic are learned through predefined progression rather than player-assigned stat points or skill trees.
 
 ## Existing C01 Boundary
 
@@ -278,6 +279,36 @@ Explicitly still OPEN:
 - whether autosave can be manually loaded from the title/menu and under what restrictions
 - persistence / cloud-sync policy, if any
 
+### GD-012 — Character Growth Model
+
+Status: **LOCKED**
+
+Decision: **Option A — classic fixed character growth.**
+
+Growth model:
+
+1. Characters gain EXP and levels through the normal JRPG progression loop.
+2. Level-ups automatically increase character statistics according to character-specific predefined growth.
+3. Skills and magic are learned through predefined character progression, such as reaching specified levels or approved story progression.
+4. There is no player-assigned stat-point system and no freeform skill tree as part of the baseline.
+
+Design implication:
+
+- Each party member can retain a strong authored identity instead of becoming a generic build container.
+- The player learns classic JRPG progression through EXP, levels, equipment, new abilities and party composition rather than build optimization.
+- Progression choices may still exist through equipment, party composition and tactical command selection without requiring permanent stat allocation.
+- The system remains readable for an independently playing 8–10-year-old while preserving meaningful character differentiation.
+
+Explicitly still OPEN:
+
+- exact stat-growth curves for each character
+- exact level caps
+- exact EXP curve
+- exact skill / magic learn levels
+- whether any abilities are learned through story events rather than levels
+- whether equipment can grant temporary or conditional abilities
+- final role / class identity of each party member
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -300,7 +331,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE SEMANTICS LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH LOCKED**
 
 Locked so far:
 
@@ -309,5 +340,6 @@ Locked so far:
 - battle command flow: select commands for the full active party first, then resolve the round according to battle-order rules
 - defeat semantics: return to a designated revival point, keep EXP/items, lose a portion of held money
 - save semantics: formal designated saves plus autosave and suspend/continue safety layers
+- character growth: fixed character-specific level growth with predefined skill / magic acquisition; no stat-point allocation or freeform skill tree
 
-Still requiring explicit decisions include character-growth/progression model, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include progression/economy constraints, reserve-party rules if needed, inventory/equipment handling, and other rules required by the vertical slice. Agents must not fill these decisions silently.

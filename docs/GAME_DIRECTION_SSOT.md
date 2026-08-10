@@ -61,6 +61,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Initial protagonist combat identities: **Yohani = stable front-line physical anchor; Sani = agile magic/support responder**; exact stats, equipment, spells, skills and special commands remain OPEN.
 - Field leader model: **free switching during normal exploration with explicit story/tutorial exceptions** — after multiple eligible party members are available, the player may normally change the controlled field leader; specific scenes, tutorials or designed sequences may temporarily lock the leader.
 - Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, and leader buffs may affect both combat and exploration while remaining clearly readable and character-themed.
+- Yohani leader-buff identity: **Protection / Guardian** — when Yohani is the leader, the party should feel safer and more stable under pressure in both combat and exploration; exact mechanics and numbers remain OPEN.
 
 ## Existing C01 Boundary
 
@@ -754,7 +755,7 @@ Design implication:
 
 Explicitly still OPEN:
 
-- exact leader buff for `yohani`
+- exact mechanical expression of `yohani`'s locked Protection / Guardian leader-buff identity (theme resolved by GD-034)
 - exact leader buff for `sani`
 - exact leader buffs for future playable characters
 - numerical magnitude and formulas
@@ -786,7 +787,7 @@ Design implication:
 
 Explicitly still OPEN:
 
-- exact leader buff for `yohani`
+- exact combat / exploration mechanics used to express `yohani`'s locked Protection / Guardian theme (theme resolved by GD-034)
 - exact leader buff for `sani`
 - exact leader buffs for future playable characters
 - exact combat/exploration split for each character
@@ -996,6 +997,38 @@ Explicitly still OPEN:
 - exact enemy / encounter used to demonstrate the two-character party
 - exact Sani commands, skills or magic available in that first shared battle
 
+### GD-034 — Yohani Leader Buff Identity
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani's leader-buff identity is Protection / Guardian: when he leads, the party should feel safer and more stable under pressure.**
+
+Leader-theme model:
+
+1. The theme applies across both combat and exploration, preserving the scope established by GD-027.
+2. In combat, Yohani's leader effect should reinforce party stability, survivability or risk mitigation in a way that fits his locked stable front-line identity.
+3. In exploration, the same theme may reduce ordinary adventuring risk or attrition, improve safety or otherwise make difficult travel feel more secure, but it must not bypass required progression or remove meaningful challenge.
+4. The effect package must read as one simple idea: **Yohani leading makes the group harder to destabilize.**
+5. This decision locks the identity and player-facing meaning only; it does not lock a particular statistic, formula, trigger or numerical value.
+6. The theme does not require Yohani to use a taunt mechanic, receive all enemy attacks, equip a shield or become the only defensive character unless later decisions explicitly establish those mechanics.
+
+Design implication:
+
+- Yohani's field-leader identity now reinforces his battle identity without turning the leader system into a duplicate class system.
+- The theme gives the intended 8–10-year-old player a simple mental model: choosing Yohani as leader is the safer / steadier choice.
+- Future mechanical tuning may express that promise differently in combat and exploration, but both expressions must remain recognizably part of the same Protection theme.
+- This decision does not define Sani's leader-buff identity; that remains OPEN.
+
+Explicitly still OPEN:
+
+- exact combat effect used to express Protection
+- exact exploration effect used to express Protection
+- numerical magnitude and formula
+- whether the effect scales, upgrades or changes later
+- activation / refresh timing
+- exact UI name, icon and explanatory text
+- whether any scripted sequence temporarily suppresses or overrides the effect
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -1039,7 +1072,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + YOHANI LEADER THEME LOCKED**
 
 Locked so far:
 
@@ -1060,5 +1093,6 @@ Locked so far:
 - normal exploration supports free switching among eligible field leaders, with explicit story/tutorial exceptions
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 - leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
+- Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include the protagonists' specific leader-buff identities, the opening anomaly's concrete clue / convergence presentation, the exact first shared-battle context, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include Sani's leader-buff identity, the opening anomaly's concrete clue / convergence presentation, the exact first shared-battle context, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

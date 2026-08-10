@@ -32,6 +32,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - The cause of the Star Road breakage remains OPEN.
 - Primary target player age: **8–10 years old**.
 - Reading assumption: **normal Taiwanese elementary middle-grade reading ability**; complete short dialogue, objectives, equipment text and skill descriptions are acceptable, but long text walls are not the baseline.
+- Independence target: **fully independent play**; an 8–10-year-old player should be able to understand, navigate and complete the intended experience without required adult explanation or intervention.
 
 ## Existing C01 Boundary
 
@@ -90,7 +91,7 @@ Design implication:
 - The game must remain a real JRPG rather than being reduced to a preschool-style simplified game.
 - Core JRPG concepts such as HP, MP, equipment, money, levels and command selection may be taught progressively.
 - Chinese text, tutorial pacing, puzzle complexity, battle pressure and navigation must be designed for an 8–10-year-old primary player.
-- Exact reading assumptions, independence level, failure pressure and session length remain OPEN until separately approved.
+- Failure pressure and session length remain OPEN until separately approved.
 
 ### GD-003 — Reading Ability Assumption
 
@@ -106,16 +107,30 @@ Design implication:
 - Important gameplay information should remain concise, visually structured and repeatable through UI where appropriate.
 - Reading support must not remove the need to learn ordinary JRPG dialogue and menu grammar.
 
+### GD-004 — Independent Play Target
+
+Status: **LOCKED**
+
+Decision: **Option C — fully independent play.**
+
+Design implication:
+
+- The intended 8–10-year-old player must be able to progress without required adult assistance.
+- Mandatory objectives, controls, menus and core combat rules must be understandable from the game itself.
+- Puzzles may require thought, but must not depend on outside knowledge, walkthroughs or an adult interpreting ambiguous instructions.
+- Navigation may preserve exploration and discovery, but required progression must have recoverable in-game clues and must not rely on external guidance.
+- If the player becomes stuck, the game should provide in-world or UI-based recovery paths without automatically solving the challenge from the outset.
+- Independent play does **not** mean removing challenge, exploration, reading or traditional JRPG grammar.
+
 ## Current Open Gate
 
 ### Gate 2 — Target Player
 
-Status: **PARTIAL — AGE + READING LOCKED, OTHER ASSUMPTIONS OPEN**
+Status: **PARTIAL — AGE + READING + INDEPENDENCE LOCKED**
 
 Still required before slice design is locked:
 
-- desired independence level (play alone vs. adult assistance)
 - acceptable difficulty / failure pressure
 - approximate play-session length
 
-Agents must not infer these remaining values from age or reading ability alone.
+Agents must not infer these remaining values from age, reading ability or independence target alone.

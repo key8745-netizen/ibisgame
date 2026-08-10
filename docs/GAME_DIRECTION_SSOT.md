@@ -52,6 +52,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
+- Initial protagonist combat identities: **Yohani = stable front-line physical anchor; Sani = agile magic/support responder**; exact stats, equipment, spells, skills and special commands remain OPEN.
 
 ## Existing C01 Boundary
 
@@ -660,6 +661,39 @@ Explicitly still OPEN:
 - whether combat occurs before, during or after their convergence
 - whether field-lead switching becomes available immediately after they join
 
+### GD-024 — Initial Protagonist Combat Identities
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani begins as the stable front-line physical anchor; Sani begins as the faster magic/support-oriented flexible responder.**
+
+Initial combat-identity model:
+
+1. `yohani` should initially emphasize durability, reliable physical contribution and the ability to function as a stable front-line anchor.
+2. `sani` should initially emphasize speed, magic/support utility and flexible responses to changing battle situations.
+3. The contrast must be readable through play without requiring the player to study hidden formulas or detailed build theory.
+4. This distinction is an authored character identity within the locked fixed-growth model; it does not create a class/job-change system or player-built archetypes.
+5. The roles are emphases rather than absolute prohibitions: later explicitly approved skills or equipment may broaden either protagonist without erasing their recognizable core identity.
+
+Design implication:
+
+- The first two-character battles can teach party-role complementarity in an immediately understandable way.
+- Yohani can provide a dependable baseline while the player learns when Sani's speed, magic or support options create a better tactical answer.
+- Equipment, skill progression and any future character-specific commands can reinforce the same contrast without requiring different overall battle-control rules.
+- Neither role implies narrative superiority; both protagonists must make meaningful contributions to the opening and Vertical Slice.
+
+Explicitly still OPEN:
+
+- exact starting and growth stats for both protagonists
+- exact HP / MP / Attack / Defense / Speed values and relative gaps
+- exact weapons and equipment compatibility
+- exact equipment-slot layouts
+- exact starting skills and magic
+- exact skill / magic learning progression
+- exact character-specific battle commands
+- exact resource costs and status-effect capabilities
+- whether either protagonist later gains substantial abilities outside the initial role emphasis
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -703,7 +737,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE + SIBLING RELATIONSHIP + SANI INDEPENDENT ENTRY LOCKED**
+Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE + SIBLING RELATIONSHIP + SANI INDEPENDENT ENTRY + INITIAL COMBAT IDENTITIES LOCKED**
 
 Locked so far:
 
@@ -714,5 +748,6 @@ Locked so far:
 - the opening everyday context is a small, familiar home village
 - Yohani and Sani are siblings: Yohani is the older brother and Sani is the younger sister
 - before joining Yohani, Sani is already independently investigating or responding to her own clue / problem; their lines converge and they continue together
+- initial combat identities: Yohani is the stable front-line physical anchor; Sani is the faster magic/support-oriented flexible responder
 
-Still requiring explicit decisions include the protagonists' initial gameplay identities, the exact opening clue / convergence content, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include field-control / protagonist-switching semantics, the exact opening clue / convergence content, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

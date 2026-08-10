@@ -51,6 +51,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening inciting structure: **ordinary life disrupted by an anomaly** — Yohani begins with a simple, concrete everyday objective; an abnormal event encountered during that task gradually opens the adventure.
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
+- Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 
 ## Existing C01 Boundary
 
@@ -627,6 +628,38 @@ Explicitly still OPEN:
 - family history and any connection to the wider plot
 - Sani's exact location and activity when Yohani's playable opening begins
 
+### GD-023 — Sani Independent Opening Entry
+
+Status: **LOCKED**
+
+Decision: **Option C — Sani is already independently pursuing her own clue / problem; her line converges with Yohani's during the early opening and they continue together.**
+
+Opening-entry model:
+
+1. The opening still begins with Yohani as the first solo playable character.
+2. Before Sani formally joins Yohani's active party, the story must establish that she has independently noticed, investigated or responded to something relevant rather than simply waiting to be found or escorted.
+3. Yohani's and Sani's early observations / problems overlap or converge strongly enough to create a clear reason for them to act together.
+4. Their convergence establishes the sibling pair as active partners in the opening rather than an older-brother protagonist with a passive younger-sister follower.
+5. This decision does **not** require a separately playable Sani segment before she joins; whether the player directly controls her before convergence remains OPEN.
+
+Design implication:
+
+- Sani enters the story with visible agency and her own contribution to understanding the opening problem.
+- The sibling relationship can show familiarity while still allowing each protagonist to notice different things and make independent judgments.
+- Their meeting can naturally transition from Yohani's solo tutorial into the dual-protagonist party structure.
+- The two strands must remain simple enough that an independently playing 8–10-year-old can understand why they are now working together.
+
+Explicitly still OPEN:
+
+- exact clue / anomaly / problem Sani is investigating
+- whether Sani is directly playable before joining Yohani
+- Sani's exact location and activity when the opening begins
+- whether Yohani or Sani initially understands more about the anomaly
+- exact meeting / convergence scene
+- whether the same anomaly directly triggers both protagonists' actions
+- whether combat occurs before, during or after their convergence
+- whether field-lead switching becomes available immediately after they join
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -670,7 +703,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE + SIBLING RELATIONSHIP LOCKED**
+Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE + SIBLING RELATIONSHIP + SANI INDEPENDENT ENTRY LOCKED**
 
 Locked so far:
 
@@ -680,5 +713,6 @@ Locked so far:
 - Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
 - the opening everyday context is a small, familiar home village
 - Yohani and Sani are siblings: Yohani is the older brother and Sani is the younger sister
+- before joining Yohani, Sani is already independently investigating or responding to her own clue / problem; their lines converge and they continue together
 
-Still requiring explicit decisions include Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the protagonists' initial gameplay identities, the exact opening clue / convergence content, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

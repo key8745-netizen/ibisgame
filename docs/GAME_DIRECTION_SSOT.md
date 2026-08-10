@@ -51,6 +51,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening inciting structure: **ordinary life disrupted by an anomaly** — Yohani begins with a simple, concrete everyday objective; an abnormal event encountered during that task gradually opens the adventure.
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
 - Opening everyday task type: **village errand** — Yohani's first concrete objective is an ordinary task performed within the familiar village, giving the player a reason to move through the settlement and meet normal village life before the anomaly interrupts it.
+- Initial anomaly presentation: **subtle but unmistakably wrong** — the first abnormality is clearly noticeable as something that should not be happening in familiar village life, but it does not begin as an immediate crisis or attack; its exact form and cause remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -563,7 +564,7 @@ Explicitly still OPEN:
 
 - exact village errand content (resolved only at type level by GD-029)
 - exact starting location and social context
-- exact nature and presentation of the anomaly
+- exact sensory / physical form of the anomaly (presentation intensity resolved by GD-030)
 - whether the anomaly directly involves Star Roads, magic or monsters
 - whether the anomaly itself causes Sani's introduction
 - whether combat occurs before or after the anomaly
@@ -862,6 +863,39 @@ Explicitly still OPEN:
 - whether completing the errand is interrupted, completed before the anomaly, or resumed later
 - exact transition from Yohani's errand into the playable Sani segment
 
+### GD-030 — Initial Anomaly Presentation
+
+Status: **LOCKED**
+
+Decision: **Option A — the first anomaly is subtle but unmistakably wrong, without beginning as an immediate crisis.**
+
+Presentation model:
+
+1. The first abnormality appears inside or immediately around otherwise familiar village life.
+2. The player must be able to recognize that something is genuinely out of place, even though the exact meaning is not yet explained.
+3. The first presentation does not begin with an immediate attack, catastrophic destruction or full crisis escalation.
+4. The abnormality may be expressed through sound, light, traces, object state, environmental behavior or another approved form, but the exact manifestation remains OPEN.
+5. This presentation decision does **not** define the anomaly's cause, ontology or relationship to Star Roads, magic, monsters or ancient civilization.
+6. Later escalation may become dangerous; this decision governs only the player's first encounter with the abnormality.
+
+Design implication:
+
+- The opening preserves a readable `normal → something is wrong → investigate → escalation` rhythm rather than jumping directly from tutorial errands to crisis.
+- Yohani and Sani can plausibly notice different evidence or perspectives before their lines converge.
+- The player receives a mystery question before receiving a danger response, helping the opening establish curiosity as well as threat.
+- The anomaly must remain clear enough that an independently playing 8–10-year-old understands that investigating it is intentional progression rather than decorative background detail.
+
+Explicitly still OPEN:
+
+- exact visual / audio / environmental form of the anomaly
+- exact location of first appearance
+- exact clue Yohani receives from it
+- exact clue Sani receives from her parallel investigation
+- whether both protagonists are observing the same underlying incident or separate related incidents
+- exact cause and world-lore explanation
+- when and how the anomaly escalates into danger or combat
+- exact convergence scene produced by the two lines of investigation
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -905,12 +939,13 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY PRESENTATION + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
 
 Locked so far:
 
 - the first controllable character is Yohani
 - Yohani's first concrete objective is an ordinary village errand that establishes familiar local life before the anomaly
+- the first anomaly is subtle but unmistakably wrong and does not begin as an immediate crisis
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
@@ -923,4 +958,4 @@ Locked so far:
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 - leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
 
-Still requiring explicit decisions include the opening anomaly / clue / convergence content, protagonist-specific leader-buff effects, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include how Yohani's and Sani's anomaly clues relate and converge, protagonist-specific leader-buff effects, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

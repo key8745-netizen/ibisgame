@@ -37,6 +37,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Intended normal play session: **60–90 minutes**; the game may use full home-console-style JRPG adventure pacing rather than being designed around very short mobile-style sessions.
 - Maximum active battle party size: **4 characters**.
 - Encounter model: **hybrid** — ordinary exploration areas use random encounters as the baseline, while selected special, elite and event enemies may be visible on the map.
+- Battle command flow: **classic party-wide round selection** — choose commands for all active party members first, confirm the round, then resolve actions according to battle order rules.
 
 ## Existing C01 Boundary
 
@@ -196,6 +197,34 @@ Explicitly still OPEN:
 - whether some regions disable random encounters
 - encounter-rate modifiers, repellent items or equivalent systems
 
+### GD-009 — Battle Command Flow
+
+Status: **LOCKED**
+
+Decision: **Option A — classic Dragon Quest-style party-wide round command selection.**
+
+Round structure:
+
+1. At the start of a round, the player selects a command for each currently active party member.
+2. The round is confirmed only after the required party commands are chosen.
+3. Player and enemy actions then resolve according to the battle-order rules.
+4. A new round begins after the previous round has fully resolved.
+
+Design implication:
+
+- The player plans the whole party's round before seeing all action results, preserving the classic JRPG decision rhythm.
+- The UI must make each selected character and command unambiguous for an independently playing 8–10-year-old.
+- The system must not silently change into character-by-character initiative input where commands are chosen only when each actor's turn arrives.
+
+Explicitly still OPEN:
+
+- speed / agility formula and randomness
+- tie handling for equal action-order values
+- enemy AI and enemy command-selection timing
+- whether command entry can be backed up / cancelled before final round confirmation
+- whether any future skill can alter initiative or action order
+- exact command menu contents beyond the already established classic command family baseline
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -218,11 +247,12 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY SIZE + ENCOUNTER MODEL LOCKED**
+Status: **PARTIAL — PARTY SIZE + ENCOUNTER MODEL + BATTLE COMMAND FLOW LOCKED**
 
 Locked so far:
 
 - maximum active battle party: 4
 - encounter model: hybrid; random encounters remain the ordinary-area baseline, with selected visible special / elite / event enemies
+- battle command flow: select commands for the full active party first, then resolve the round according to battle-order rules
 
-Still requiring explicit decisions include battle command flow, defeat/revival semantics, save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include defeat/revival semantics, save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.

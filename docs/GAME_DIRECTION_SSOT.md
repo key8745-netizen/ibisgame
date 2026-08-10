@@ -54,6 +54,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Initial anomaly presentation: **subtle but unmistakably wrong** — the first abnormality is clearly noticeable as something that should not be happening in familiar village life, but it does not begin as an immediate crisis or attack; its exact form and cause remain OPEN.
 - Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
+- First shared sibling battle context: **the opening anomaly escalates immediately at the sibling convergence, triggering Yohani and Sani's first formal two-character battle on the spot**; exact enemy, cause, scene details and battle-specific tutorial content remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -834,7 +835,7 @@ Explicitly still OPEN:
 - exact non-combat tension / hazard presentation, if any
 - exact timing of her observation relative to Yohani's observation of the same underlying anomaly
 - exact transition scene from Yohani to Sani
-- exact convergence scene after the Sani segment
+- exact convergence scene after the Sani segment, within the timing constraint established by GD-036
 - whether any leader-buff or field-leader mechanics are taught before or only after convergence
 
 ### GD-029 — Opening Village Errand
@@ -901,7 +902,7 @@ Explicitly still OPEN:
 - exact way their separate clues reveal a shared underlying incident
 - exact cause and world-lore explanation
 - exact form and cause of the escalation that produces Yohani's first solo battle (timing resolved by GD-032)
-- exact convergence scene produced by the two lines of investigation
+- exact presentation of the convergence escalation that produces the first shared battle (timing resolved by GD-036)
 
 ### GD-031 — Shared Underlying Opening Anomaly
 
@@ -931,7 +932,7 @@ Explicitly still OPEN:
 - exact difference in the information or perspective each clue provides
 - exact time relationship between the two discoveries
 - exact physical locations of the clues
-- exact convergence scene and dialogue
+- exact convergence scene and dialogue, with the immediate escalation timing locked by GD-036
 - whether either protagonist initially misinterprets the clue
 - exact cause and lore meaning of the anomaly
 - exact mechanism by which the anomaly's Yohani-side escalation leads to the first battle
@@ -967,7 +968,7 @@ Explicitly still OPEN:
 - whether `Run` is available in this first battle
 - exact tutorial prompts and command restrictions, if any
 - exact recovery state after the battle
-- exact timing / encounter context of Sani's first formal battle after convergence
+- exact enemy, mechanics and tutorial presentation of the first shared battle; its timing is resolved by GD-036
 
 ### GD-033 — Sani Pre-Convergence Combat Scope
 
@@ -981,7 +982,7 @@ Segment model:
 2. The segment does not open the standard battle interface and does not require the player to learn Sani through a solo combat tutorial.
 3. The segment may contain clearly authored non-combat tension, danger, pursuit, avoidance or environmental hazards if later approved, but those elements must not silently become a formal battle.
 4. Sani's first formal battle occurs only after the siblings have converged and can demonstrate her role inside party combat.
-5. This decision does not define when that first shared battle occurs, which enemy is fought or exactly which of Sani's magic/support capabilities are available at that point.
+5. The timing of that first shared battle is resolved by GD-036; this decision still does not define the exact enemy or which of Sani's magic/support capabilities are available at that point.
 
 Design implication:
 
@@ -994,8 +995,8 @@ Explicitly still OPEN:
 
 - exact non-combat tension / hazard, if any
 - whether Sani can fail or be reset during a non-combat hazard
-- exact timing and location of Sani's first formal battle after convergence
-- exact enemy / encounter used to demonstrate the two-character party
+- exact enemy / encounter used to demonstrate the two-character party at convergence
+- exact encounter presentation and narrative mechanism of the immediate escalation
 - exact Sani commands, skills or magic available in that first shared battle
 
 ### GD-034 — Yohani Leader Buff Identity
@@ -1062,6 +1063,39 @@ Explicitly still OPEN:
 - exact UI name, icon and explanatory text
 - whether any scripted sequence temporarily suppresses or overrides the effect
 
+### GD-036 — First Shared Sibling Battle Context
+
+Status: **LOCKED**
+
+Decision: **Option B — as Yohani and Sani converge and connect their two clues, the opening anomaly immediately escalates into an active threat, triggering their first formal two-character battle at the convergence.**
+
+Shared-battle model:
+
+1. Sani's short playable investigation still ends by converging with Yohani's line rather than by entering a separate solo battle.
+2. During or immediately after the siblings recognize that their clues belong to the same underlying anomaly, the situation escalates before normal shared exploration resumes.
+3. The resulting encounter is the first formal battle in which both `yohani` and `sani` are active player-controlled party members.
+4. This encounter is also Sani's first formal combat participation, preserving GD-033.
+5. The pacing relationship is therefore `clue convergence → immediate threat escalation → first sibling party battle`, without requiring the siblings to return to an adult authority or travel through another normal exploration segment first.
+6. This decision locks the timing and narrative placement only. It does **not** define the enemy, exact cause of escalation, anomaly ontology, relationship to Star Roads / magic / monsters, exact location, skills available, leader selection state or tutorial prompts.
+
+Design implication:
+
+- The dual-protagonist convergence receives an immediate gameplay payoff instead of ending as exposition only.
+- The first two-character battle can demonstrate Yohani's stability and Sani's speed / magic / support contrast at the exact moment the story establishes them as an active pair.
+- The opening keeps forward momentum: the player understands that combining the two clues has brought them to the real point of danger.
+- The first shared battle should teach party-wide command planning without simultaneously introducing unrelated systems unless separately approved.
+
+Explicitly still OPEN:
+
+- exact convergence scene and dialogue
+- exact enemy / enemy count
+- exact physical battle location
+- exact anomaly mechanism that creates the immediate threat
+- whether the encounter begins as a visible scripted enemy, a direct event transition or another approved presentation
+- exact Sani skills / magic available in this battle
+- whether field-leader switching and leader buffs are available before this battle, introduced after it or delayed further
+- exact recovery state and next objective after the battle
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -1105,7 +1139,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES LOCKED**
 
 Locked so far:
 
@@ -1116,6 +1150,7 @@ Locked so far:
 - the game's first real battle is a Yohani solo battle that occurs after the anomaly becomes relevant and before the playable Sani segment / sibling convergence
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
+- when the siblings converge and connect their clues, the anomaly immediately escalates into their first formal two-character battle before normal shared exploration resumes
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
 - Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
@@ -1129,4 +1164,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include the opening anomaly's concrete clue / convergence presentation, the exact first shared-battle context, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the opening anomaly's concrete clue / convergence presentation, the timing for introducing field-leader switching / leader buffs, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

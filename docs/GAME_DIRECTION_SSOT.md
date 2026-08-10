@@ -38,6 +38,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Maximum active battle party size: **4 characters**.
 - Encounter model: **hybrid** — ordinary exploration areas use random encounters as the baseline, while selected special, elite and event enemies may be visible on the map.
 - Battle command flow: **classic party-wide round selection** — choose commands for all active party members first, confirm the round, then resolve actions according to battle order rules.
+- Party defeat semantics: **classic Dragon Quest-style consequence** — on full-party defeat, return to the most recent designated revival / recovery point, retain earned EXP and carried items, and lose a portion of currently held money.
 
 ## Existing C01 Boundary
 
@@ -141,14 +142,6 @@ Design implication:
 - The game must remain independently understandable by the 8–10 target player even when challenge is substantial.
 - Difficulty must come from learnable JRPG decisions, resource management and preparation, not obscure rules or intentionally misleading information.
 
-Explicitly still OPEN:
-
-- exact defeat penalty
-- whether money is lost on defeat and by how much
-- whether EXP or items can ever be lost
-- revival / restart location and semantics
-- whether bosses or specific encounters receive special retry rules
-
 ### GD-006 — Intended Play-Session Length
 
 Status: **LOCKED**
@@ -225,6 +218,36 @@ Explicitly still OPEN:
 - whether any future skill can alter initiative or action order
 - exact command menu contents beyond the already established classic command family baseline
 
+### GD-010 — Party Defeat and Revival Semantics
+
+Status: **LOCKED**
+
+Decision: **Option A — classic Dragon Quest-style defeat consequence.**
+
+On full-party defeat:
+
+1. The party returns to the most recent designated revival / recovery point.
+2. Earned EXP is retained.
+3. Carried items are retained.
+4. A portion of currently held money is lost.
+
+Design implication:
+
+- Defeat is meaningful and economically painful without erasing character-growth progress or acquired items.
+- The player may need to reconsider preparation, equipment, resource use or whether to return to a difficult area immediately.
+- Defeat must not roll the game back to the player's last manual save as the default consequence.
+- The consequence should be clearly explained in-game so an independently playing 8–10-year-old understands what was lost and what was retained.
+
+Explicitly still OPEN:
+
+- exact percentage / formula for money loss
+- minimum or maximum money-loss rules, if any
+- exact revival-point selection rules
+- post-revival HP / MP state
+- status-condition handling after revival
+- individual fallen-member revival semantics outside a total-party defeat
+- special retry rules for bosses or scripted encounters
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -247,12 +270,13 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY SIZE + ENCOUNTER MODEL + BATTLE COMMAND FLOW LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT SEMANTICS LOCKED**
 
 Locked so far:
 
 - maximum active battle party: 4
 - encounter model: hybrid; random encounters remain the ordinary-area baseline, with selected visible special / elite / event enemies
 - battle command flow: select commands for the full active party first, then resolve the round according to battle-order rules
+- defeat semantics: return to a designated revival point, keep EXP/items, lose a portion of held money
 
-Still requiring explicit decisions include defeat/revival semantics, save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.

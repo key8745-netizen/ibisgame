@@ -36,6 +36,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Difficulty / failure-pressure target: **close to classic Dragon Quest pressure**; resource management, retreat decisions and meaningful defeat consequences are part of the intended learning experience.
 - Intended normal play session: **60–90 minutes**; the game may use full home-console-style JRPG adventure pacing rather than being designed around very short mobile-style sessions.
 - Maximum active battle party size: **4 characters**.
+- Encounter model: **hybrid** — ordinary exploration areas use random encounters as the baseline, while selected special, elite and event enemies may be visible on the map.
 
 ## Existing C01 Boundary
 
@@ -174,6 +175,27 @@ Design implication:
 - This decision does **not** require the game or vertical slice to begin with four characters.
 - Party acquisition order, reserve-party size, in-battle switching, formation rules and whether the vertical slice ever reaches four active members remain **OPEN**.
 
+### GD-008 — Encounter Model
+
+Status: **LOCKED**
+
+Decision: **Option C — hybrid encounter model.**
+
+Design implication:
+
+- Ordinary overworld / route / dungeon exploration may use classic random encounters as the default encounter pressure.
+- Selected special enemies, elite enemies, bosses or story/event encounters may be represented visibly in the world when doing so has a clear gameplay or narrative purpose.
+- The hybrid model must preserve resource-management pressure rather than turning all ordinary combat into freely avoidable map encounters.
+- Visible enemies must not silently replace the random-encounter baseline across the whole game.
+
+Explicitly still OPEN:
+
+- random encounter rate and step/zone algorithm
+- which exact enemy categories are visible
+- whether visible non-boss enemies can be avoided, ambushed or respawn
+- whether some regions disable random encounters
+- encounter-rate modifiers, repellent items or equivalent systems
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -196,10 +218,11 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — MAX ACTIVE PARTY SIZE LOCKED**
+Status: **PARTIAL — PARTY SIZE + ENCOUNTER MODEL LOCKED**
 
 Locked so far:
 
 - maximum active battle party: 4
+- encounter model: hybrid; random encounters remain the ordinary-area baseline, with selected visible special / elite / event enemies
 
-Still requiring explicit decisions include encounter model confirmation, battle command flow, defeat/revival semantics, save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include battle command flow, defeat/revival semantics, save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.

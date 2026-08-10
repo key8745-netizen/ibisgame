@@ -52,6 +52,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
 - Opening everyday task type: **village errand** — Yohani's first concrete objective is an ordinary task performed within the familiar village, giving the player a reason to move through the settlement and meet normal village life before the anomaly interrupts it.
 - Initial anomaly presentation: **subtle but unmistakably wrong** — the first abnormality is clearly noticeable as something that should not be happening in familiar village life, but it does not begin as an immediate crisis or attack; its exact form and cause remain OPEN.
+- Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -661,7 +662,7 @@ Explicitly still OPEN:
 - Sani's exact location and activity when the opening begins
 - whether Yohani or Sani initially understands more about the anomaly
 - exact meeting / convergence scene
-- whether the same anomaly directly triggers both protagonists' actions
+- exact way the two different clues are shown to point to the same underlying anomaly
 - whether combat occurs before, during or after their convergence
 - whether field-lead switching becomes available immediately after they join
 
@@ -825,7 +826,7 @@ Explicitly still OPEN:
 - exact location and objective of the Sani segment
 - exact clue / anomaly she investigates
 - whether the Sani segment contains combat
-- whether she encounters the anomaly before, after or in parallel with Yohani
+- exact timing of her observation relative to Yohani's observation of the same underlying anomaly
 - exact transition scene from Yohani to Sani
 - exact convergence scene after the Sani segment
 - whether any leader-buff or field-leader mechanics are taught before or only after convergence
@@ -891,10 +892,43 @@ Explicitly still OPEN:
 - exact location of first appearance
 - exact clue Yohani receives from it
 - exact clue Sani receives from her parallel investigation
-- whether both protagonists are observing the same underlying incident or separate related incidents
+- exact way their separate clues reveal a shared underlying incident
 - exact cause and world-lore explanation
 - when and how the anomaly escalates into danger or combat
 - exact convergence scene produced by the two lines of investigation
+
+### GD-031 — Shared Underlying Opening Anomaly
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani and Sani independently discover different clues or perspectives belonging to the same underlying opening anomaly.**
+
+Clue-relationship model:
+
+1. Yohani's village-errand line and Sani's short playable line do not introduce unrelated opening mysteries.
+2. Each protagonist receives distinct evidence, context or perspective, so neither segment merely repeats the other's discovery.
+3. The two sets of clues must be compatible enough that their convergence gives the player a clear realization that both protagonists have been following the same abnormal incident.
+4. The player should be able to understand the connection from information presented in play; the relationship must not rely on an unexplained lore reveal or hidden external knowledge.
+5. This decision defines the relationship between the opening clues only. It does **not** define the anomaly's sensory form, cause, ontology, Star Road relationship, magic relationship, monster relationship or later world-level explanation.
+
+Design implication:
+
+- The dual playable opening works as a simple two-piece mystery rather than two competing plot hooks.
+- Sani retains independent agency because her segment contributes information Yohani does not already possess.
+- The convergence scene can reward player comprehension by combining two understandable pieces into one shared problem.
+- The clue structure remains simple enough for the intended 8–10-year-old player while still establishing a genuine dual-protagonist perspective.
+
+Explicitly still OPEN:
+
+- exact clue Yohani discovers
+- exact clue Sani discovers
+- exact difference in the information or perspective each clue provides
+- exact time relationship between the two discoveries
+- exact physical locations of the clues
+- exact convergence scene and dialogue
+- whether either protagonist initially misinterprets the clue
+- exact cause and lore meaning of the anomaly
+- when the shared anomaly escalates into danger or combat
 
 ## Gate Status
 
@@ -939,13 +973,14 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY PRESENTATION + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + SHARED CLUE STRUCTURE + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
 
 Locked so far:
 
 - the first controllable character is Yohani
 - Yohani's first concrete objective is an ordinary village errand that establishes familiar local life before the anomaly
 - the first anomaly is subtle but unmistakably wrong and does not begin as an immediate crisis
+- Yohani and Sani independently discover different clues or perspectives belonging to the same underlying opening anomaly
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
@@ -958,4 +993,4 @@ Locked so far:
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 - leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
 
-Still requiring explicit decisions include how Yohani's and Sani's anomaly clues relate and converge, protagonist-specific leader-buff effects, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the protagonists' specific leader-buff identities, the opening anomaly's concrete clue/convergence presentation, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

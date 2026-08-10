@@ -39,6 +39,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Encounter model: **hybrid** — ordinary exploration areas use random encounters as the baseline, while selected special, elite and event enemies may be visible on the map.
 - Battle command flow: **classic party-wide round selection** — choose commands for all active party members first, confirm the round, then resolve actions according to battle order rules.
 - Party defeat semantics: **classic Dragon Quest-style consequence** — on full-party defeat, return to the most recent designated revival / recovery point, retain earned EXP and carried items, and lose a portion of currently held money.
+- Save semantics: **classic ritual + modern safety layer** — formal saves occur at designated locations, while autosave and suspend/continue protect real-life interruption without replacing the formal JRPG save structure.
 
 ## Existing C01 Boundary
 
@@ -248,6 +249,35 @@ Explicitly still OPEN:
 - individual fallen-member revival semantics outside a total-party defeat
 - special retry rules for bosses or scripted encounters
 
+### GD-011 — Save Semantics
+
+Status: **LOCKED**
+
+Decision: **Option B — classic formal-save ritual plus a modern safety layer.**
+
+Save model:
+
+1. Formal/manual saves are created at designated in-world save locations or equivalent approved JRPG save points.
+2. The game also maintains an autosave safety layer at appropriate progression boundaries.
+3. A suspend / continue mechanism must allow the player to stop safely when real life interrupts a 60–90 minute intended session.
+4. Autosave and suspend features protect continuity; they do not silently replace the formal save ritual or erase defeat consequences.
+
+Design implication:
+
+- The player still learns the classic JRPG habit of deliberately returning to or using a formal save point.
+- The game must protect an 8–10-year-old player's time when the browser/device must be closed unexpectedly.
+- Autosave design must not become a default battle-result reroll system that trivializes the locked defeat/economy pressure.
+- Save UI must clearly distinguish formal save state from temporary/safety recovery state where relevant.
+
+Explicitly still OPEN:
+
+- exact formal save-point fiction / location type
+- number of manual save slots
+- autosave trigger list and retention count
+- whether suspend state is single-use, overwritten on resume, or otherwise constrained
+- whether autosave can be manually loaded from the title/menu and under what restrictions
+- persistence / cloud-sync policy, if any
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -270,7 +300,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT SEMANTICS LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE SEMANTICS LOCKED**
 
 Locked so far:
 
@@ -278,5 +308,6 @@ Locked so far:
 - encounter model: hybrid; random encounters remain the ordinary-area baseline, with selected visible special / elite / event enemies
 - battle command flow: select commands for the full active party first, then resolve the round according to battle-order rules
 - defeat semantics: return to a designated revival point, keep EXP/items, lose a portion of held money
+- save semantics: formal designated saves plus autosave and suspend/continue safety layers
 
-Still requiring explicit decisions include save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include character-growth/progression model, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.

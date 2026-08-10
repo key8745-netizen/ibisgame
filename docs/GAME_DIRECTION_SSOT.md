@@ -66,7 +66,8 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - First solo battle encounter presentation: **visible scripted map encounter with normal territorial vigilance** — the familiar ordinary monster is visibly present near the village water-channel anomaly, notices Yohani, gives a readable warning / territorial response, then deliberately approaches and enters battle. The high-level behavior is normal rather than panicked; exact map placement, warning animation, distances, timing, contact threshold and anomaly causality remain OPEN. This does not replace the locked random-encounter baseline for ordinary areas.
 - First shared sibling battle context: **the opening anomaly escalates immediately at the sibling convergence, triggering Yohani and Sani's first formal two-character battle on the spot**; exact enemy cause, scene details and battle-specific tutorial content remain OPEN.
 - First shared sibling battle enemy state: **1 familiar local monster in unmistakable panic / disorientation, visibly abnormal before battle** — the enemy is a monster the protagonists / local community can recognize, and exactly one such monster appears in this first shared battle. Its panic / disorientation is already readable on the exploration field before combat begins. The locked transition is **panic-driven rush → direct contact with the siblings → battle**: the monster rushes toward Yohani and Sani as part of its loss of control rather than as a clearly deliberate hunt. Exact species, concrete field animation, rush distance / path, player-control lock timing, cause and relationship to the reverse-flow anomaly remain OPEN.
-- Opening tutorial-battle monster relationship: **same familiar local monster species, different individual creatures across the two opening battles** — the normal enemy in Yohani's first solo battle and the panicked enemy in the first shared sibling battle are the same species but explicitly different specimens, so the player can compare ordinary versus abnormal behavior without implying that the first individual later became panicked; the exact species, name and visual design remain OPEN.
+- Opening tutorial-battle monster relationship: **same familiar local monster species, different individual creatures across the two opening battles** — the normal enemy in Yohani's first solo battle and the panicked enemy in the first shared sibling battle are the same species but explicitly different specimens, so the player can compare ordinary versus abnormal behavior without implying that the first individual later became panicked; the exact species, name and detailed visual design remain OPEN within the small-quadruped body archetype locked by GD-056.
+- Opening tutorial-battle monster body archetype: **small quadrupedal fantasy creature** — both opening specimens use the same small four-legged body plan, chosen so posture and locomotion can clearly contrast controlled territorial vigilance with panic / disorientation. Exact species identity, name, surface anatomy, coloration and decorative fantasy traits remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -1130,7 +1131,7 @@ Design implication:
 Explicitly still OPEN:
 
 - exact convergence scene and dialogue
-- exact familiar monster species identity / name / visual design shared by both opening battles
+- exact familiar monster species identity / name / detailed visual design shared by both opening battles, within the small-quadruped body archetype locked by GD-056
 - exact concrete panic/disorientation field animation and in-battle expression
 - exact physical battle location
 - exact anomaly mechanism that creates the immediate threat
@@ -1370,7 +1371,7 @@ Explicitly still OPEN:
 - whether the two water features belong to the same hydrological system
 - exact transition from Yohani's solo battle to Sani's playable segment
 - exact convergence point and dialogue
-- exact shared familiar monster species identity / name / design used in both opening battles
+- exact shared familiar monster species identity / name / detailed visual design used in both opening battles, within the small-quadruped body archetype locked by GD-056
 - exact map placement, territorial-warning animation, approach geometry / contact threshold and causal mechanism for Yohani's first solo battle
 - exact concrete panic/disorientation behavior and causal mechanism for the convergence shared battle
 - exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
@@ -1485,11 +1486,12 @@ Resolution note:
 - GD-053 separately resolves that the first shared sibling battle uses the **same species**.
 - GD-054 separately resolves that the two battles use **different individual creatures**.
 - GD-055 separately resolves that the solo specimen is behaving **normally and territorially**, with warning followed by deliberate approach.
+- GD-056 separately resolves the species' opening body archetype as a **small quadrupedal fantasy creature**.
 - It does **not** resolve the exact species identity, detailed animation, anomaly influence or world-lore causality.
 
 Explicitly still OPEN:
 
-- exact shared monster species identity / name / visual design
+- exact shared monster species identity / name / detailed visual design within the locked small-quadruped body archetype
 - exact map position relative to the village water channel
 - exact territorial warning animation / vocalization / posture
 - exact approach distance, speed, path and contact threshold
@@ -1513,7 +1515,7 @@ Encounter-count model:
 5. This decision does not require the battle to be trivial, scripted or impossible to lose; exact stats, damage, behavior and intended round count remain OPEN.
 6. Later battles may freely introduce multiple enemies and target-selection decisions.
 7. GD-047 fixes the first enemy as visibly present on the map before combat; GD-055 fixes its normal territorial warning / deliberate approach behavior. Neither changes the one-enemy count.
-8. GD-053 fixes that the single enemy in the later first shared battle is the same species as this first enemy, and GD-054 fixes that the later enemy is a different individual creature.
+8. GD-053 fixes that the single enemy in the later first shared battle is the same species as this first enemy, GD-054 fixes that the later enemy is a different individual creature, and GD-056 fixes the shared species' body archetype as a small quadruped.
 
 Design implication:
 
@@ -1528,11 +1530,12 @@ Resolution note:
 - GD-053 separately resolves same-species reuse across the two opening teaching battles.
 - GD-054 separately resolves the two encounters as different individual creatures.
 - GD-055 separately resolves normal territorial warning / deliberate approach behavior.
+- GD-056 separately resolves the shared species' small-quadruped body archetype.
 - It does not resolve species identity, stats, exact animation / geometry, anomaly causality, Run availability or tutorial restrictions.
 
 Explicitly still OPEN:
 
-- exact shared monster species identity / design
+- exact shared monster species identity / detailed design within the locked small-quadruped body archetype
 - exact enemy stats / attacks
 - exact map position relative to the village water channel
 - exact warning animation and approach geometry / contact threshold
@@ -1555,7 +1558,7 @@ Encounter-presentation model:
 4. Seeing the monster beside or near the reverse-flow event does **not** prove that the anomaly summoned, transformed, controlled or caused the monster.
 5. This visible first encounter is compatible with GD-008's hybrid encounter model and does **not** replace the random-encounter baseline for ordinary routes / exploration areas.
 6. The enemy remains the one familiar ordinary local monster established by GD-045 and GD-046; no additional enemy is implied.
-7. GD-053 later reuses the same species in the first shared sibling battle, while GD-054 fixes that the later specimen is a different individual; together with GD-055 this creates a deliberate normal-territorial versus panic-disorientation comparison.
+7. GD-053 later reuses the same species in the first shared sibling battle, GD-054 fixes that the later specimen is a different individual, and GD-056 fixes the shared species as a small quadrupedal fantasy creature; together with GD-055 this creates a deliberate normal-territorial versus panic-disorientation comparison.
 
 Design implication:
 
@@ -1571,11 +1574,12 @@ Resolution note:
 - GD-055 resolves the previously OPEN high-level movement / approach behavior as **normal territorial warning followed by deliberate approach**.
 - GD-053 separately fixes same-species reuse in the later shared battle.
 - GD-054 separately fixes the two encounters as different individual creatures.
+- GD-056 separately fixes the shared species' small-quadruped body archetype.
 - Earlier wording that leaves the solo monster's entire approach behavior OPEN is superseded by GD-055 only at the high-level behavioral sequence; exact animation, geometry, timing and contact threshold remain OPEN.
 
 Explicitly still OPEN:
 
-- exact shared monster species identity / design
+- exact shared monster species identity / detailed design within the locked small-quadruped body archetype
 - exact map position relative to the village water channel
 - exact warning animation / sound / posture
 - exact approach path, distance, speed and battle-start contact threshold
@@ -1599,13 +1603,14 @@ Enemy-state model:
 5. The abnormal behavior must be legible enough that the intended 8–10-year-old player can understand `this same kind of monster is acting strangely` without needing hidden lore knowledge.
 6. The monster does not need to be visibly mutated, transformed or redesigned into a new form merely to communicate the abnormality.
 7. The fact that the abnormal behavior occurs during the same opening incident as the reverse-flow anomaly does **not** establish that the water anomaly caused, controlled or transformed it.
-8. GD-049 resolves the broad behavior class as **panic / disorientation that turns into aggression toward the siblings**, GD-050 resolves the encounter at **exactly one enemy**, GD-051 resolves that the panic / disorientation is already visible on the field before combat, GD-052 resolves the transition as **panic-driven rush → direct contact → battle**, GD-053 resolves same-species reuse across the two opening battles, and GD-054 resolves different individual specimens. Exact species identity, concrete behavior, battle mechanics, rush path / distance and causal relationship remain OPEN.
-9. Any later explanation connecting the monster behavior to Star Roads, magic, the reverse-flow anomaly, another actor or another world-lore cause must be established explicitly in Gate 5 or later; no agent may infer that answer from GD-048 through GD-055 alone.
+8. GD-049 resolves the broad behavior class as **panic / disorientation that turns into aggression toward the siblings**, GD-050 resolves the encounter at **exactly one enemy**, GD-051 resolves that the panic / disorientation is already visible on the field before combat, GD-052 resolves the transition as **panic-driven rush → direct contact → battle**, GD-053 resolves same-species reuse across the two opening battles, GD-054 resolves different individual specimens, and GD-056 fixes the shared species' body archetype as a small quadruped. Exact species identity, concrete behavior, battle mechanics, rush path / distance and causal relationship remain OPEN.
+9. Any later explanation connecting the monster behavior to Star Roads, magic, the reverse-flow anomaly, another actor or another world-lore cause must be established explicitly in Gate 5 or later; no agent may infer that answer from GD-048 through GD-056 alone.
 
 Design implication:
 
-- The opening now escalates in a readable sequence: `one specimen of a familiar species gives a normal territorial warning and approaches deliberately → a different specimen of that same species is visibly panicked before the first sibling battle → panic-driven rush creates the combat threat`.
+- The opening now escalates in a readable sequence: `one specimen of a familiar small quadruped species gives a normal territorial warning and approaches deliberately → a different specimen of that same species is visibly panicked before the first sibling battle → panic-driven rush creates the combat threat`.
 - The same-species comparison lets the player recognize abnormal behavior from memory instead of needing a dialogue explanation, while the different-individual rule prevents an unintended `what happened to the first monster?` continuity question.
+- The four-legged body plan provides multiple readable posture and locomotion cues without requiring explanatory dialogue.
 - This lets the first shared battle add narrative tension while still keeping the player's mechanical focus on learning two-character party command planning.
 - The player receives a second mystery signal — not only the environment but also familiar creature behavior is wrong — without being told that both signals share a known cause.
 - The design preserves Gate 5 freedom and avoids prematurely turning the opening into a confirmed monster-mutation or anomaly-control story.
@@ -1624,10 +1629,11 @@ Resolution note:
 - GD-053 resolves the **species relationship across the two opening battles as the same species**.
 - GD-054 resolves the **individual relationship across the two opening battles as different creatures**.
 - GD-055 supplies the earlier encounter's normal territorial-behavior baseline for comparison.
+- GD-056 supplies the shared species' small-quadruped body archetype.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species identity / name / visual design
+- exact shared familiar monster species identity / name / detailed visual design within the locked small-quadruped body archetype
 - exact concrete panic/disorientation field animation and in-battle expression
 - exact combat mechanics used to express the abnormality
 - exact physical battle location
@@ -1655,12 +1661,14 @@ Behavior model:
 10. GD-049 does **not** establish that the reverse-flow anomaly frightened the monster, that a Star Road affected it, that magic controlled it, or that another actor is present. All causal explanations remain OPEN for Gate 5 or later.
 11. The monster remains physically recognizable as the familiar local species established by GD-045 and linked across both opening battles by GD-053; mutation or transformation is not required to communicate the behavior.
 12. GD-050 fixes the encounter at **exactly one such monster**; the panic/disorientation read therefore applies to that single enemy rather than to a group pattern in this first shared battle.
+13. GD-056 fixes the species' body archetype as a small quadruped, so panic and vigilance may be differentiated through four-legged posture and locomotion without requiring a transformation.
 
 Design implication:
 
 - The opening threat escalates without collapsing the mystery into `the water anomaly creates evil monsters`.
 - The same-species/different-individual comparison gives the player a clean behavioral baseline without creating an unnecessary returning-monster subplot.
 - The first specimen's controlled warning / approach makes the second specimen's chaotic rush immediately legible as abnormal.
+- The small quadruped body plan gives the animation language enough readable posture and movement contrast to carry that story beat visually.
 - The player receives a useful narrative question: **what is this familiar creature reacting to?**
 - The monster can feel endangered or destabilized while still functioning as a legitimate battle threat.
 - The behavior remains readable to the intended 8–10-year-old player through visible action rather than lore exposition.
@@ -1677,10 +1685,11 @@ Resolution note:
 - GD-053 separately resolves same-species reuse across the two opening teaching battles.
 - GD-054 separately resolves that the two battles use different individual creatures.
 - GD-055 separately resolves the solo encounter's normal territorial behavior baseline.
+- GD-056 separately resolves the shared species' small-quadruped body archetype.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species identity / design
+- exact shared familiar monster species identity / detailed design within the locked small-quadruped body archetype
 - exact concrete pre-battle panic/disorientation actions
 - exact in-battle behavior / attacks used to express panic
 - exact rush path, distance, speed and player-control timing
@@ -1704,14 +1713,14 @@ Encounter-count model:
 5. The new mechanical lesson is the party layer: the player selects one command for Yohani and one for Sani before the round resolves under GD-009.
 6. This does not require the battle to be trivial, scripted or impossible to lose; exact stats, attacks, AI and intended round count remain OPEN.
 7. Later ordinary battles may introduce two or more enemies and teach target prioritization without changing this opening encounter.
-8. GD-051 requires this single enemy's panic / disorientation to be visibly readable on the field before the battle begins, and GD-052 fixes the transition into battle as a panic-driven rush/contact event.
+8. GD-051 requires this single enemy's panic / disorientation to be visibly readable on the field before the battle begins, GD-052 fixes the transition into battle as a panic-driven rush/contact event, and GD-056 fixes its species' body archetype as a small quadruped.
 
 Design implication:
 
 - The tutorial sequence remains layered: first solo battle teaches the battle loop; first shared battle teaches two-character command planning; later combat can introduce multi-target decisions.
 - Reusing one species across both teaching battles reinforces the behavior contrast without introducing another monster-recognition lesson; using a different individual avoids implying personal continuity.
 - Sani's first battle has room to demonstrate her faster magic/support identity without competing with a new target-prioritization lesson.
-- A single panicked familiar monster keeps the narrative escalation readable while preserving the mystery around why it is distressed.
+- A single panicked familiar small quadruped keeps the narrative escalation readable while preserving the mystery around why it is distressed.
 
 Resolution note:
 
@@ -1721,11 +1730,12 @@ Resolution note:
 - GD-053 separately resolves that the species matches the one used in the solo teaching battle.
 - GD-054 separately resolves that the shared-battle enemy is a different individual from the solo-battle enemy.
 - GD-055 supplies the controlled territorial-behavior reference in the earlier battle.
+- GD-056 separately resolves the shared species' small-quadruped body archetype.
 - It does not resolve species identity, concrete panic behavior, battle mechanics, exact rush geometry / timing, Run availability, tutorial prompts, post-battle state or anomaly causality.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species identity / design
+- exact shared familiar monster species identity / detailed design within the locked small-quadruped body archetype
 - exact enemy stats / attacks / AI
 - exact concrete panic/disorientation behavior before and during combat
 - exact physical battle location and exact rush geometry / timing
@@ -1745,18 +1755,20 @@ Presentation model:
 1. The monster's abnormal state is readable **before** the battle screen opens; the player does not first learn that it is panicked through battle-log text or post-entry exposition.
 2. GD-053 ensures the creature is the **same species** already seen in Yohani's normal solo encounter, and GD-054 ensures it is a **different individual specimen**, allowing the player to read the difference through behavior without implying a returning creature.
 3. GD-055 defines the earlier specimen's normal baseline as controlled territorial vigilance / warning and deliberate approach, giving this panic presentation a direct contrast.
-4. The field presentation must communicate the broad GD-049 behavior class: the creature appears frightened, agitated, confused, evasive or otherwise unable to behave normally.
-5. Exact animation and pathing are not locked. It may run erratically, recoil, change direction, hesitate, vocalize unusually or use another authored field behavior later approved.
-6. After this readable field beat, GD-052 fixes the transition: the monster's panic / loss of control carries it into a rush toward the siblings, and direct contact triggers the first two-character battle.
-7. The rush must read as a consequence of the creature's unstable state rather than requiring the player to interpret it as a calculated hunt. Exact path, distance, speed, framing and whether player control is temporarily locked remain OPEN.
-8. The field presentation does not reveal what the monster fears and does not establish any causal relationship to the reverse-flow anomaly, Star Roads, magic, another actor or another world-lore mechanism.
-9. This is a deliberately authored event encounter and does not replace GD-008's ordinary random-encounter baseline.
+4. GD-056 fixes the shared species as a small quadruped, so posture and locomotion may carry the contrast without changing the creature into another form.
+5. The field presentation must communicate the broad GD-049 behavior class: the creature appears frightened, agitated, confused, evasive or otherwise unable to behave normally.
+6. Exact animation and pathing are not locked. It may run erratically, recoil, change direction, hesitate, vocalize unusually or use another authored field behavior later approved.
+7. After this readable field beat, GD-052 fixes the transition: the monster's panic / loss of control carries it into a rush toward the siblings, and direct contact triggers the first two-character battle.
+8. The rush must read as a consequence of the creature's unstable state rather than requiring the player to interpret it as a calculated hunt. Exact path, distance, speed, framing and whether player control is temporarily locked remain OPEN.
+9. The field presentation does not reveal what the monster fears and does not establish any causal relationship to the reverse-flow anomaly, Star Roads, magic, another actor or another world-lore mechanism.
+10. This is a deliberately authored event encounter and does not replace GD-008's ordinary random-encounter baseline.
 
 Design implication:
 
 - The player can understand `this creature is in distress` from ordinary scene behavior before combat, which is clearer than relying on explanatory text.
 - Same-species reuse lets the player compare the second creature to a behavior baseline they have already experienced, while different-individual status keeps that comparison species-based rather than character-continuity-based.
-- The narrative escalation becomes `familiar species previously seen giving a controlled territorial warning → different specimen of same species visibly panicked → panic-driven rush toward siblings → contact → battle`.
+- The small quadruped silhouette gives the animation enough readable whole-body language for an 8–10-year-old player to notice the difference quickly.
+- The narrative escalation becomes `familiar small quadruped previously seen giving a controlled territorial warning → different specimen of same species visibly panicked → panic-driven rush toward siblings → contact → battle`.
 - The first shared battle remains mechanically focused on two-character command planning while the field scene carries most of the abnormality storytelling.
 - The presentation preserves ambiguity: seeing panic proves abnormal behavior, not its cause.
 
@@ -1767,11 +1779,12 @@ Resolution note:
 - GD-053 resolves that the visible creature is the same species used in Yohani's solo teaching battle.
 - GD-054 resolves that it is a different individual creature from the solo-battle specimen.
 - GD-055 supplies the earlier normal territorial baseline.
+- GD-056 supplies the shared species' small-quadruped body archetype.
 - GD-051 still does not lock exact panic animation, path, distance, physical location, species identity, feared stimulus or causal explanation.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species identity / design
+- exact shared familiar monster species identity / detailed design within the locked small-quadruped body archetype
 - exact field animation / movement pattern used to communicate panic
 - exact distance / framing when the player first sees it
 - exact convergence-point / battle location
@@ -1792,12 +1805,13 @@ Trigger model:
 1. The battle transition follows the readable sequence `field-visible panic / disorientation → sudden rush toward the siblings → direct contact → battle`.
 2. GD-053 ensures the rushing creature is the same species previously encountered normally by Yohani, and GD-054 fixes it as a different individual creature, so the dramatic change is behavioral without implying one creature changed between scenes.
 3. GD-055 defines the first specimen's behavior as a controlled territorial warning followed by deliberate approach, making this uncontrolled rush a distinct contrast.
-4. The rush is framed as an extension of the monster's chaotic / frightened state rather than evidence that it deliberately selected the siblings as prey.
-5. Yohani and Sani do not need to initiate the battle by approaching or attacking the creature first.
-6. The monster is not required to be cornered before it attacks; the locked high-level trigger is the creature's panic-driven movement itself becoming the immediate threat.
-7. The encounter remains a deliberately authored story/event battle. This does not change GD-008's ordinary random-encounter baseline.
-8. Direct contact is the narrative / presentation trigger for entering the battle state; this decision does not define collision-box dimensions, engine event thresholds, camera behavior or transition effects.
-9. The trigger does **not** establish what the monster is fleeing, why it is panicked, or whether the reverse-flow anomaly, Star Roads, magic or another actor caused the behavior.
+4. GD-056 fixes the shared species as a small quadruped, providing a stable silhouette for comparing controlled versus uncontrolled locomotion.
+5. The rush is framed as an extension of the monster's chaotic / frightened state rather than evidence that it deliberately selected the siblings as prey.
+6. Yohani and Sani do not need to initiate the battle by approaching or attacking the creature first.
+7. The monster is not required to be cornered before it attacks; the locked high-level trigger is the creature's panic-driven movement itself becoming the immediate threat.
+8. The encounter remains a deliberately authored story/event battle. This does not change GD-008's ordinary random-encounter baseline.
+9. Direct contact is the narrative / presentation trigger for entering the battle state; this decision does not define collision-box dimensions, engine event thresholds, camera behavior or transition effects.
+10. The trigger does **not** establish what the monster is fleeing, why it is panicked, or whether the reverse-flow anomaly, Star Roads, magic or another actor caused the behavior.
 
 Design implication:
 
@@ -1805,6 +1819,7 @@ Design implication:
 - The scene preserves the distinction between **aggression caused by instability** and a deliberate predatory attack.
 - Same-species reuse lets the player notice that the abnormality is not merely `a different monster behaves differently`, while different-individual status prevents the scene from becoming a returning-enemy subplot.
 - Contrasting the first creature's controlled territorial approach with this uncontrolled rush makes the abnormality readable without explanatory dialogue.
+- The small quadruped silhouette helps that contrast read through full-body movement rather than a text explanation.
 - The player does not need to perform a potentially confusing `walk up to the frightened creature to make it attack` interaction.
 - The transition remains visually direct and suitable for the opening's child-readable pacing without revealing the mystery's cause.
 
@@ -1815,11 +1830,12 @@ Resolution note:
 - GD-053 separately fixes the monster-species relationship across the two opening teaching battles.
 - GD-054 separately fixes the monster-individual relationship as different specimens.
 - GD-055 separately fixes the first encounter's normal territorial warning / deliberate approach behavior.
+- GD-056 separately fixes the shared species' small-quadruped body archetype.
 - Exact field animation, rush path / distance / speed, player-control lock timing, camera framing, transition effect, physical battle location and causal explanation remain OPEN.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species identity / design
+- exact shared familiar monster species identity / detailed design within the locked small-quadruped body archetype
 - exact panic animation before the rush
 - exact rush path, distance and speed
 - exact camera framing and whether / when player control is temporarily locked
@@ -1842,7 +1858,7 @@ Species-relationship model:
 2. The first shared sibling battle presents one specimen of that **same species**, but with the panic / disorientation behavior locked by GD-049 and the pre-battle field presentation locked by GD-051.
 3. The purpose of species reuse is comparison: the player can recognize `this is the same kind of monster I already saw, but now it is behaving wrong` without needing a dialogue explanation or a new-monster reveal.
 4. GD-054 further locks that the two encounters involve **different individual creatures** of that species; the second monster is not the first monster returning in a changed state.
-5. The exact monster species, name, visual design, attacks, stats and ecological details remain OPEN.
+5. GD-056 further locks the shared species' body archetype as a **small quadrupedal fantasy creature**. Exact species, name, detailed anatomy, surface treatment and decorative fantasy traits remain OPEN inside that archetype.
 6. Same-species reuse does **not** establish that the reverse-flow anomaly caused the second specimen's panic, that the first specimen was unaffected, or that the two specimens share any special causal history.
 7. The first solo battle remains the normal-behavior reference point; agents must not silently make its monster equally panicked in a way that destroys the intended comparison without an explicit override.
 
@@ -1852,6 +1868,7 @@ Design implication:
 - The second encounter's abnormality becomes more meaningful because the species itself is already known and therefore cannot explain the behavior difference.
 - Using different individuals keeps the comparison focused on `normal species behavior vs abnormal species behavior` instead of asking what personally happened to the first creature.
 - GD-055 makes that comparison concrete as `controlled territorial warning / approach` versus `panic / disorientation / uncontrolled rush`.
+- GD-056 gives both encounters one stable small-quadruped silhouette so the difference can be carried by posture and movement.
 - The opening avoids introducing another monster species at the same moment it teaches two-character command planning.
 - Gate 5 remains free to explain, or not explain, the relationship between the monster behavior and the wider anomaly.
 
@@ -1860,12 +1877,13 @@ Resolution note:
 - GD-053 resolves the previously OPEN relationship between the enemy species used in the two opening teaching battles: **same species**.
 - GD-054 resolves the individual-creature relationship: **different specimens**.
 - GD-055 resolves the earlier specimen's normal territorial-behavior baseline.
+- GD-056 resolves the shared species' body archetype as a **small quadruped**.
 - This does not change GD-045's familiar-local-monster requirement, GD-046 / GD-050's one-enemy counts, GD-047 / GD-051's field-presentation decisions, or GD-052's rush/contact trigger.
 - Exact species identity and all causal explanations remain OPEN.
 
 Explicitly still OPEN:
 
-- exact monster species / name / visual design
+- exact monster species / name / detailed visual design within the locked small-quadruped body archetype
 - exact territorial warning animation / sound and approach geometry in the solo encounter
 - exact shared-battle panic animation and in-battle expression
 - exact monster stats / attacks in each encounter
@@ -1885,14 +1903,16 @@ Individual-relationship model:
 2. The first shared Yohani/Sani battle uses a **different individual specimen** of that same species.
 3. The panicked creature in the shared battle is therefore not the solo-battle creature returning after an off-screen transformation, pursuit or unexplained intervening experience.
 4. The comparison remains intentionally species-based: the player first sees a normal specimen, then a different specimen of the same species behaving unmistakably abnormally.
-5. This decision does not establish whether the two specimens belong to the same nest, herd, territory, family group or local population; those ecological relationships remain OPEN.
-6. This decision does not establish the post-battle fate of either specimen, whether the first specimen was affected later, or whether either creature is causally connected to the reverse-flow anomaly.
-7. Exact species identity, name, visual design, attacks, stats and ecology remain OPEN.
+5. GD-056 fixes both specimens' shared species as a small quadrupedal fantasy creature; detailed visual differentiation between the two individuals is not required and remains OPEN.
+6. This decision does not establish whether the two specimens belong to the same nest, herd, territory, family group or local population; those ecological relationships remain OPEN.
+7. This decision does not establish the post-battle fate of either specimen, whether the first specimen was affected later, or whether either creature is causally connected to the reverse-flow anomaly.
+8. Exact species identity, name, detailed visual design, attacks, stats and ecology remain OPEN inside the locked body archetype.
 
 Design implication:
 
 - The opening preserves the strong same-species behavior comparison without creating an unintended `what happened to that exact monster after the first battle?` subplot.
 - GD-055 makes the normal specimen's behavior concrete enough to serve as a clean comparison target for the second specimen's panic.
+- GD-056 gives both specimens a stable small-quadruped silhouette while leaving the creature's original fantasy identity open for later design.
 - The second creature's panic can indicate that something is wrong in the local environment or creature behavior at a broader level without proving the cause.
 - No continuity bookkeeping is required between the two enemy individuals, keeping the opening readable and focused.
 - Gate 5 remains free to decide whether the wider anomaly affects monsters at all.
@@ -1903,10 +1923,11 @@ Resolution note:
 - Any earlier wording that leaves `same individual vs different individual` OPEN for these two encounters is superseded by GD-054.
 - GD-053 still governs the species relationship: **same species**.
 - GD-055 separately governs the first specimen's normal territorial behavior.
+- GD-056 separately governs the shared species' small-quadruped body archetype.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species / name / visual design
+- exact shared familiar monster species / name / detailed visual design within the locked small-quadruped body archetype
 - whether the two specimens belong to the same local nest / group / population
 - exact territorial warning animation / sound and approach geometry for the solo specimen
 - exact shared-battle panic animation and in-battle expression
@@ -1926,14 +1947,16 @@ Behavior model:
 2. The high-level readable sequence is `notice Yohani → territorial vigilance / warning → purposeful approach → battle`.
 3. The warning must be legible enough that the player understands the creature has noticed Yohani and is intentionally responding rather than moving randomly.
 4. The approach is controlled and directional. This is intentionally distinct from GD-052's later **panic-driven uncontrolled rush** by a different specimen of the same species.
-5. This decision locks the behavior class and high-level approach logic only. Exact warning animation, vocalization, posture, facing, approach distance, path, speed, delay, camera treatment, player-control timing, contact threshold and battle-transition effect remain OPEN.
-6. The encounter does not establish that every individual of this species always attacks humans on sight or that all later encounters must use visible territorial behavior; it defines the authored normal-behavior reference for this opening teaching encounter.
-7. The creature's normal territorial response does not explain why it is present near the reverse-flow water channel and does not establish any causal relationship to the anomaly, Star Roads, magic or another actor.
+5. GD-056 fixes the species' body archetype as a small quadruped, so the warning and purposeful approach may be expressed through whole-body posture and four-legged locomotion.
+6. This decision locks the behavior class and high-level approach logic only. Exact warning animation, vocalization, posture, facing, approach distance, path, speed, delay, camera treatment, player-control timing, contact threshold and battle-transition effect remain OPEN.
+7. The encounter does not establish that every individual of this species always attacks humans on sight or that all later encounters must use visible territorial behavior; it defines the authored normal-behavior reference for this opening teaching encounter.
+8. The creature's normal territorial response does not explain why it is present near the reverse-flow water channel and does not establish any causal relationship to the anomaly, Star Roads, magic or another actor.
 
 Design implication:
 
 - The first encounter now gives the player a concrete behavioral baseline rather than merely a visually normal monster.
 - The later same-species / different-individual shared encounter can communicate abnormality through motion alone: **controlled warning and deliberate approach** versus **panic, disorientation and uncontrolled rush**.
+- The small quadruped body plan supports readable stance, recoil, direction changes and gait differences without requiring explanatory dialogue.
 - The contrast remains readable for the intended 8–10-year-old player without dialogue explaining that the second monster is acting strangely.
 - The first battle still functions primarily as a basic combat tutorial and does not introduce monster-anomaly causality.
 
@@ -1942,11 +1965,12 @@ Resolution note:
 - GD-055 resolves the previously OPEN high-level question of how the first solo-battle monster behaves before combat: **normal territorial vigilance / warning followed by deliberate approach**.
 - Where GD-019, GD-032, GD-045, GD-046 or GD-047 still leave the entire `approach trigger`, `movement behavior` or `whether the monster behaves unusually` OPEN, GD-055 supersedes only the high-level behavior / approach choice. Exact animation, geometry, timing, contact threshold and transition implementation remain OPEN.
 - GD-053 and GD-054 continue to govern the cross-battle relationship: same species, different individuals.
+- GD-056 separately governs the shared species' small-quadruped body archetype.
 - GD-055 does not establish why the first specimen is at the water channel, whether its location is unusual, or whether the wider anomaly affects it in any way.
 
 Explicitly still OPEN:
 
-- exact shared familiar monster species / name / visual design
+- exact shared familiar monster species / name / detailed visual design within the locked small-quadruped body archetype
 - exact warning animation, posture, sound or vocalization
 - exact approach path, distance, speed and timing
 - whether / when player control is temporarily constrained during the approach
@@ -1954,6 +1978,48 @@ Explicitly still OPEN:
 - exact physical position relative to the water channel
 - exact reason the creature is present there and whether that presence is unusual
 - exact battle stats / attacks / AI and intended round count
+- exact causal relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
+
+### GD-056 — Opening Tutorial Monster Body Archetype
+
+Status: **LOCKED**
+
+Decision: **Option A — the familiar local monster species reused across the two opening teaching battles has a small quadrupedal fantasy-creature body archetype.**
+
+Body-archetype model:
+
+1. The creature is **small relative to Yohani and Sani** and primarily moves on **four legs**.
+2. The body plan must support clear whole-body behavior language: alertness, defensive / territorial vigilance, hesitation, recoil, frantic direction changes and uncontrolled rushing can be distinguished through posture and locomotion.
+3. Both opening specimens share this same body archetype because GD-053 locks them as the same species and GD-054 locks them as different individuals.
+4. The archetype is an original fantasy-creature design boundary, not permission to copy a *Dragon Quest* monster, another game's creature design or a specific copyrighted character.
+5. This decision does **not** require the creature to be a literal real-world mammal, canine, feline, reptile or other existing animal. Those resemblance choices remain OPEN.
+6. Exact species identity, name, proportions within the small-quadruped range, fur / scales / skin, ears, horns, tail, facial features, coloration, markings, fantasy appendages and cute-versus-threatening tone remain OPEN.
+7. The body archetype does not establish intelligence, diet, social grouping, habitat details, magical properties, monster taxonomy or any causal relationship to reverse flow / Star Roads / magic / another actor.
+
+Design implication:
+
+- A four-legged silhouette gives the opening a strong nonverbal comparison surface: **controlled territorial stance / deliberate approach** in the solo encounter versus **panicked posture / unstable locomotion / uncontrolled rush** in the shared encounter.
+- The same basic silhouette can remain recognizable across both scenes even if the later animation is much more chaotic.
+- The design remains simple enough for the intended 8–10-year-old player to read from field animation without requiring explanatory dialogue.
+- Locking only the body archetype leaves substantial room for an original species design rather than prematurely fixing a generic dog, fox, lizard or other real-animal analogue.
+
+Resolution note:
+
+- GD-056 resolves the previously OPEN high-level **body / silhouette archetype** of the shared opening monster as **small quadruped**.
+- Earlier references to the monster's `exact visual design` remaining OPEN are superseded **only at this body-archetype level**. Detailed species and visual design remain OPEN inside the small-quadruped constraint.
+- GD-053 and GD-054 continue to govern the cross-battle relationship as **same species, different individuals**.
+- GD-055 and GD-049 / GD-052 continue to govern the behavioral contrast; GD-056 does not replace those behavior decisions.
+
+Explicitly still OPEN:
+
+- exact species identity and name
+- whether its strongest visual resemblance is mammalian, reptilian or a more hybrid fantasy creature
+- exact body proportions within the small-quadruped range
+- fur / scales / skin treatment
+- exact ears / horns / tail / face / markings / coloration / fantasy appendages
+- exact cute-versus-threatening visual tone
+- exact field and battle sprite design
+- exact ecology and social grouping
 - exact causal relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
 
 ## Gate Status
@@ -1999,7 +2065,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + FIRST SOLO BATTLE NORMAL TERRITORIAL BEHAVIOR + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + FIRST SHARED BATTLE ENEMY STATE + FIRST SHARED BATTLE PANIC/DISORIENTATION BEHAVIOR + FIRST SHARED BATTLE ENEMY COUNT + FIRST SHARED BATTLE PRE-BATTLE FIELD ABNORMALITY + FIRST SHARED BATTLE PANIC-DRIVEN RUSH TRIGGER + OPENING TWO-BATTLE SAME-SPECIES CONTRAST + OPENING TWO-BATTLE DIFFERENT-INDIVIDUAL RELATIONSHIP + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + FIRST SOLO BATTLE NORMAL TERRITORIAL BEHAVIOR + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + FIRST SHARED BATTLE ENEMY STATE + FIRST SHARED BATTLE PANIC/DISORIENTATION BEHAVIOR + FIRST SHARED BATTLE ENEMY COUNT + FIRST SHARED BATTLE PRE-BATTLE FIELD ABNORMALITY + FIRST SHARED BATTLE PANIC-DRIVEN RUSH TRIGGER + OPENING TWO-BATTLE SAME-SPECIES CONTRAST + OPENING TWO-BATTLE DIFFERENT-INDIVIDUAL RELATIONSHIP + OPENING SHARED MONSTER SMALL-QUADRUPED BODY ARCHETYPE + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -2016,12 +2082,12 @@ Locked so far:
 - clue allocation is **Yohani = event witness / first danger; Sani = repeated-pattern confirmation**: Yohani directly encounters the reverse-flow event and solo danger escalation, while Sani independently confirms matching reverse flow in the nearby natural stream and establishes that the anomaly is not isolated
 - the game's first real battle is a Yohani solo battle that occurs after the anomaly becomes relevant and before the playable Sani segment / sibling convergence
 - Yohani's first solo battle uses a **familiar ordinary local monster type** and contains **exactly 1 enemy**
-- the first solo-battle monster is **visible on the map before battle** and displays **normal territorial vigilance**: it notices Yohani, gives a readable warning / defensive response, then deliberately approaches and enters battle. Exact species identity, map placement, warning animation, approach geometry / timing, contact threshold and anomaly causality remain OPEN
+- the first solo-battle monster is **visible on the map before battle** and displays **normal territorial vigilance**: it notices Yohani, gives a readable warning / defensive response, then deliberately approaches and enters battle. Exact map placement, warning animation, approach geometry / timing, contact threshold and anomaly causality remain OPEN
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
 - when the siblings converge and connect their clues, the anomaly immediately escalates into their first formal two-character battle before normal shared exploration resumes
 - the first shared sibling battle contains **exactly 1 familiar local monster in unmistakable panic / disorientation**, and that panic / disorientation is **visibly readable on the field before combat begins**; the panicked creature then **rushes directly toward Yohani and Sani, and direct contact triggers the battle**. The rush is framed as loss of control rather than a clearly deliberate hunt. Exact concrete animation, rush path / distance / speed, feared stimulus and causal relationship to the reverse-flow anomaly remain OPEN
-- the **same familiar local monster species is used in both opening teaching battles, but they are different individual creatures**: the solo encounter establishes the controlled normal territorial-behavior reference, while the shared encounter uses another specimen of the same species to make its panic / disorientation visibly comparative without implying that the first creature later changed. Exact species identity, name and visual design remain OPEN
+- the **same familiar local monster species is used in both opening teaching battles, but they are different individual creatures**, and that species has a **small quadrupedal fantasy-creature body archetype**: the solo encounter establishes the controlled normal territorial-behavior reference, while the shared encounter uses another specimen of the same species to make its panic / disorientation visibly comparative. Exact species identity, name and detailed visual design remain OPEN inside the small-quadruped constraint
 - the first shared sibling battle does not yet use field-leader switching or leader buffs; those systems unlock immediately after the battle in a safer exploration context
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
@@ -2036,4 +2102,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include exact evidence details and convergence presentation, exact shared opening monster species / visual design, exact territorial-warning presentation / map geometry for the opening solo battle, exact concrete panic animation / rush geometry for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include exact evidence details and convergence presentation, exact shared opening monster species / name / detailed visual design within the locked small-quadruped body archetype, exact territorial-warning presentation / map geometry for the opening solo battle, exact concrete panic animation / rush geometry for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

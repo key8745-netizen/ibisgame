@@ -45,6 +45,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Equipment slot model: **character-differentiated** — equipment-slot availability and equip categories may differ by character; exact character slot layouts remain explicitly OPEN.
 - Reserve-party model: **reserve members are supported, but party changes occur outside combat**; active battle composition remains capped at four and in-battle character swapping is not part of the baseline.
 - Progression / preparation pressure: **occasional extra preparation is expected** — normal exploration should usually be sufficient, while tougher challenges may reasonably ask for a short loop of extra battles, modest leveling, money saving or equipment improvement rather than long mandatory grinding.
+- Shop / economy pressure: **classic trade-off economy** — on first reaching a new shop tier, the player is not normally expected to afford every useful upgrade for every party member at once; prioritization among equipment and consumables is part of preparation.
 
 ## Existing C01 Boundary
 
@@ -435,6 +436,37 @@ Explicitly still OPEN:
 - whether every shop equipment tier is expected to be purchased
 - any anti-grind, catch-up or reserve-member progression rules
 
+### GD-017 — Shop and Economy Pressure
+
+Status: **LOCKED**
+
+Decision: **Option B — classic trade-off economy.**
+
+Economy model:
+
+1. On first arriving at a new town or shop tier, the player is not normally expected to have enough money to buy every useful equipment upgrade for every active party member.
+2. The player should make understandable trade-offs among weapon upgrades, defensive upgrades, consumables and keeping some money in reserve.
+3. Ordinary exploration and encounters remain the primary source of progression money; a player may fight some additional battles when they intentionally want to afford more upgrades.
+4. The economy must support the locked short-preparation-loop model rather than requiring long mandatory gold grinding.
+5. Shop pressure must not depend on hidden traps such as deliberately useless mandatory purchases or opaque pricing rules.
+
+Design implication:
+
+- Money remains a meaningful JRPG resource rather than an automatic checklist currency.
+- Shops become preparation decisions: improving one character or one defensive weakness first can matter.
+- The player can respond to difficulty through equipment and consumable choices without being forced into pure level grinding.
+- The intended 8–10-year-old player must be able to understand why they cannot buy everything and compare the practical effect of available purchases.
+
+Explicitly still OPEN:
+
+- exact gold yields
+- exact shop-price curves
+- exact sell-back rate
+- whether shops ever have limited stock
+- whether rare equipment can be purchased or is only found / earned
+- exact inn / recovery-service pricing
+- banking or protected-money systems, if any
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -457,7 +489,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT + RESERVE PARTY + PREPARATION PRESSURE LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT + RESERVE PARTY + PREPARATION PRESSURE + ECONOMY LOCKED**
 
 Locked so far:
 
@@ -471,5 +503,6 @@ Locked so far:
 - equipment: equipment-slot structure may differ by character; exact per-character slot layouts remain OPEN
 - reserve party: recruited party may exceed four; active/reserve changes happen outside combat; no in-battle switching baseline
 - progression pressure: normal exploration usually suffices; tougher challenges may call for a short extra preparation loop rather than long mandatory grinding
+- economy: new shop tiers should require prioritization rather than allowing every useful upgrade to be purchased immediately; extra short money-preparation loops are allowed but long mandatory gold grinding is not baseline
 
-Still requiring explicit decisions include economy / shop-pressure constraints and any other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the baseline battle command set and any other rules required by the Vertical Slice. Agents must not fill these decisions silently.

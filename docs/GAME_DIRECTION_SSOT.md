@@ -50,6 +50,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening playable lead: **Yohani first** — the opening begins with `yohani` as the sole playable character; `sani` joins during the early opening sequence.
 - Opening inciting structure: **ordinary life disrupted by an anomaly** — Yohani begins with a simple, concrete everyday objective; an abnormal event encountered during that task gradually opens the adventure.
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
+- Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 
 ## Existing C01 Boundary
 
@@ -596,6 +597,36 @@ Explicitly still OPEN:
 - where and how the anomaly first appears
 - Sani's relationship to the village before her introduction
 
+### GD-022 — Protagonist Sibling Relationship
+
+Status: **LOCKED**
+
+Decision: **Yohani and Sani are siblings; Yohani is the older brother and Sani is the younger sister.**
+
+Relationship model:
+
+1. Their relationship exists before the opening and does not need to be established as a first meeting.
+2. The opening may assume ordinary sibling familiarity, shared history and recognizable interpersonal shorthand between them.
+3. Their sibling relationship does not reduce the locked dual-protagonist status; both remain core protagonists rather than a protagonist-plus-sidekick pairing.
+4. The exact legal / biological / adoptive nature of the sibling relationship is not defined by this decision.
+
+Design implication:
+
+- Sani's early introduction can focus on personality, tension, affection and gameplay contrast rather than exposition about who she is to Yohani.
+- The home-village opening can use their pre-existing family bond to make the early stakes immediately legible.
+- Their eventual gameplay differences should feel complementary without implying that the younger sibling is mechanically or narratively subordinate.
+
+Explicitly still OPEN:
+
+- exact age of Yohani
+- exact age of Sani
+- exact age gap
+- whether they are biological, adoptive or otherwise legally/familially siblings
+- whether they live in the same household at the opening
+- parents / guardians / other family members
+- family history and any connection to the wider plot
+- Sani's exact location and activity when Yohani's playable opening begins
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -639,7 +670,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE CONTEXT LOCKED**
+Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE + SIBLING RELATIONSHIP LOCKED**
 
 Locked so far:
 
@@ -648,5 +679,6 @@ Locked so far:
 - this opening order does not alter the locked dual-protagonist status
 - Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
 - the opening everyday context is a small, familiar home village
+- Yohani and Sani are siblings: Yohani is the older brother and Sani is the younger sister
 
 Still requiring explicit decisions include Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

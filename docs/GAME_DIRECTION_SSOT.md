@@ -44,6 +44,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Inventory model: **shared field inventory + limited per-character battle carry slots** — general item management uses a shared inventory, while battle item use is limited to consumables prepared in each character's battle carry slots before combat.
 - Equipment slot model: **character-differentiated** — equipment-slot availability and equip categories may differ by character; exact character slot layouts remain explicitly OPEN.
 - Reserve-party model: **reserve members are supported, but party changes occur outside combat**; active battle composition remains capped at four and in-battle character swapping is not part of the baseline.
+- Progression / preparation pressure: **occasional extra preparation is expected** — normal exploration should usually be sufficient, while tougher challenges may reasonably ask for a short loop of extra battles, modest leveling, money saving or equipment improvement rather than long mandatory grinding.
 
 ## Existing C01 Boundary
 
@@ -404,6 +405,36 @@ Explicitly still OPEN:
 - whether story events can temporarily lock party composition
 - whether equipment and prepared battle items stay attached to reserve members
 
+### GD-016 — Progression and Preparation Pressure
+
+Status: **LOCKED**
+
+Decision: **Option B — normal exploration usually carries progression; occasional short preparation loops are expected for tougher challenges.**
+
+Progression model:
+
+1. A player who explores normally and participates in ordinary encounters should usually remain within a reasonable progression range for the main path.
+2. A tougher boss or area may reasonably ask the player to do some additional preparation before returning.
+3. That preparation may include fighting some extra battles, gaining roughly one or two levels in a typical intended case, earning money, improving equipment, restocking consumables or adjusting party preparation.
+4. Losing and then choosing to prepare before retrying is a valid part of the intended classic JRPG loop.
+5. Long mandatory repetitive grinding or hidden stat walls are not the baseline difficulty model.
+
+Design implication:
+
+- The game may teach the classic `challenge → retreat / prepare → return stronger` rhythm without making repetition the dominant play experience.
+- EXP, money, shops, equipment and consumables must matter enough that preparation produces a noticeable improvement.
+- A player should have more than one understandable preparation response to difficulty rather than being told only to raise a number.
+- The intended 8–10-year-old player must be able to recognize practical preparation options without external guides.
+
+Explicitly still OPEN:
+
+- exact EXP curve and battle EXP yields
+- exact gold yields and shop-price curves
+- exact level expectations for individual bosses or regions
+- how frequently a one-to-two-level preparation loop should occur
+- whether every shop equipment tier is expected to be purchased
+- any anti-grind, catch-up or reserve-member progression rules
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -426,7 +457,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT + RESERVE PARTY LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT + RESERVE PARTY + PREPARATION PRESSURE LOCKED**
 
 Locked so far:
 
@@ -439,5 +470,6 @@ Locked so far:
 - inventory: shared general inventory plus limited per-character battle carry slots for consumables
 - equipment: equipment-slot structure may differ by character; exact per-character slot layouts remain OPEN
 - reserve party: recruited party may exceed four; active/reserve changes happen outside combat; no in-battle switching baseline
+- progression pressure: normal exploration usually suffices; tougher challenges may call for a short extra preparation loop rather than long mandatory grinding
 
-Still requiring explicit decisions include progression/economy constraints and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include economy / shop-pressure constraints and any other rules required by the vertical slice. Agents must not fill these decisions silently.

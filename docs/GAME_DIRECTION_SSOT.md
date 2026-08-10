@@ -33,6 +33,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Primary target player age: **8–10 years old**.
 - Reading assumption: **normal Taiwanese elementary middle-grade reading ability**; complete short dialogue, objectives, equipment text and skill descriptions are acceptable, but long text walls are not the baseline.
 - Independence target: **fully independent play**; an 8–10-year-old player should be able to understand, navigate and complete the intended experience without required adult explanation or intervention.
+- Difficulty / failure-pressure target: **close to classic Dragon Quest pressure**; resource management, retreat decisions and meaningful defeat consequences are part of the intended learning experience.
 
 ## Existing C01 Boundary
 
@@ -91,7 +92,7 @@ Design implication:
 - The game must remain a real JRPG rather than being reduced to a preschool-style simplified game.
 - Core JRPG concepts such as HP, MP, equipment, money, levels and command selection may be taught progressively.
 - Chinese text, tutorial pacing, puzzle complexity, battle pressure and navigation must be designed for an 8–10-year-old primary player.
-- Failure pressure and session length remain OPEN until separately approved.
+- Session length remains OPEN until separately approved.
 
 ### GD-003 — Reading Ability Assumption
 
@@ -122,15 +123,37 @@ Design implication:
 - If the player becomes stuck, the game should provide in-world or UI-based recovery paths without automatically solving the challenge from the outset.
 - Independent play does **not** mean removing challenge, exploration, reading or traditional JRPG grammar.
 
+### GD-005 — Difficulty and Failure Pressure
+
+Status: **LOCKED**
+
+Decision: **Option C — pressure close to a classic Dragon Quest experience.**
+
+Design implication:
+
+- Ordinary battles may consume meaningful HP, MP and item resources rather than serving only as frictionless spectacle.
+- A dungeon may create a real decision between continuing deeper and retreating to recover or resupply.
+- Bosses may require preparation and understanding of the available JRPG systems rather than being guaranteed first-attempt wins.
+- Defeat should have a meaningful consequence, but the exact consequence is **OPEN** and must be designed separately.
+- The game must remain independently understandable by the 8–10 target player even when challenge is substantial.
+- Difficulty must come from learnable JRPG decisions, resource management and preparation, not obscure rules or intentionally misleading information.
+
+Explicitly still OPEN:
+
+- exact defeat penalty
+- whether money is lost on defeat and by how much
+- whether EXP or items can ever be lost
+- revival / restart location and semantics
+- whether bosses or specific encounters receive special retry rules
+
 ## Current Open Gate
 
 ### Gate 2 — Target Player
 
-Status: **PARTIAL — AGE + READING + INDEPENDENCE LOCKED**
+Status: **PARTIAL — AGE + READING + INDEPENDENCE + FAILURE PRESSURE LOCKED**
 
-Still required before slice design is locked:
+Still required before Gate 2 can close:
 
-- acceptable difficulty / failure pressure
 - approximate play-session length
 
-Agents must not infer these remaining values from age, reading ability or independence target alone.
+Agents must not infer session length from the other Target Player decisions.

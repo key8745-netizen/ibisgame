@@ -34,6 +34,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Reading assumption: **normal Taiwanese elementary middle-grade reading ability**; complete short dialogue, objectives, equipment text and skill descriptions are acceptable, but long text walls are not the baseline.
 - Independence target: **fully independent play**; an 8–10-year-old player should be able to understand, navigate and complete the intended experience without required adult explanation or intervention.
 - Difficulty / failure-pressure target: **close to classic Dragon Quest pressure**; resource management, retreat decisions and meaningful defeat consequences are part of the intended learning experience.
+- Intended normal play session: **60–90 minutes**; the game may use full home-console-style JRPG adventure pacing rather than being designed around very short mobile-style sessions.
 
 ## Existing C01 Boundary
 
@@ -92,7 +93,6 @@ Design implication:
 - The game must remain a real JRPG rather than being reduced to a preschool-style simplified game.
 - Core JRPG concepts such as HP, MP, equipment, money, levels and command selection may be taught progressively.
 - Chinese text, tutorial pacing, puzzle complexity, battle pressure and navigation must be designed for an 8–10-year-old primary player.
-- Session length remains OPEN until separately approved.
 
 ### GD-003 — Reading Ability Assumption
 
@@ -146,14 +146,41 @@ Explicitly still OPEN:
 - revival / restart location and semantics
 - whether bosses or specific encounters receive special retry rules
 
-## Current Open Gate
+### GD-006 — Intended Play-Session Length
+
+Status: **LOCKED**
+
+Decision: **Option C — 60–90 minutes for a normal intended session.**
+
+Design implication:
+
+- Adventure pacing may resemble a traditional home-console JRPG rather than a mobile game built around 10–20 minute chunks.
+- A normal session may contain preparation, travel, several encounters, exploration and a meaningful story or dungeon segment.
+- Save / suspend design must still allow the player to stop safely before 60 minutes when real life requires it; 60–90 minutes is a pacing target, not a mandatory uninterrupted commitment.
+- The vertical slice does not automatically have to last 60–90 minutes; its final duration remains a Gate 6 scope decision.
+
+## Gate Status
+
+### Gate 1 — Milestone / Scope
+
+Status: **CLOSED**
+
+- Separate post-v0.2 JRPG Vertical Slice selected.
 
 ### Gate 2 — Target Player
 
-Status: **PARTIAL — AGE + READING + INDEPENDENCE + FAILURE PRESSURE LOCKED**
+Status: **CLOSED**
 
-Still required before Gate 2 can close:
+Locked baseline:
 
-- approximate play-session length
+- age: 8–10
+- reading: normal elementary middle-grade reading ability
+- independent play: required
+- difficulty / failure pressure: close to classic Dragon Quest
+- normal intended session: 60–90 minutes
 
-Agents must not infer session length from the other Target Player decisions.
+### Gate 3 — Core JRPG Rules
+
+Status: **OPEN**
+
+Core rules still requiring explicit decisions include battle-party structure, encounter model confirmation, defeat/revival semantics, save semantics, progression/economy constraints, and other rules required by the vertical slice. Agents must not fill these decisions silently.

@@ -42,6 +42,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Save semantics: **classic ritual + modern safety layer** — formal saves occur at designated locations, while autosave and suspend/continue protect real-life interruption without replacing the formal JRPG save structure.
 - Character growth model: **classic fixed growth** — level-ups automatically increase character stats, and character-specific skills / magic are learned through predefined progression rather than player-assigned stat points or skill trees.
 - Inventory model: **shared field inventory + limited per-character battle carry slots** — general item management uses a shared inventory, while battle item use is limited to consumables prepared in each character's battle carry slots before combat.
+- Equipment slot model: **character-differentiated** — equipment-slot availability and equip categories may differ by character; exact character slot layouts remain explicitly OPEN.
 
 ## Existing C01 Boundary
 
@@ -340,6 +341,39 @@ Explicitly still OPEN:
 - when and where prepared battle items can be rearranged or replenished
 - what happens to prepared items when a character leaves the active party
 
+### GD-014 — Character-Differentiated Equipment Slots
+
+Status: **LOCKED**
+
+Decision: **Option C — equipment-slot structure may differ by character.**
+
+Equipment model:
+
+1. Characters are not required to expose one identical equipment-slot template.
+2. A character may lack a slot another character has, such as a shield / off-hand slot, when that difference supports the character's authored combat identity.
+3. A character may have an approved character-specific equipment slot when the design requires it.
+4. Equipment compatibility and slot differences must be clearly shown in the UI and must not depend on hidden rules.
+5. This decision does **not** create a class/job-change system or freeform build system by itself.
+
+Design implication:
+
+- Equipment can reinforce distinct authored party roles while keeping the locked fixed-growth model intact.
+- Shops and equipment rewards can present meaningful character-specific choices rather than universal linear upgrades.
+- The UI must make unusable equipment and missing/different slots understandable to an independently playing 8–10-year-old.
+- Slot differences should add recognizable character identity, not arbitrary complexity.
+
+Explicitly still OPEN:
+
+- exact equipment slots for `yohani`
+- exact equipment slots for `sani`
+- exact equipment slots for future party members
+- which characters may use shields / off-hand equipment
+- whether any character receives a special equipment slot
+- exact weapon / armor category compatibility rules
+- number of accessory slots per character
+- two-handed weapon and off-hand interaction rules
+- whether equipment-slot structure can ever change through story progression
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -362,7 +396,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT LOCKED**
 
 Locked so far:
 
@@ -373,5 +407,6 @@ Locked so far:
 - save semantics: formal designated saves plus autosave and suspend/continue safety layers
 - character growth: fixed character-specific level growth with predefined skill / magic acquisition; no stat-point allocation or freeform skill tree
 - inventory: shared general inventory plus limited per-character battle carry slots for consumables
+- equipment: equipment-slot structure may differ by character; exact per-character slot layouts remain OPEN
 
-Still requiring explicit decisions include progression/economy constraints, reserve-party rules if needed, equipment-slot structure, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.

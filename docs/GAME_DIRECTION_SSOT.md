@@ -54,9 +54,10 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Initial anomaly presentation: **subtle but unmistakably wrong** — the first abnormality is clearly noticeable as something that should not be happening in familiar village life, but it does not begin as an immediate crisis or attack.
 - Initial anomaly core form: **environmental rule violation** — a familiar environmental or physical behavior becomes unmistakably wrong.
 - Initial anomaly affected rule: **water-flow direction** — water in related village / near-village water features behaves in an impossible directional way.
-- Initial anomaly manifestation: **clear reverse flow** — water that normally moves downstream / downward visibly reverses and flows back upstream / toward its source direction; exact duration, timing, intensity and cause remain OPEN.
+- Initial anomaly manifestation: **clear reverse flow** — water that normally moves downstream / downward visibly reverses and flows back upstream / toward its source direction; exact duration, intensity and cause remain OPEN.
 - Initial anomaly distribution: **multiple related locations** — the same recognizable reverse-flow anomaly appears across a small set of related locations in or immediately around the opening village.
-- Opening anomaly water-feature allocation: **Yohani = village water channel; Sani = nearby natural stream** — Yohani directly witnesses reverse flow in an artificial village waterway, while Sani independently confirms the same reverse-flow behavior in a natural stream near the village; exact positions, timing and whether both features belong to one water system remain OPEN.
+- Opening anomaly water-feature allocation: **Yohani = village water channel; Sani = nearby natural stream** — Yohani directly witnesses reverse flow in an artificial village waterway, while Sani independently confirms the same reverse-flow behavior in a natural stream near the village; exact positions and whether both features belong to one water system remain OPEN.
+- Opening anomaly temporal relationship: **overlapping manifestations** — the village-water-channel reverse flow and nearby-natural-stream reverse flow occur within an overlapping time window; exact onset, duration and stopping behavior remain OPEN, and overlap does not imply hydrological connection or causal propagation.
 - Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
 - Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse-flow behavior in the nearby stream, establishing that the anomaly is not an isolated accident; exact evidence details and convergence dialogue remain OPEN.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
@@ -1385,6 +1386,45 @@ Explicitly still OPEN:
 - exact convergence point and shared-battle trigger
 - exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
 
+### GD-044 — Opening Reverse-Flow Temporal Relationship
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani's village-water-channel reverse flow and Sani's nearby-natural-stream reverse flow occur within an overlapping time window.**
+
+Temporal model:
+
+1. The two protagonist-facing manifestations are not a simple sequential handoff in which Yohani's water-channel anomaly ends and only afterward Sani's stream anomaly begins.
+2. Both locations experience the same class of clear reverse flow for at least part of the same in-world period.
+3. The playable segments may still be presented sequentially for clarity; presentation order does not imply that the events happened one after another in-world.
+4. `Overlapping` does **not** require identical start times, identical end times, equal duration or frame-exact synchronization.
+5. The overlap does **not** establish that the two water features are hydrologically connected or that the anomaly propagates from one location to the other.
+6. It also does not decide whether either sibling can independently prove the overlap before they compare information.
+7. The causal mechanism, ontology and relationship to Star Roads, magic, monsters or ancient civilization remain OPEN for Gate 5.
+
+Design implication:
+
+- The opening does not accidentally teach the player that the anomaly simply moved from the village channel to the nearby stream.
+- Sani's observation becomes evidence of a wider concurrent incident while remaining easy to understand.
+- Sequential tutorial presentation remains available without imposing sequential world chronology.
+- Later lore remains free to explain why two locations can be affected during the same period.
+
+Resolution note:
+
+- This resolves the previously OPEN high-level temporal relationship in GD-020, GD-023, GD-028, GD-030, GD-031, GD-038, GD-039, GD-040, GD-041, GD-042 and GD-043: **the two protagonist-facing reverse-flow manifestations overlap in time**.
+- Where those earlier sections still list `timing`, `synchronization`, `simultaneous/sequential` or equivalent high-level timing as OPEN, GD-044 supersedes only that high-level question. Exact onset, duration, stopping behavior, degree of overlap and character knowledge remain OPEN.
+
+Explicitly still OPEN:
+
+- exact onset of each manifestation
+- exact duration and stopping behavior of each manifestation
+- exact degree of overlap
+- whether either manifestation stops and restarts
+- whether either protagonist knows or proves the temporal overlap at convergence
+- exact presentation cue, if any, used to communicate the overlap to the player
+- hydrological relationship between the two water features
+- causal mechanism and all Gate 5 world-lore explanations
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -1428,7 +1468,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -1439,7 +1479,8 @@ Locked so far:
 - the affected environmental rule is **water-flow direction**
 - the visible manifestation is **clear reverse flow**: water that normally moves downstream / downward visibly flows back upstream / toward its source direction
 - the same reverse-flow anomaly appears across multiple related locations in or immediately around the village, rather than one isolated point or one simultaneous village-wide event
-- protagonist-facing water-feature allocation is **Yohani = village water channel; Sani = nearby natural stream**; exact positions, timing and hydrological relationship remain OPEN
+- protagonist-facing water-feature allocation is **Yohani = village water channel; Sani = nearby natural stream**; exact positions and hydrological relationship remain OPEN
+- the village-channel and nearby-stream reverse-flow manifestations **overlap in time**; exact onset, duration, stopping behavior and degree of overlap remain OPEN
 - Yohani and Sani independently discover different clues or perspectives belonging to the same underlying opening anomaly
 - clue allocation is **Yohani = event witness / first danger; Sani = repeated-pattern confirmation**: Yohani directly encounters the reverse-flow event and solo danger escalation, while Sani independently confirms matching reverse flow in the nearby natural stream and establishes that the anomaly is not isolated
 - the game's first real battle is a Yohani solo battle that occurs after the anomaly becomes relevant and before the playable Sani segment / sibling convergence
@@ -1460,4 +1501,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include the timing / synchronization of the two reverse-flow manifestations, exact evidence details and convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include exact evidence details and convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

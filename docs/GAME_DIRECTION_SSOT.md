@@ -48,6 +48,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Shop / economy pressure: **classic trade-off economy** — on first reaching a new shop tier, the player is not normally expected to afford every useful upgrade for every party member at once; prioritization among equipment and consumables is part of preparation.
 - Battle command set: **shared classic commands plus character-specific command allowance** — all active characters use a common `Attack / Skill or Magic / Item / Defend / Run` baseline, while selected characters may receive one approved character-specific top-level command.
 - Opening playable lead: **Yohani first** — the opening begins with `yohani` as the sole playable character; `sani` joins during the early opening sequence.
+- Opening inciting structure: **ordinary life disrupted by an anomaly** — Yohani begins with a simple, concrete everyday objective; an abnormal event encountered during that task gradually opens the adventure.
 
 ## Existing C01 Boundary
 
@@ -529,6 +530,37 @@ Explicitly still OPEN:
 - whether field-lead switching becomes available immediately after Sani joins
 - the exact narrative circumstances of their first playable collaboration
 
+### GD-020 — Opening Inciting Structure
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani begins with an ordinary, concrete everyday task; an anomaly encountered during that task gradually opens the adventure.**
+
+Opening-inciting model:
+
+1. The first playable objective is understandable as a normal part of Yohani's everyday life rather than an immediate world-saving mission.
+2. The opening initially gives the player enough ordinary context to understand what is normal for Yohani and the starting community.
+3. An abnormal event interrupts or complicates that everyday objective and creates the first reason to investigate, respond or travel beyond the routine.
+4. Escalation should be gradual enough that the player can recognize the contrast between ordinary life and the first sign that something is wrong.
+5. This decision does **not** define the anomaly's cause, ontology or connection to Star Roads, magic, monsters or ancient civilization.
+
+Design implication:
+
+- Movement, interaction and local social context can be taught through an in-world objective instead of a detached tutorial.
+- The opening can establish emotional and spatial normality before asking the player to care about a larger fantasy problem.
+- The first anomaly can become the bridge from Yohani's solo tutorial into Sani's introduction and the broader adventure, but that exact connection remains OPEN.
+- The ordinary task must be concrete enough that an independently playing 8–10-year-old immediately understands what to do.
+
+Explicitly still OPEN:
+
+- exact everyday task / errand
+- exact starting location and social context
+- exact nature and presentation of the anomaly
+- whether the anomaly directly involves Star Roads, magic or monsters
+- whether the anomaly itself causes Sani's introduction
+- whether combat occurs before or after the anomaly
+- exact narrative stakes at the end of the opening sequence
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -572,12 +604,13 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING PLAYABLE LEAD LOCKED**
+Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE LOCKED**
 
 Locked so far:
 
 - the first controllable character is Yohani
 - Sani joins during the early opening sequence
 - this opening order does not alter the locked dual-protagonist status
+- Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
 
-Still requiring explicit decisions include Yohani's opening motivation / inciting structure, starting context, Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the starting social/location context, Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

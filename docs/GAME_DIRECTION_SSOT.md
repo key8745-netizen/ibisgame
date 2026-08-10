@@ -31,6 +31,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Many Star Roads are now broken, dormant or unusable.
 - The cause of the Star Road breakage remains OPEN.
 - Primary target player age: **8–10 years old**.
+- Reading assumption: **normal Taiwanese elementary middle-grade reading ability**; complete short dialogue, objectives, equipment text and skill descriptions are acceptable, but long text walls are not the baseline.
 
 ## Existing C01 Boundary
 
@@ -91,17 +92,30 @@ Design implication:
 - Chinese text, tutorial pacing, puzzle complexity, battle pressure and navigation must be designed for an 8–10-year-old primary player.
 - Exact reading assumptions, independence level, failure pressure and session length remain OPEN until separately approved.
 
+### GD-003 — Reading Ability Assumption
+
+Status: **LOCKED**
+
+Decision: **Option B — normal elementary middle-grade reading ability.**
+
+Design implication:
+
+- Players may be expected to read complete short conversations and straightforward objective text.
+- Equipment, item and skill descriptions may use ordinary age-appropriate Chinese rather than icon-only communication.
+- Long uninterrupted lore dumps, dense tutorial manuals and text walls are not the default presentation.
+- Important gameplay information should remain concise, visually structured and repeatable through UI where appropriate.
+- Reading support must not remove the need to learn ordinary JRPG dialogue and menu grammar.
+
 ## Current Open Gate
 
 ### Gate 2 — Target Player
 
-Status: **PARTIAL — AGE LOCKED, OTHER ASSUMPTIONS OPEN**
+Status: **PARTIAL — AGE + READING LOCKED, OTHER ASSUMPTIONS OPEN**
 
 Still required before slice design is locked:
 
-- reading level assumptions
 - desired independence level (play alone vs. adult assistance)
 - acceptable difficulty / failure pressure
 - approximate play-session length
 
-Agents must not infer these remaining values from the age range alone.
+Agents must not infer these remaining values from age or reading ability alone.

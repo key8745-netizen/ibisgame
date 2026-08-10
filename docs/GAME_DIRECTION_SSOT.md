@@ -53,6 +53,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening everyday task type: **village errand** — Yohani's first concrete objective is an ordinary task performed within the familiar village, giving the player a reason to move through the settlement and meet normal village life before the anomaly interrupts it.
 - Initial anomaly presentation: **subtle but unmistakably wrong** — the first abnormality is clearly noticeable as something that should not be happening in familiar village life, but it does not begin as an immediate crisis or attack; its exact form and cause remain OPEN.
 - Initial anomaly core form: **environmental rule violation** — a familiar environmental or physical behavior becomes unmistakably wrong; the exact affected rule, location, visible behavior and cause remain OPEN.
+- Initial anomaly distribution: **multiple related locations** — the same class of environmental-rule violation appears across a small set of related locations in or immediately around the opening village; exact count, locations, timing and which protagonist observes which manifestation remain OPEN.
 - Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
 - First shared sibling battle context: **the opening anomaly escalates immediately at the sibling convergence, triggering Yohani and Sani's first formal two-character battle on the spot**; exact enemy, cause, scene details and battle-specific tutorial content remain OPEN.
@@ -902,7 +903,7 @@ Explicitly still OPEN:
 
 - exact environmental rule / physical behavior that becomes abnormal (core category resolved by GD-038)
 - supporting visual / audio / sensory details
-- exact location of first appearance
+- exact first location and the other related locations (multi-location distribution resolved by GD-039)
 - exact clue Yohani receives from it
 - exact clue Sani receives from her parallel investigation
 - exact way their separate clues reveal a shared underlying incident
@@ -937,7 +938,7 @@ Explicitly still OPEN:
 - exact clue Sani discovers
 - exact difference in the information or perspective each clue provides
 - exact time relationship between the two discoveries
-- exact physical locations of the clues
+- exact physical locations of the clues within the multi-location pattern locked by GD-039
 - exact convergence scene and dialogue, with the immediate escalation timing locked by GD-036
 - whether either protagonist initially misinterprets the clue
 - exact cause and lore meaning of the anomaly
@@ -1150,7 +1151,7 @@ Core-form model:
 3. The core presentation is not merely an unexplained sound / glow with no environmental consequence, and it is not only an after-the-fact trace whose abnormal source is never directly perceptible.
 4. Supporting sound, light, particles, traces or dialogue may reinforce the event, but they must support the environmental-rule violation rather than replace it as the core idea.
 5. The first presentation remains subtle rather than catastrophic, preserving GD-030; the abnormal rule can later escalate into danger under GD-032 and GD-036.
-6. This decision does **not** define which environmental rule breaks, why it breaks, whether the cause is Star Roads, magic, monsters or ancient civilization, or whether the same form recurs elsewhere in the game.
+6. This decision does **not** define which environmental rule breaks, why it breaks, whether the cause is Star Roads, magic, monsters or ancient civilization, or the exact spatial distribution of the opening manifestations; GD-039 resolves that the opening uses multiple related locations.
 
 Design implication:
 
@@ -1162,13 +1163,47 @@ Design implication:
 Explicitly still OPEN:
 
 - exact environmental rule / physical behavior that becomes abnormal
-- exact village location or locations where it appears
-- whether the same abnormal rule appears in one spot or multiple related spots
+- exact number, placement and relationship of the affected locations within the multi-location pattern locked by GD-039
 - exact Yohani-side observation / clue
 - exact Sani-side observation / clue
 - supporting sound, light, particles, traces or NPC reactions
 - exact relationship between the abnormal behavior and Yohani's first solo battle
 - exact relationship between the abnormal behavior and the convergence escalation / first shared battle
+- exact cause, ontology and world-lore meaning
+
+### GD-039 — Initial Anomaly Spatial Distribution
+
+Status: **LOCKED**
+
+Decision: **Option B — the same class of environmental-rule violation appears at multiple related locations in or immediately around the opening village, allowing Yohani and Sani to encounter different manifestations of one underlying anomaly.**
+
+Distribution model:
+
+1. The opening anomaly is not confined to one isolated point and does not affect the entire village as one simultaneous village-wide event.
+2. A small set of related locations shows the same recognizable class of impossible environmental behavior.
+3. Yohani and Sani may encounter different locations or different manifestations within that set, supporting GD-031's requirement that each protagonist contributes distinct evidence rather than replaying the same observation.
+4. The relationship between the locations must be understandable enough that the eventual convergence can reveal `these are connected` without requiring hidden lore knowledge.
+5. The manifestations do not need to occur at exactly the same moment unless a later decision explicitly establishes synchronization.
+6. This decision locks spatial distribution only. It does **not** lock the exact environmental rule, number of locations, map coordinates, sequence, protagonist-to-location assignment, cause, Star Road relationship, magic relationship or monster relationship.
+
+Design implication:
+
+- The dual-playable opening can give each protagonist a genuinely different investigation path while preserving one clear mystery.
+- Repetition of the same abnormal rule across related places gives an independently playing 8–10-year-old a visual pattern they can recognize before the characters explain it.
+- The anomaly can feel larger than a single accident without immediately becoming a village-wide catastrophe.
+- The later convergence scene can use the matching pattern itself as part of the evidence that the siblings are dealing with the same event.
+
+Explicitly still OPEN:
+
+- exact environmental rule / physical behavior that becomes abnormal
+- exact number of related locations
+- exact locations and map relationship
+- which location Yohani encounters first
+- which location or manifestation Sani investigates
+- whether manifestations are simultaneous, sequential or intermittent
+- exact clues produced at each location
+- exact convergence point
+- exact connection between the location pattern and either opening battle
 - exact cause, ontology and world-lore meaning
 
 ## Gate Status
@@ -1214,7 +1249,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + MULTI-LOCATION ANOMALY DISTRIBUTION + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -1222,6 +1257,7 @@ Locked so far:
 - Yohani's first concrete objective is an ordinary village errand that establishes familiar local life before the anomaly
 - the first anomaly is subtle but unmistakably wrong and does not begin as an immediate crisis
 - the first anomaly's core form is an environmental-rule violation: a familiar environmental or physical behavior becomes visibly and unmistakably wrong; the exact rule and cause remain OPEN
+- the same class of environmental-rule violation appears across multiple related locations in or immediately around the village, rather than one isolated point or one simultaneous village-wide event; exact count, locations and timing remain OPEN
 - Yohani and Sani independently discover different clues or perspectives belonging to the same underlying opening anomaly
 - the game's first real battle is a Yohani solo battle that occurs after the anomaly becomes relevant and before the playable Sani segment / sibling convergence
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
@@ -1241,4 +1277,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include the exact environmental-rule manifestation and clue/convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the exact environmental-rule manifestation, the specific Yohani/Sani clue allocation and convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

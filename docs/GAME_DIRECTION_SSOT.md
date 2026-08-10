@@ -52,6 +52,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
+- Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
 - Initial protagonist combat identities: **Yohani = stable front-line physical anchor; Sani = agile magic/support responder**; exact stats, equipment, spells, skills and special commands remain OPEN.
 - Field leader model: **free switching during normal exploration with explicit story/tutorial exceptions** — after multiple eligible party members are available, the player may normally change the controlled field leader; specific scenes, tutorials or designed sequences may temporarily lock the leader.
 - Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, and leader buffs may affect both combat and exploration while remaining clearly readable and character-themed.
@@ -643,7 +644,7 @@ Opening-entry model:
 2. Before Sani formally joins Yohani's active party, the story must establish that she has independently noticed, investigated or responded to something relevant rather than simply waiting to be found or escorted.
 3. Yohani's and Sani's early observations / problems overlap or converge strongly enough to create a clear reason for them to act together.
 4. Their convergence establishes the sibling pair as active partners in the opening rather than an older-brother protagonist with a passive younger-sister follower.
-5. This decision does **not** require a separately playable Sani segment before she joins; whether the player directly controls her before convergence remains OPEN.
+5. This decision does **not** itself require a separately playable Sani segment before she joins; that previously OPEN question is resolved by GD-028.
 
 Design implication:
 
@@ -655,7 +656,6 @@ Design implication:
 Explicitly still OPEN:
 
 - exact clue / anomaly / problem Sani is investigating
-- whether Sani is directly playable before joining Yohani
 - Sani's exact location and activity when the opening begins
 - whether Yohani or Sani initially understands more about the anomaly
 - exact meeting / convergence scene
@@ -792,6 +792,42 @@ Explicitly still OPEN:
 - scripted suppression / override rules
 - exact UI presentation
 
+### GD-028 — Playable Sani Pre-Convergence Segment
+
+Status: **LOCKED**
+
+Decision: **Option B — after Yohani establishes the opening and basic play grammar, the player directly controls Sani for one short pre-convergence segment before the siblings' lines meet.**
+
+Opening-control model:
+
+1. The game's first controllable character remains `yohani`, preserving GD-019.
+2. After Yohani has established enough of the basic movement, interaction and local-context grammar, the opening shifts to a short directly playable `sani` segment.
+3. Sani's playable segment must demonstrate that she is independently noticing, investigating or responding to her own clue / problem, making the agency established in GD-023 player-experienced rather than exposition-only.
+4. The intended baseline is one purposeful pre-convergence Sani segment, not repeated rapid intercutting between the siblings throughout the opening.
+5. After the two opening strands converge, the story transitions into their shared party adventure and the later locked field-leader system can be introduced at an appropriate point.
+
+Design implication:
+
+- Both dual protagonists receive direct player-controlled presence before their first sustained shared adventure.
+- Yohani can still teach the first basic control grammar, so Sani's segment does not need to repeat the entire tutorial from zero.
+- Sani's segment should teach or reveal something meaningfully different from Yohani's segment rather than existing only to prove that she is playable.
+- The handoff between protagonists and the later convergence must remain simple enough for an independently playing 8–10-year-old to understand who they are controlling and why.
+
+Resolution note:
+
+- This decision resolves the previously OPEN GD-023 question of whether Sani is directly playable before joining Yohani: **yes**.
+
+Explicitly still OPEN:
+
+- exact length of the Sani segment
+- exact location and objective of the Sani segment
+- exact clue / anomaly she investigates
+- whether the Sani segment contains combat
+- whether she encounters the anomaly before, after or in parallel with Yohani
+- exact transition scene from Yohani to Sani
+- exact convergence scene after the Sani segment
+- whether any leader-buff or field-leader mechanics are taught before or only after convergence
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -835,20 +871,21 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
+Status: **PARTIAL — OPENING + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE LOCKED**
 
 Locked so far:
 
 - the first controllable character is Yohani
-- Sani joins during the early opening sequence
+- after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
+- Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
 - Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
 - the opening everyday context is a small, familiar home village
 - Yohani and Sani are siblings: Yohani is the older brother and Sani is the younger sister
-- before joining Yohani, Sani is already independently investigating or responding to her own clue / problem; their lines converge and they continue together
+- before joining Yohani, Sani is already independently investigating or responding to her own clue / problem
 - initial combat identities: Yohani is the stable front-line physical anchor; Sani is the faster magic/support-oriented flexible responder
 - normal exploration supports free switching among eligible field leaders, with explicit story/tutorial exceptions
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 - leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
 
-Still requiring explicit decisions include the exact opening clue / convergence content, protagonist-specific leader-buff effects, whether Sani receives a directly playable pre-convergence segment, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the exact ordinary opening task, opening clue / anomaly / convergence content, protagonist-specific leader-buff effects, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

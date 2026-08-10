@@ -62,7 +62,8 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse-flow behavior in the nearby stream, establishing that the anomaly is not an isolated accident; exact evidence details and convergence dialogue remain OPEN.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
 - First solo battle enemy familiarity: **familiar ordinary local monster** — Yohani's first formal battle uses a monster type already known to exist around the village / nearby area; the battle does not by itself establish that the monster is new, transformed or caused by the reverse-flow anomaly, and the exact species and causal relationship remain OPEN.
-- First solo battle enemy count: **1 enemy** — Yohani's first formal battle contains one familiar ordinary local monster, so the first combat lesson does not require multi-target selection; exact species, stats, behavior and encounter trigger remain OPEN.
+- First solo battle enemy count: **1 enemy** — Yohani's first formal battle contains one familiar ordinary local monster, so the first combat lesson does not require multi-target selection; exact species, stats and behavior remain OPEN.
+- First solo battle encounter presentation: **visible scripted map encounter** — the familiar ordinary monster is visibly present near the village water-channel anomaly before battle and the player can understand the threat before the transition into combat; exact map placement, approach / contact trigger and anomaly causality remain OPEN. This does not replace the locked random-encounter baseline for ordinary areas.
 - First shared sibling battle context: **the opening anomaly escalates immediately at the sibling convergence, triggering Yohani and Sani's first formal two-character battle on the spot**; exact enemy, cause, scene details and battle-specific tutorial content remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
@@ -551,7 +552,7 @@ Explicitly still OPEN:
 - exact starting location and social context
 - exact event that leads to Sani's introduction
 - how long the solo Yohani segment lasts
-- exact first-battle enemy / location / encounter presentation (timing resolved by GD-032; enemy familiarity resolved by GD-045; enemy count resolved by GD-046)
+- exact first-battle species / location / approach trigger; visible map presentation is resolved by GD-047
 - exact post-battle tutorial presentation for field-leader switching / leader buffs (unlock timing resolved by GD-037)
 - the exact narrative circumstances of their first playable collaboration
 
@@ -582,7 +583,7 @@ Explicitly still OPEN:
 - exact starting location and social context
 - exact positions, timing and evidence details used to present the locked water-channel / stream reverse-flow pattern
 - whether the anomaly directly involves Star Roads, magic or monsters
-- exact causal mechanism by which the anomaly escalates into Yohani's first solo battle (timing resolved by GD-032; familiar-local-monster baseline resolved by GD-045; one-enemy count resolved by GD-046)
+- exact causal mechanism by which the anomaly escalates into Yohani's first solo battle (timing resolved by GD-032; familiar-local-monster baseline resolved by GD-045; one-enemy count resolved by GD-046; visible encounter presentation resolved by GD-047)
 - exact narrative stakes at the end of the opening sequence
 
 ### GD-021 — Opening Home Village Context
@@ -919,7 +920,7 @@ Explicitly still OPEN:
 - exact timing relationship between the two manifestations
 - exact convergence scene / dialogue that combines those two roles
 - exact cause and world-lore explanation
-- exact form and cause of the escalation that produces Yohani's first solo battle (timing resolved by GD-032; enemy familiarity resolved by GD-045; enemy count resolved by GD-046)
+- exact form and cause of the escalation that produces Yohani's first solo battle (timing resolved by GD-032; enemy familiarity resolved by GD-045; enemy count resolved by GD-046; visible encounter presentation resolved by GD-047)
 - exact presentation of the convergence escalation that produces the first shared battle (timing resolved by GD-036)
 
 ### GD-031 — Shared Underlying Opening Anomaly
@@ -959,7 +960,7 @@ Explicitly still OPEN:
 - exact convergence scene and dialogue, with the immediate escalation timing locked by GD-036
 - whether either protagonist initially misinterprets any detail
 - exact cause and lore meaning of the anomaly
-- exact mechanism by which the anomaly's Yohani-side escalation leads to the first battle; GD-045 locks only that the enemy type itself is familiar and ordinary, and GD-046 locks the count at one
+- exact causal reason that the visible familiar monster is present near Yohani's water-channel event; GD-047 resolves only that it is visible before the battle
 
 ### GD-032 — First Battle Timing
 
@@ -974,7 +975,7 @@ First-battle model:
 3. The anomaly or the immediate investigation around it escalates enough during Yohani's line to create the first combat situation.
 4. The battle introduces the basic command / round grammar with a single controllable character before later party combat adds multi-character command planning.
 5. After this first battle, the opening still proceeds to the already locked short playable Sani segment before the siblings' lines converge.
-6. GD-042 gives Yohani's opening clue the `event witness / first danger` role, GD-043 fixes the anomaly water feature on this line as a village water channel, GD-045 fixes the enemy familiarity as an ordinary monster type already known around the village / nearby area, and GD-046 fixes the encounter at exactly one enemy. None of those decisions establishes the causal mechanism that brings the monster into the encounter.
+6. GD-042 gives Yohani's opening clue the `event witness / first danger` role, GD-043 fixes the anomaly water feature on this line as a village water channel, GD-045 fixes the enemy familiarity as an ordinary monster type already known around the village / nearby area, GD-046 fixes the encounter at exactly one enemy, and GD-047 fixes the encounter presentation as a visible scripted map encounter. None of those decisions establishes why the monster is present there.
 
 Design implication:
 
@@ -983,15 +984,16 @@ Design implication:
 - The first shared Yohani/Sani battle can focus on teaching party-role complementarity rather than introducing every battle concept at once.
 - The first battle must remain understandable and survivable as an introductory encounter without becoming a no-decision scripted victory.
 - Using one familiar ordinary monster keeps the first combat lesson from prematurely teaching multi-target selection or implying that the reverse-flow anomaly has created or transformed a new kind of enemy.
+- Showing the monster on the map before combat gives the player a concrete threat-to-battle transition without changing the ordinary-area random-encounter baseline locked by GD-008.
 
 Explicitly still OPEN:
 
 - exact familiar monster species
-- exact battle location relative to the village water channel
-- exact narrative / anomaly mechanism that produces the encounter
+- exact map position relative to the village water channel
+- exact approach / contact / aggro trigger that begins the battle
+- exact narrative reason the monster is present at that moment
 - whether the familiar monster is behaving unusually or is simply encountered in an unusual place / moment
 - whether the monster is causally affected by the reverse-flow anomaly at all
-- whether the encounter begins visibly, randomly or as a scripted special encounter
 - whether `Run` is available in this first battle
 - exact tutorial prompts and command restrictions, if any
 - exact recovery state after the battle
@@ -1323,7 +1325,7 @@ Decision: **Option A — Yohani directly witnesses the opening reverse-flow even
 Clue-allocation model:
 
 1. Yohani's clue function is **event witness**: during his village-errand / investigation line, he directly encounters clear reverse flow in the village water channel fixed by GD-043.
-2. Yohani's line then reaches the already locked first danger escalation and solo battle under GD-032. GD-045 fixes the enemy familiarity as an ordinary local monster type, GD-046 fixes the count at one, while the exact species and causal mechanism remain OPEN.
+2. Yohani's line then reaches the already locked first danger escalation and solo battle under GD-032. GD-045 fixes the enemy familiarity as an ordinary local monster type, GD-046 fixes the count at one, and GD-047 fixes the monster as visible on the map before battle; exact species and causal mechanism remain OPEN.
 3. Sani's clue function is **pattern confirmation**: during her short non-combat playable segment, she independently encounters or verifies matching reverse flow in the natural stream near the village fixed by GD-043.
 4. Sani's contribution establishes that the abnormality is **not a one-off local accident or merely a broken artificial waterway**. She does not need to know the cause, ontology or world-lore explanation in order to make that contribution.
 5. At sibling convergence, the combined information should let the player understand the simple relationship `the impossible thing in the village channel is happening in the natural stream too` before the immediate shared-battle escalation locked by GD-036.
@@ -1344,6 +1346,7 @@ Resolution note:
 - GD-044 resolves the high-level time relationship as overlapping manifestations.
 - GD-045 resolves only the familiarity class of Yohani's first battle enemy, not its cause or exact species.
 - GD-046 resolves the first solo battle enemy count as exactly one.
+- GD-047 resolves the first solo battle encounter presentation as a visible scripted map encounter.
 
 Explicitly still OPEN:
 
@@ -1354,7 +1357,7 @@ Explicitly still OPEN:
 - whether the two water features belong to the same hydrological system
 - exact transition from Yohani's solo battle to Sani's playable segment
 - exact convergence point and dialogue
-- exact familiar monster species and causal mechanism for Yohani's first solo battle
+- exact familiar monster species, map placement, approach trigger and causal mechanism for Yohani's first solo battle
 - exact enemy / causal mechanism for the convergence shared battle
 - exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
 
@@ -1449,7 +1452,7 @@ Enemy-familiarity model:
 2. The first battle must not introduce the enemy as a previously unknown monster species.
 3. The enemy must not be visibly transformed, mutated or presented as a new anomaly-created form merely to justify the encounter.
 4. The monster's presence near the reverse-flow event does **not** establish that the water anomaly caused, summoned, transformed or controlled it.
-5. GD-046 fixes this first encounter at **exactly one enemy**. The exact species, location, behavior and encounter trigger remain OPEN.
+5. GD-046 fixes this first encounter at **exactly one enemy**, and GD-047 fixes the enemy as visibly present on the map before battle. The exact species, map position, behavior and approach trigger remain OPEN.
 6. A later explicit decision may establish some relationship between the monster and the anomaly, but no agent may infer such a relationship from proximity alone.
 
 Design implication:
@@ -1463,13 +1466,14 @@ Resolution note:
 
 - This resolves the enemy-familiarity question for the Yohani solo battle in GD-019, GD-020, GD-030, GD-031, GD-032 and GD-042 as **familiar ordinary local monster**.
 - GD-046 separately resolves the count as exactly one enemy.
-- It does **not** resolve the exact species, battle trigger, unusual behavior, anomaly influence or world-lore causality.
+- GD-047 separately resolves that the monster is visible on the map before battle.
+- It does **not** resolve the exact species, approach trigger, unusual behavior, anomaly influence or world-lore causality.
 
 Explicitly still OPEN:
 
 - exact monster species
-- exact battle location relative to the village water channel
-- exact encounter trigger / presentation
+- exact map position relative to the village water channel
+- exact approach / contact trigger
 - whether the monster behaves unusually
 - whether the monster's presence at this specific location is unusual
 - whether the reverse-flow anomaly affects the monster in any way
@@ -1490,6 +1494,7 @@ Encounter-count model:
 4. Because only one enemy is present, the first battle does not need to teach choosing among multiple enemy targets.
 5. This decision does not require the battle to be trivial, scripted or impossible to lose; exact stats, damage, behavior and intended round count remain OPEN.
 6. Later battles may freely introduce multiple enemies and target-selection decisions.
+7. GD-047 fixes the first enemy as visibly present on the map before combat; this does not change the one-enemy count.
 
 Design implication:
 
@@ -1500,19 +1505,58 @@ Design implication:
 Resolution note:
 
 - This resolves the previously OPEN enemy-count question in GD-019, GD-020, GD-030, GD-031, GD-032, GD-042 and GD-045: **the first Yohani solo battle contains exactly one enemy**.
-- It does not resolve species, stats, encounter presentation, anomaly causality, Run availability or tutorial restrictions.
+- GD-047 separately resolves the visible pre-battle presentation.
+- It does not resolve species, stats, exact approach trigger, anomaly causality, Run availability or tutorial restrictions.
 
 Explicitly still OPEN:
 
 - exact monster species
 - exact enemy stats / behavior / attacks
-- exact battle location relative to the village water channel
-- exact encounter trigger / presentation
+- exact map position relative to the village water channel
+- exact approach / contact trigger
 - whether the monster behaves unusually
 - whether the monster's presence or behavior is causally related to the reverse-flow anomaly
 - whether `Run` is available
 - exact tutorial prompts / command restrictions
 - exact intended round count and post-battle recovery state
+
+### GD-047 — First Solo Battle Encounter Presentation
+
+Status: **LOCKED**
+
+Decision: **Option A — the familiar ordinary monster is visibly present on the field near Yohani's village-water-channel anomaly before the first solo battle begins.**
+
+Encounter-presentation model:
+
+1. Before the game's first formal battle, the player can see the single familiar local monster in the exploration scene rather than having the encounter arrive as an unseen random transition.
+2. The monster's visible presence should make the immediate threat readable before the battle screen opens; the exact map placement, facing, movement and approach / contact trigger remain OPEN.
+3. The encounter is a deliberately authored opening encounter, so the monster may approach Yohani, block a route or otherwise create a clear threat when later specified, but none of those exact trigger behaviors is locked by this decision.
+4. Seeing the monster beside or near the reverse-flow event does **not** prove that the anomaly summoned, transformed, controlled or caused the monster.
+5. This visible first encounter is compatible with GD-008's hybrid encounter model and does **not** replace the random-encounter baseline for ordinary routes / exploration areas.
+6. The enemy remains the one familiar ordinary local monster established by GD-045 and GD-046; no additional enemy is implied.
+
+Design implication:
+
+- The intended 8–10-year-old player gets a concrete causal sequence at the tutorial level: `see a threat on the map → enter battle → learn the battle screen`.
+- The first combat transition does not need to teach the random-encounter concept at the same moment as the battle interface itself.
+- Because the monster is already familiar and visibly ordinary, the scene can remain ambiguous about whether its presence is related to the water anomaly.
+- Later ordinary areas remain free to teach and use random encounters according to the locked hybrid model.
+
+Resolution note:
+
+- This resolves the previously OPEN first-battle encounter-presentation question in GD-019, GD-020, GD-030, GD-032, GD-042, GD-045 and GD-046 as **visible scripted map encounter before combat**.
+- It does **not** resolve the exact species, map location, movement behavior, approach / contact trigger, Run availability, tutorial restrictions or anomaly causality.
+
+Explicitly still OPEN:
+
+- exact familiar monster species
+- exact map position relative to the village water channel
+- whether the monster is stationary, moving, approaching, blocking or pursuing before combat
+- exact battle-start trigger / collision distance
+- whether the monster's presence or behavior is unusual for that location
+- whether the monster is causally affected by the reverse-flow anomaly
+- exact battle stats, attacks, intended round count, Run availability and tutorial restrictions
+- exact post-battle recovery state and transition to the Sani segment
 
 ## Gate Status
 
@@ -1557,7 +1601,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -1575,6 +1619,7 @@ Locked so far:
 - the game's first real battle is a Yohani solo battle that occurs after the anomaly becomes relevant and before the playable Sani segment / sibling convergence
 - Yohani's first solo battle uses a **familiar ordinary local monster type**; exact species, behavior and causal relationship to the anomaly remain OPEN
 - Yohani's first solo battle contains **exactly 1 enemy**, so multi-target selection is not part of the first combat lesson
+- the first solo-battle monster is **visible on the map before battle** near the water-channel event; exact map placement, movement and approach / contact trigger remain OPEN, and this does not replace ordinary random encounters
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
 - when the siblings converge and connect their clues, the anomaly immediately escalates into their first formal two-character battle before normal shared exploration resumes
@@ -1592,4 +1637,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include exact evidence details and convergence presentation, exact species / trigger details for the opening solo battle, the exact encounter content of the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include exact evidence details and convergence presentation, exact species / map placement / approach trigger for the opening solo battle, the exact encounter content of the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

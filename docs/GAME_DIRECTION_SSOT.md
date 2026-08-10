@@ -64,6 +64,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, and leader buffs may affect both combat and exploration while remaining clearly readable and character-themed.
 - Yohani leader-buff identity: **Protection / Guardian** — when Yohani is the leader, the party should feel safer and more stable under pressure in both combat and exploration; exact mechanics and numbers remain OPEN.
 - Sani leader-buff identity: **Insight** — when Sani is the leader, the party should be better at noticing information, anomalies and opportunities in both combat and exploration; exact mechanics and numbers remain OPEN.
+- Leader-system introduction timing: **after the first shared sibling battle** — the convergence battle teaches two-character party command planning first; field-leader switching and leader buffs unlock immediately afterward in a safer exploration context.
 
 ## Existing C01 Boundary
 
@@ -542,7 +543,7 @@ Explicitly still OPEN:
 - exact event that leads to Sani's introduction
 - how long the solo Yohani segment lasts
 - exact first-battle enemy / location / encounter presentation (timing resolved by GD-032)
-- whether field-lead switching becomes available immediately after Sani joins
+- exact post-battle tutorial presentation for field-leader switching / leader buffs (unlock timing resolved by GD-037)
 - the exact narrative circumstances of their first playable collaboration
 
 ### GD-020 — Opening Inciting Structure
@@ -668,7 +669,7 @@ Explicitly still OPEN:
 - exact meeting / convergence scene
 - exact way the two different clues are shown to point to the same underlying anomaly
 - exact non-combat tension / hazard presentation, if any, during Sani's short segment
-- whether field-lead switching becomes available immediately after they join
+- exact post-battle tutorial presentation for field-leader switching / leader buffs (unlock timing resolved by GD-037)
 
 ### GD-024 — Initial Protagonist Combat Identities
 
@@ -711,11 +712,12 @@ Decision: **Option C — normal exploration allows free field-leader switching, 
 
 Field-leader model:
 
-1. After multiple eligible party members are available, normal exploration allows the player to choose which eligible character is the controlled field leader.
+1. After multiple eligible party members are available and the system has been introduced, normal exploration allows the player to choose which eligible character is the controlled field leader.
 2. Changing field leader changes the character directly controlled in the world.
 3. A story scene, tutorial or deliberately authored gameplay sequence may temporarily require a specific leader when the restriction is clearly communicated.
 4. A temporary leader lock is an exception to the normal rule and must not silently become the default exploration model.
 5. Changing field leader does not by itself add or remove characters from the active battle party.
+6. In the opening, field-leader switching is first unlocked immediately after the siblings' first shared formal battle, as established by GD-037; it is not part of that battle's teaching load.
 
 Design implication:
 
@@ -747,6 +749,7 @@ Leader-buff model:
 4. Non-leader characters do not simultaneously contribute their own leader buffs merely by being present in the party; the baseline is one currently designated leader and one active leader buff.
 5. The leader buff is a passive system effect and does not replace the character's normal battle commands, skills, magic, equipment or future character-specific command.
 6. The active leader buff and its practical effect must be clearly visible and understandable to the intended 8–10-year-old player rather than relying on hidden formulas.
+7. In the opening, the leader-buff system becomes active when field-leader switching is introduced immediately after the first shared sibling battle, as established by GD-037; no leader buff is active as a gameplay system during that first shared battle.
 
 Design implication:
 
@@ -826,6 +829,7 @@ Resolution note:
 
 - This decision resolves the previously OPEN GD-023 question of whether Sani is directly playable before joining Yohani: **yes**.
 - GD-033 resolves whether her short pre-convergence segment contains a formal battle: **no**.
+- GD-037 resolves the field-leader / leader-buff teaching timing: **the systems unlock immediately after the first shared sibling battle, not before or during it**.
 
 Explicitly still OPEN:
 
@@ -836,7 +840,7 @@ Explicitly still OPEN:
 - exact timing of her observation relative to Yohani's observation of the same underlying anomaly
 - exact transition scene from Yohani to Sani
 - exact convergence scene after the Sani segment, within the timing constraint established by GD-036
-- whether any leader-buff or field-leader mechanics are taught before or only after convergence
+- exact post-battle tutorial presentation for field-leader switching / leader buffs
 
 ### GD-029 — Opening Village Errand
 
@@ -1076,7 +1080,8 @@ Shared-battle model:
 3. The resulting encounter is the first formal battle in which both `yohani` and `sani` are active player-controlled party members.
 4. This encounter is also Sani's first formal combat participation, preserving GD-033.
 5. The pacing relationship is therefore `clue convergence → immediate threat escalation → first sibling party battle`, without requiring the siblings to return to an adult authority or travel through another normal exploration segment first.
-6. This decision locks the timing and narrative placement only. It does **not** define the enemy, exact cause of escalation, anomaly ontology, relationship to Star Roads / magic / monsters, exact location, skills available, leader selection state or tutorial prompts.
+6. The first shared battle occurs before field-leader switching / leader buffs are unlocked, so it teaches two-character party command planning and protagonist-role contrast without adding the leader-system layer; the leader system unlocks immediately afterward under GD-037.
+7. This decision locks the timing and narrative placement only. It does **not** define the enemy, exact cause of escalation, anomaly ontology, relationship to Star Roads / magic / monsters, exact location, skills available or battle-specific tutorial prompts.
 
 Design implication:
 
@@ -1093,8 +1098,42 @@ Explicitly still OPEN:
 - exact anomaly mechanism that creates the immediate threat
 - whether the encounter begins as a visible scripted enemy, a direct event transition or another approved presentation
 - exact Sani skills / magic available in this battle
-- whether field-leader switching and leader buffs are available before this battle, introduced after it or delayed further
 - exact recovery state and next objective after the battle
+
+### GD-037 — Leader System Introduction Timing
+
+Status: **LOCKED**
+
+Decision: **Option B — field-leader switching and leader buffs unlock immediately after the first shared Yohani/Sani battle, not before or during it.**
+
+Introduction model:
+
+1. The first shared sibling battle at convergence remains focused on the already learned battle grammar expanded to two active characters.
+2. Field-leader switching and leader buffs are not active gameplay systems during that first shared battle.
+3. After the battle ends and the player returns to a controllable, comparatively safe exploration state, the game introduces the ability to choose the field leader and explains that the current leader determines the active leader buff.
+4. The introduction must make the immediate contrast understandable: Yohani represents Protection / Guardian and Sani represents Insight.
+5. After this introduction, normal exploration follows GD-025: eligible field leaders can normally be switched freely, subject only to explicit story/tutorial exceptions.
+6. This is a tutorial-sequencing decision only. It does not lock the exact UI, button, animation, initial selected leader, tutorial dialogue or mechanical values of either buff.
+
+Design implication:
+
+- The player first learns `two characters → two commands → one round` without having to understand a second strategic system at the same moment.
+- The post-battle transition creates a clean second teaching beat: `now choose who leads and what passive advantage the party receives`.
+- The leader system becomes meaningful immediately after it is taught because ordinary shared exploration can begin with both Protection and Insight as understandable options.
+- The tutorial must not imply that one protagonist is the canonical permanent leader; both remain valid choices after the system unlocks.
+
+Resolution note:
+
+- This resolves the earlier OPEN question in GD-019 / GD-023 / GD-028 / GD-036 about when field-leader switching and leader buffs become available in the opening.
+
+Explicitly still OPEN:
+
+- exact post-battle tutorial scene / dialogue
+- exact initial field leader immediately after the unlock
+- whether the tutorial forces one demonstration switch or only explains the option
+- exact switching input / UI and iconography
+- exact safe location / amount of movement available during the tutorial beat
+- exact mechanical implementation and numerical values of Yohani's Protection and Sani's Insight buffs
 
 ## Gate Status
 
@@ -1139,7 +1178,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -1151,6 +1190,7 @@ Locked so far:
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
 - when the siblings converge and connect their clues, the anomaly immediately escalates into their first formal two-character battle before normal shared exploration resumes
+- the first shared sibling battle does not yet use field-leader switching or leader buffs; those systems unlock immediately after the battle in a safer exploration context
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
 - Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
@@ -1164,4 +1204,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include the opening anomaly's concrete clue / convergence presentation, the timing for introducing field-leader switching / leader buffs, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the opening anomaly's concrete clue / convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

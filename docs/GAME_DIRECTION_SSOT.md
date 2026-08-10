@@ -65,7 +65,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - First solo battle enemy count: **1 enemy** — Yohani's first formal battle contains one familiar ordinary local monster, so the first combat lesson does not require multi-target selection; exact species, stats and behavior remain OPEN.
 - First solo battle encounter presentation: **visible scripted map encounter** — the familiar ordinary monster is visibly present near the village water-channel anomaly before battle and the player can understand the threat before the transition into combat; exact map placement, approach / contact trigger and anomaly causality remain OPEN. This does not replace the locked random-encounter baseline for ordinary areas.
 - First shared sibling battle context: **the opening anomaly escalates immediately at the sibling convergence, triggering Yohani and Sani's first formal two-character battle on the spot**; exact enemy cause, scene details and battle-specific tutorial content remain OPEN.
-- First shared sibling battle enemy state: **1 familiar local monster in unmistakable panic / disorientation** — the enemy is a monster the protagonists / local community can recognize, and exactly one such monster appears in this first shared battle. It behaves as if frightened, agitated or trying to escape an unidentified threat before its chaotic state turns into aggression toward the siblings. Exact species, concrete behavior, cause and relationship to the reverse-flow anomaly remain OPEN.
+- First shared sibling battle enemy state: **1 familiar local monster in unmistakable panic / disorientation, visibly abnormal before battle** — the enemy is a monster the protagonists / local community can recognize, and exactly one such monster appears in this first shared battle. Its panic / disorientation is already readable on the exploration field before combat begins, after which its chaotic state turns into aggression toward the siblings. Exact species, concrete field animation, approach trigger, cause and relationship to the reverse-flow anomaly remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
 - Sani opening entry: **independent parallel discovery** — before formally joining Yohani's active party, Sani is already independently investigating or responding to her own clue / problem; their early lines converge and they continue together.
 - Pre-convergence playable structure: **Yohani first, then one short directly playable Sani segment before convergence**; this gives both protagonists direct player-controlled agency before the sibling pair formally continues together.
@@ -922,7 +922,7 @@ Explicitly still OPEN:
 - exact convergence scene / dialogue that combines those two roles
 - exact cause and world-lore explanation
 - exact form and cause of the escalation that produces Yohani's first solo battle (timing resolved by GD-032; enemy familiarity resolved by GD-045; enemy count resolved by GD-046; visible encounter presentation resolved by GD-047)
-- exact presentation of the convergence escalation that produces the first shared battle (timing resolved by GD-036; enemy state resolved by GD-048, panic/disorientation behavior class by GD-049, and enemy count by GD-050)
+- exact presentation details of the convergence escalation that produces the first shared battle; GD-036/048/049/050/051 now lock timing, familiar/panicked state, one-enemy count and pre-battle field visibility, but not the exact animation / trigger / location
 
 ### GD-031 — Shared Underlying Opening Anomaly
 
@@ -962,7 +962,7 @@ Explicitly still OPEN:
 - whether either protagonist initially misinterprets any detail
 - exact cause and lore meaning of the anomaly
 - exact causal reason that the visible familiar monster is present near Yohani's water-channel event; GD-047 resolves only that it is visible before the battle
-- exact cause or feared stimulus behind the single familiar local monster's panic/disorientation in the first shared battle; GD-049 locks the behavior class and GD-050 locks the count at one
+- exact cause or feared stimulus behind the single familiar local monster's panic/disorientation in the first shared battle; GD-049 locks the behavior class, GD-050 locks the count at one, and GD-051 locks that the panic is visible before combat
 
 ### GD-032 — First Battle Timing
 
@@ -999,7 +999,7 @@ Explicitly still OPEN:
 - whether `Run` is available in this first battle
 - exact tutorial prompts and command restrictions, if any
 - exact recovery state after the battle
-- exact enemy species/mechanics and tutorial presentation of the first shared battle; its timing is resolved by GD-036, familiar-local-monster state by GD-048, panic/disorientation behavior class by GD-049, and enemy count by GD-050
+- exact enemy species/mechanics and tutorial presentation of the first shared battle; its timing is resolved by GD-036, familiar-local-monster state by GD-048, panic/disorientation behavior class by GD-049, enemy count by GD-050 and pre-battle field visibility by GD-051
 
 ### GD-033 — Sani Pre-Convergence Combat Scope
 
@@ -1013,7 +1013,7 @@ Segment model:
 2. The segment does not open the standard battle interface and does not require the player to learn Sani through a solo combat tutorial.
 3. The segment may contain clearly authored non-combat tension, danger, pursuit, avoidance or environmental hazards if later approved, but those elements must not silently become a formal battle.
 4. Sani's first formal battle occurs only after the siblings have converged and can demonstrate her role inside party combat.
-5. The timing of that first shared battle is resolved by GD-036; GD-048 resolves the enemy state as a familiar local monster behaving unmistakably abnormally, GD-049 resolves that abnormality at the behavior-class level as panic / disorientation, and GD-050 resolves the encounter count as exactly one enemy. Exact species and concrete expression remain OPEN.
+5. The timing of that first shared battle is resolved by GD-036; GD-048 resolves the enemy state as a familiar local monster behaving unmistakably abnormally, GD-049 resolves that abnormality at the behavior-class level as panic / disorientation, GD-050 resolves the encounter count as exactly one enemy, and GD-051 resolves that the panic / disorientation is visible on the field before combat. Exact species and concrete expression remain OPEN.
 6. GD-042 resolves the informational goal of Sani's non-combat segment as confirming the repeated anomaly, and GD-043 fixes the observation site category as a natural stream near the village.
 
 Design implication:
@@ -1029,7 +1029,7 @@ Explicitly still OPEN:
 - whether Sani can fail or be reset during a non-combat hazard
 - exact stream position and evidence used for pattern confirmation
 - exact familiar monster species used to demonstrate the two-character party at convergence
-- exact concrete panic/disorientation presentation, encounter presentation and narrative mechanism of the immediate escalation
+- exact concrete panic/disorientation animation, battle-start trigger and narrative mechanism of the immediate escalation
 - exact Sani commands, skills or magic available in that first shared battle
 
 ### GD-034 — Yohani Leader Buff Identity
@@ -1111,7 +1111,7 @@ Shared-battle model:
 5. The pacing relationship is therefore `clue convergence → immediate threat escalation → first sibling party battle`, without requiring the siblings to return to an adult authority or travel through another normal exploration segment first.
 6. The first shared battle occurs before field-leader switching / leader buffs are unlocked, so it teaches two-character party command planning and protagonist-role contrast without adding the leader-system layer; the leader system unlocks immediately afterward under GD-037.
 7. Under GD-042 and GD-043, the convergence combines Yohani's village-water-channel event/danger evidence with Sani's nearby-stream pattern confirmation before the immediate escalation.
-8. GD-048 resolves the threat's enemy state at a high level as a **familiar local monster type behaving unmistakably abnormally**, GD-049 resolves the behavior class as **panic / disorientation that turns into aggression toward the siblings**, and GD-050 resolves the battle at **exactly one enemy**. Exact species, concrete behavior, cause and anomaly relationship remain OPEN.
+8. GD-048 resolves the threat's enemy state at a high level as a **familiar local monster type behaving unmistakably abnormally**, GD-049 resolves the behavior class as **panic / disorientation that turns into aggression toward the siblings**, GD-050 resolves the battle at **exactly one enemy**, and GD-051 resolves that the panic / disorientation is already visible on the field before combat begins. Exact species, concrete behavior, trigger, cause and anomaly relationship remain OPEN.
 9. This decision locks the timing and narrative placement only. It does **not** define the exact cause of escalation, anomaly ontology, relationship to Star Roads / magic / monsters, exact location, skills available or battle-specific tutorial prompts.
 
 Design implication:
@@ -1123,15 +1123,16 @@ Design implication:
 - The familiar-but-abnormal enemy creates a clear escalation from the solo battle without requiring a new monster species or prematurely proving a causal link to the reverse-flow anomaly.
 - Panic / disorientation makes the monster read as reacting to an unknown disturbance rather than simply becoming more malicious, while still leaving the actual cause unresolved.
 - Keeping the encounter at one enemy ensures that the new mechanical lesson remains **two-character party command planning**, not multi-target prioritization.
+- Showing the panic before combat lets the player read the monster as distressed through ordinary field behavior rather than relying on battle text to explain the narrative signal.
 
 Explicitly still OPEN:
 
 - exact convergence scene and dialogue
 - exact familiar monster species
-- exact concrete panic/disorientation behavior and combat expression
+- exact concrete panic/disorientation field animation and in-battle expression
 - exact physical battle location
 - exact anomaly mechanism that creates the immediate threat
-- whether the encounter begins as a visible scripted enemy, a direct event transition or another approved presentation
+- exact approach / contact / scripted trigger that transitions from field panic to combat
 - exact Sani skills / magic available in this battle
 - exact recovery state and next objective after the battle
 
@@ -1365,7 +1366,7 @@ Explicitly still OPEN:
 - exact transition from Yohani's solo battle to Sani's playable segment
 - exact convergence point and dialogue
 - exact familiar monster species, map placement, approach trigger and causal mechanism for Yohani's first solo battle
-- exact familiar monster species, concrete panic/disorientation behavior and causal mechanism for the convergence shared battle; GD-048 and GD-049 lock the broad enemy state / behavior class, while GD-050 locks the count at one
+- exact familiar monster species, concrete panic/disorientation behavior and causal mechanism for the convergence shared battle; GD-048 and GD-049 lock the broad enemy state / behavior class, GD-050 locks the count at one, and GD-051 locks pre-battle field visibility
 - exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
 
 ### GD-043 — Opening Water-Feature Allocation
@@ -1579,32 +1580,34 @@ Enemy-state model:
 4. The abnormal behavior must be legible enough that the intended 8–10-year-old player can understand `this monster is acting strangely` without needing hidden lore knowledge.
 5. The monster does not need to be visibly mutated, transformed or redesigned into a new form merely to communicate the abnormality.
 6. The fact that the abnormal behavior occurs during the same opening incident as the reverse-flow anomaly does **not** establish that the water anomaly caused, controlled or transformed the monster.
-7. GD-049 resolves the broad behavior class as **panic / disorientation that turns into aggression toward the siblings**, and GD-050 resolves the encounter at **exactly one enemy**. Exact species, concrete behavior, battle mechanics, encounter presentation and causal relationship remain OPEN.
-8. Any later explanation connecting the monster behavior to Star Roads, magic, the reverse-flow anomaly, another actor or another world-lore cause must be established explicitly in Gate 5 or later; no agent may infer that answer from GD-048 through GD-050 alone.
+7. GD-049 resolves the broad behavior class as **panic / disorientation that turns into aggression toward the siblings**, GD-050 resolves the encounter at **exactly one enemy**, and GD-051 resolves that the panic / disorientation is already visible on the field before combat. Exact species, concrete behavior, battle mechanics, battle-start trigger and causal relationship remain OPEN.
+8. Any later explanation connecting the monster behavior to Star Roads, magic, the reverse-flow anomaly, another actor or another world-lore cause must be established explicitly in Gate 5 or later; no agent may infer that answer from GD-048 through GD-051 alone.
 
 Design implication:
 
-- The opening now escalates in a readable sequence: `ordinary familiar monster in Yohani's solo tutorial → one familiar monster behaving unmistakably wrong in the first sibling battle`.
+- The opening now escalates in a readable sequence: `ordinary familiar monster in Yohani's solo tutorial → one familiar monster visibly panicking before the first sibling battle`.
 - This lets the first shared battle add narrative tension while still keeping the player's mechanical focus on learning two-character party command planning.
 - The player receives a second mystery signal — not only the environment but also familiar creature behavior is wrong — without being told that both signals share a known cause.
 - The design preserves Gate 5 freedom and avoids prematurely turning the opening into a confirmed monster-mutation or anomaly-control story.
 - GD-049 further biases the player-facing read toward **distress / panic** rather than straightforward increased malice, while preserving uncertainty about the actual cause.
 - GD-050 keeps the tutorial encounter single-target so multi-target prioritization is not introduced at the same time as two-character command planning.
+- GD-051 makes the abnormality readable before combat, so the narrative meaning does not depend on battle-log exposition.
 
 Resolution note:
 
 - GD-048 resolves the previously OPEN high-level enemy-state question in GD-033 and GD-036 as **familiar local monster type + unmistakably abnormal behavior**.
 - GD-049 further resolves the abnormal-behavior class as **panic / disorientation**, but not its detailed animation, combat mechanic or cause.
 - GD-050 resolves the first shared battle enemy count as **exactly one**.
+- GD-051 resolves **pre-battle field visibility of the panic / disorientation**.
 - GD-048 does not alter GD-045 through GD-047, which govern Yohani's earlier solo battle.
 
 Explicitly still OPEN:
 
 - exact familiar monster species
-- exact concrete panic/disorientation behavior before and during combat
+- exact concrete panic/disorientation field animation and in-battle expression
 - exact combat mechanics used to express the abnormality
-- exact encounter presentation and physical battle location
-- whether the enemy appears abnormal before the battle screen opens or only through battle behavior
+- exact physical battle location
+- exact approach / contact / scripted battle-start trigger
 - exact causal relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
 - exact post-battle state of the enemy and what the siblings conclude from the encounter
 
@@ -1618,7 +1621,7 @@ Behavior model:
 
 1. The player-facing read is **distress / panic**, not simply `this familiar monster has become more evil or more aggressive`.
 2. Before or during the encounter, the monster should behave in a way that suggests it is reacting to an unidentified threat, disturbance or stimulus: it may appear agitated, confused, erratic or desperate to get away before attacking the siblings.
-3. The exact visible actions are not locked by this decision; running back and forth, recoiling, changing direction, frantic movement, unusual vocalization or other authored cues remain OPEN.
+3. GD-051 requires this panic / disorientation to be visibly readable on the exploration field before battle begins. The exact visible actions are still not locked: running back and forth, recoiling, changing direction, frantic movement, unusual vocalization or other authored cues remain OPEN.
 4. The battle may mechanically reinforce the panic/disorientation if later approved, but no specific status effect, targeting rule, random-action system or attack pattern is implied by GD-049.
 5. The monster attacking the siblings does not establish deliberate hostility as its original intent; the aggression may be a consequence of its chaotic state.
 6. The player may reasonably suspect that the monster is frightened by something, but the game must not treat the feared object, source or cause as known at this point.
@@ -1640,14 +1643,15 @@ Resolution note:
 - Where earlier sections list the first shared battle's `abnormal behavior` as wholly OPEN, GD-049 supersedes that only at the behavior-class level. Exact animation, combat expression, timing and cause remain OPEN.
 - GD-049 does not establish whether the monster's apparent fear corresponds to a conscious emotion, instinctive reaction, magical influence or another mechanism.
 - GD-050 separately resolves the encounter count as exactly one enemy.
+- GD-051 separately resolves that the panic / disorientation is visible before combat.
 
 Explicitly still OPEN:
 
 - exact familiar monster species
 - exact concrete pre-battle panic/disorientation actions
 - exact in-battle behavior / attacks used to express panic
-- whether the panic is visible before combat, during combat or both
-- exact encounter presentation and physical battle location
+- exact battle-start trigger after the field presentation
+- exact physical battle location
 - exact feared stimulus / source of distress
 - exact causal relationship to reverse flow, Star Roads, magic, monsters, ancient civilization or another actor
 - exact post-battle state of the monster and what Yohani / Sani conclude
@@ -1667,6 +1671,7 @@ Encounter-count model:
 5. The new mechanical lesson is the party layer: the player selects one command for Yohani and one for Sani before the round resolves under GD-009.
 6. This does not require the battle to be trivial, scripted or impossible to lose; exact stats, attacks, AI and intended round count remain OPEN.
 7. Later ordinary battles may introduce two or more enemies and teach target prioritization without changing this opening encounter.
+8. GD-051 requires this single enemy's panic / disorientation to be visibly readable on the field before the battle begins.
 
 Design implication:
 
@@ -1677,18 +1682,59 @@ Design implication:
 Resolution note:
 
 - GD-050 resolves the previously OPEN enemy-count question in GD-033, GD-036, GD-048 and GD-049 as **exactly one enemy**.
-- It does not resolve species, concrete panic behavior, battle mechanics, encounter presentation, Run availability, tutorial prompts, post-battle state or anomaly causality.
+- GD-051 separately resolves the pre-battle field visibility of its panic / disorientation.
+- It does not resolve species, concrete panic behavior, battle mechanics, exact battle-start trigger, Run availability, tutorial prompts, post-battle state or anomaly causality.
 
 Explicitly still OPEN:
 
 - exact familiar monster species
 - exact enemy stats / attacks / AI
 - exact concrete panic/disorientation behavior before and during combat
-- exact encounter presentation and physical battle location
+- exact physical battle location and battle-start trigger
 - whether `Run` is available in this battle
 - exact tutorial prompts / command restrictions
 - exact intended round count and post-battle recovery state
 - exact feared stimulus / cause and relationship, if any, to reverse flow / Star Roads / magic / another actor / another phenomenon
+
+### GD-051 — First Shared Battle Pre-Battle Field Presentation
+
+Status: **LOCKED**
+
+Decision: **Option A — before Yohani and Sani's first shared battle begins, the player sees the single familiar local monster visibly panicking / disoriented on the exploration field.**
+
+Presentation model:
+
+1. The monster's abnormal state is readable **before** the battle screen opens; the player does not first learn that it is panicked through battle-log text or post-entry exposition.
+2. The field presentation must communicate the broad GD-049 behavior class: the creature appears frightened, agitated, confused, evasive or otherwise unable to behave normally.
+3. Exact animation and pathing are not locked. It may run erratically, recoil, change direction, hesitate, vocalize unusually or use another authored field behavior later approved.
+4. After this readable field beat, the monster's chaotic state turns into a direct threat and the first two-character battle begins.
+5. GD-051 does not decide whether the battle starts because the monster charges the siblings, becomes cornered, collides with them, blocks the route, or is triggered through another scripted interaction. The exact transition remains OPEN.
+6. The field presentation does not reveal what the monster fears and does not establish any causal relationship to the reverse-flow anomaly, Star Roads, magic, another actor or another world-lore mechanism.
+7. This is a deliberately authored event encounter and does not replace GD-008's ordinary random-encounter baseline.
+
+Design implication:
+
+- The player can understand `this creature is in distress` from ordinary scene behavior before combat, which is clearer than relying on explanatory text.
+- The narrative escalation becomes `clues converge → visibly panicked familiar monster appears / is encountered → panic becomes aggression → battle`.
+- The first shared battle remains mechanically focused on two-character command planning while the field scene carries most of the abnormality storytelling.
+- The presentation preserves ambiguity: seeing panic proves abnormal behavior, not its cause.
+
+Resolution note:
+
+- GD-051 resolves the previously OPEN high-level question of whether the first shared battle's abnormal behavior is visible before combat: **yes**.
+- It does not lock exact field animation, path, distance, physical location, battle-start trigger, species, feared stimulus or causal explanation.
+
+Explicitly still OPEN:
+
+- exact familiar monster species
+- exact field animation / movement pattern used to communicate panic
+- exact distance / framing when the player first sees it
+- exact convergence-point / battle location
+- exact battle-start trigger and whether player control is temporarily locked during the approach
+- exact in-battle behavior / attacks used to reinforce panic, if any
+- exact feared stimulus / source of distress
+- exact causal relationship to reverse flow / Star Roads / magic / another actor / another phenomenon
+- exact post-battle state of the monster and the siblings' immediate interpretation
 
 ## Gate Status
 
@@ -1733,7 +1779,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + FIRST SHARED BATTLE ENEMY STATE + FIRST SHARED BATTLE PANIC/DISORIENTATION BEHAVIOR + FIRST SHARED BATTLE ENEMY COUNT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + WATER-FEATURE ALLOCATION + OVERLAPPING ANOMALY TIMING + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + FIRST SOLO BATTLE ENEMY FAMILIARITY + FIRST SOLO BATTLE ENEMY COUNT + FIRST SOLO BATTLE VISIBLE ENCOUNTER + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + FIRST SHARED BATTLE ENEMY STATE + FIRST SHARED BATTLE PANIC/DISORIENTATION BEHAVIOR + FIRST SHARED BATTLE ENEMY COUNT + FIRST SHARED BATTLE PRE-BATTLE FIELD ABNORMALITY + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -1755,7 +1801,7 @@ Locked so far:
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
 - when the siblings converge and connect their clues, the anomaly immediately escalates into their first formal two-character battle before normal shared exploration resumes
-- the first shared sibling battle contains **exactly 1 familiar local monster in unmistakable panic / disorientation**; it appears frightened, agitated or confused before its chaotic state turns into aggression toward the siblings. Exact species, concrete behavior, feared stimulus and causal relationship to the reverse-flow anomaly remain OPEN
+- the first shared sibling battle contains **exactly 1 familiar local monster in unmistakable panic / disorientation**, and that panic / disorientation is **visibly readable on the field before combat begins**; its chaotic state then turns into aggression toward the siblings. Exact species, concrete animation, battle-start trigger, feared stimulus and causal relationship to the reverse-flow anomaly remain OPEN
 - the first shared sibling battle does not yet use field-leader switching or leader buffs; those systems unlock immediately after the battle in a safer exploration context
 - Sani joins Yohani during the early opening sequence after their independently pursued lines converge
 - this opening order does not alter the locked dual-protagonist status
@@ -1770,4 +1816,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include exact evidence details and convergence presentation, exact species / map placement / approach trigger for the opening solo battle, exact species / concrete panic behavior / encounter presentation for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include exact evidence details and convergence presentation, exact species / map placement / approach trigger for the opening solo battle, exact species / concrete panic animation / battle-start trigger for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

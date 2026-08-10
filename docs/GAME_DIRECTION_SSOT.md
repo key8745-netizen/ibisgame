@@ -55,8 +55,9 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Initial anomaly core form: **environmental rule violation** — a familiar environmental or physical behavior becomes unmistakably wrong.
 - Initial anomaly affected rule: **water-flow direction** — water in related village / near-village water features behaves in an impossible directional way.
 - Initial anomaly manifestation: **clear reverse flow** — water that normally moves downstream / downward visibly reverses and flows back upstream / toward its source direction; exact water features, duration, timing, intensity and cause remain OPEN.
-- Initial anomaly distribution: **multiple related locations** — the same recognizable reverse-flow anomaly appears across a small set of related locations in or immediately around the opening village; exact count, locations, timing and which protagonist observes which manifestation remain OPEN.
+- Initial anomaly distribution: **multiple related locations** — the same recognizable reverse-flow anomaly appears across a small set of related locations in or immediately around the opening village; exact count, locations and timing remain OPEN.
 - Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
+- Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse-flow behavior at another related location, establishing that the anomaly is not an isolated accident; exact water features, evidence details and convergence dialogue remain OPEN.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
 - First shared sibling battle context: **the opening anomaly escalates immediately at the sibling convergence, triggering Yohani and Sani's first formal two-character battle on the spot**; exact enemy, cause, scene details and battle-specific tutorial content remain OPEN.
 - Protagonist relationship: **siblings** — Yohani is Sani's older brother and Sani is Yohani's younger sister; exact biological/adoptive and family-history details remain OPEN.
@@ -575,7 +576,7 @@ Explicitly still OPEN:
 
 - exact village errand content (resolved only at type level by GD-029)
 - exact starting location and social context
-- exact water features, location sequence and clue allocation used to present the locked reverse-flow anomaly
+- exact water features, location sequence and evidence details used to present the locked reverse-flow anomaly and GD-042 clue roles
 - whether the anomaly directly involves Star Roads, magic or monsters
 - exact causal mechanism by which the anomaly escalates into Yohani's first solo battle (timing resolved by GD-032)
 - exact narrative stakes at the end of the opening sequence
@@ -657,6 +658,7 @@ Opening-entry model:
 3. Yohani's and Sani's early observations / problems overlap or converge strongly enough to create a clear reason for them to act together.
 4. Their convergence establishes the sibling pair as active partners in the opening rather than an older-brother protagonist with a passive younger-sister follower.
 5. This decision does **not** itself require a separately playable Sani segment before she joins; that previously OPEN question is resolved by GD-028.
+6. GD-042 resolves Sani's clue function as independent pattern confirmation: her segment establishes that matching reverse-flow behavior is occurring at another related location rather than merely replaying Yohani's event.
 
 Design implication:
 
@@ -667,11 +669,9 @@ Design implication:
 
 Explicitly still OPEN:
 
-- exact clue / anomaly / problem Sani is investigating within the locked reverse-flow pattern
+- exact water feature and evidence details through which Sani establishes the repeated pattern
 - Sani's exact location and activity when the opening begins
-- whether Yohani or Sani initially understands more about the anomaly
-- exact meeting / convergence scene
-- exact way the two different clues are shown to point to the same underlying anomaly
+- exact meeting / convergence scene and dialogue
 - exact non-combat tension / hazard presentation, if any, during Sani's short segment
 - exact post-battle tutorial presentation for field-leader switching / leader buffs (unlock timing resolved by GD-037)
 
@@ -820,6 +820,7 @@ Opening-control model:
 4. The intended baseline is one purposeful pre-convergence Sani segment, not repeated rapid intercutting between the siblings throughout the opening.
 5. After the two opening strands converge, the story transitions into their shared party adventure and the later locked field-leader system can be introduced at an appropriate point.
 6. The Sani pre-convergence segment contains no formal battle; her first formal combat participation occurs only after she has converged with Yohani, preserving GD-033.
+7. GD-042 resolves the informational purpose of the segment: Sani confirms matching reverse flow at another related location and establishes that the anomaly is repeating rather than isolated.
 
 Design implication:
 
@@ -834,12 +835,12 @@ Resolution note:
 - This decision resolves the previously OPEN GD-023 question of whether Sani is directly playable before joining Yohani: **yes**.
 - GD-033 resolves whether her short pre-convergence segment contains a formal battle: **no**.
 - GD-037 resolves the field-leader / leader-buff teaching timing: **the systems unlock immediately after the first shared sibling battle, not before or during it**.
+- GD-042 resolves the segment's clue function: **Sani establishes the repeated multi-location pattern**.
 
 Explicitly still OPEN:
 
 - exact length of the Sani segment
-- exact location and objective of the Sani segment
-- exact clue / anomaly she investigates within the locked reverse-flow pattern
+- exact water feature, location and evidence details used for her pattern confirmation
 - exact non-combat tension / hazard presentation, if any
 - exact timing of her observation relative to Yohani's observation of the same underlying anomaly
 - exact transition scene from Yohani to Sani
@@ -906,9 +907,9 @@ Explicitly still OPEN:
 
 - supporting visual / audio / sensory details
 - exact first water feature and the other related water features (multi-location distribution resolved by GD-039)
-- exact clue Yohani receives from the reverse flow
-- exact clue Sani receives from her parallel investigation
-- exact way their separate clues reveal a shared underlying incident
+- exact evidence details through which Yohani experiences the event role locked by GD-042
+- exact evidence details through which Sani confirms the repeated pattern locked by GD-042
+- exact convergence scene / dialogue that combines those two roles
 - exact cause and world-lore explanation
 - exact form and cause of the escalation that produces Yohani's first solo battle (timing resolved by GD-032)
 - exact presentation of the convergence escalation that produces the first shared battle (timing resolved by GD-036)
@@ -923,26 +924,30 @@ Clue-relationship model:
 
 1. Yohani's village-errand line and Sani's short playable line do not introduce unrelated opening mysteries.
 2. Each protagonist receives distinct evidence, context or perspective, so neither segment merely repeats the other's discovery.
-3. The two sets of clues must be compatible enough that their convergence gives the player a clear realization that both protagonists have been following the same abnormal incident.
-4. The player should be able to understand the connection from information presented in play; the relationship must not rely on an unexplained lore reveal or hidden external knowledge.
-5. This decision defines the relationship between the opening clues only. The shared visible anomaly is now locked as clear reverse-flowing water under GD-041, but its cause, ontology, Star Road relationship, magic relationship, monster relationship and later world-level explanation remain OPEN.
+3. GD-042 resolves the functional difference between the clues: Yohani directly witnesses the reverse-flow event and its first danger escalation, while Sani independently confirms matching reverse flow elsewhere and establishes that the anomaly is repeating across locations.
+4. The two sets of clues must be compatible enough that their convergence gives the player a clear realization that both protagonists have been following the same abnormal incident.
+5. The player should be able to understand the connection from information presented in play; the relationship must not rely on an unexplained lore reveal or hidden external knowledge.
+6. The shared visible anomaly is locked as clear reverse-flowing water under GD-041, but its cause, ontology, Star Road relationship, magic relationship, monster relationship and later world-level explanation remain OPEN.
 
 Design implication:
 
 - The dual playable opening works as a simple two-piece mystery rather than two competing plot hooks.
 - Sani retains independent agency because her segment contributes information Yohani does not already possess.
-- The convergence scene can reward player comprehension by combining two understandable pieces into one shared problem.
+- The convergence scene can reward player comprehension by combining `something impossible happened` with `it is happening elsewhere too` into one shared problem.
 - The clue structure remains simple enough for the intended 8–10-year-old player while still establishing a genuine dual-protagonist perspective.
+
+Resolution note:
+
+- GD-042 resolves the previously OPEN difference in clue function: **Yohani = event witness / first danger; Sani = repeated-pattern confirmation**.
 
 Explicitly still OPEN:
 
-- exact clue Yohani discovers
-- exact clue Sani discovers
-- exact difference in the information or perspective each clue provides
+- exact water feature and evidence details for Yohani's event
+- exact water feature and evidence details for Sani's pattern confirmation
 - exact time relationship between the two discoveries
 - exact physical locations of the clues within the multi-location pattern locked by GD-039
 - exact convergence scene and dialogue, with the immediate escalation timing locked by GD-036
-- whether either protagonist initially misinterprets the clue
+- whether either protagonist initially misinterprets any detail
 - exact cause and lore meaning of the anomaly
 - exact mechanism by which the anomaly's Yohani-side escalation leads to the first battle
 
@@ -959,7 +964,7 @@ First-battle model:
 3. The anomaly or the immediate investigation around it escalates enough during Yohani's line to create the first combat situation.
 4. The battle introduces the basic command / round grammar with a single controllable character before later party combat adds multi-character command planning.
 5. After this first battle, the opening still proceeds to the already locked short playable Sani segment before the siblings' lines converge.
-6. This decision does not determine the exact enemy, combat cause, location, encounter presentation, tutorial prompts or defeat handling for this specific first battle.
+6. GD-042 gives Yohani's opening clue the `event witness / first danger` role but does not determine the exact enemy or causal mechanism of the battle.
 
 Design implication:
 
@@ -992,11 +997,12 @@ Segment model:
 3. The segment may contain clearly authored non-combat tension, danger, pursuit, avoidance or environmental hazards if later approved, but those elements must not silently become a formal battle.
 4. Sani's first formal battle occurs only after the siblings have converged and can demonstrate her role inside party combat.
 5. The timing of that first shared battle is resolved by GD-036; this decision still does not define the exact enemy or which of Sani's magic/support capabilities are available at that point.
+6. GD-042 resolves the informational goal of Sani's non-combat segment as confirming that the reverse-flow anomaly repeats at another related location.
 
 Design implication:
 
 - The opening avoids teaching two separate one-character combat tutorials before introducing the real multi-character party grammar.
-- Sani's pre-convergence segment can differentiate itself from Yohani's through investigation and perspective rather than duplicating battle structure.
+- Sani's pre-convergence segment can differentiate itself from Yohani's through investigation and pattern recognition rather than duplicating battle structure.
 - Sani's first formal combat appearance can immediately show the contrast between Yohani's stable physical role and Sani's speed / magic / support role.
 - Any non-combat danger in Sani's segment must remain independently understandable and must not depend on hidden action mechanics.
 
@@ -1004,6 +1010,7 @@ Explicitly still OPEN:
 
 - exact non-combat tension / hazard, if any
 - whether Sani can fail or be reset during a non-combat hazard
+- exact water feature and evidence used for pattern confirmation
 - exact enemy / encounter used to demonstrate the two-character party at convergence
 - exact encounter presentation and narrative mechanism of the immediate escalation
 - exact Sani commands, skills or magic available in that first shared battle
@@ -1086,7 +1093,8 @@ Shared-battle model:
 4. This encounter is also Sani's first formal combat participation, preserving GD-033.
 5. The pacing relationship is therefore `clue convergence → immediate threat escalation → first sibling party battle`, without requiring the siblings to return to an adult authority or travel through another normal exploration segment first.
 6. The first shared battle occurs before field-leader switching / leader buffs are unlocked, so it teaches two-character party command planning and protagonist-role contrast without adding the leader-system layer; the leader system unlocks immediately afterward under GD-037.
-7. This decision locks the timing and narrative placement only. It does **not** define the enemy, exact cause of escalation, anomaly ontology, relationship to Star Roads / magic / monsters, exact location, skills available or battle-specific tutorial prompts.
+7. Under GD-042, the convergence combines Yohani's event/danger evidence with Sani's repeated-pattern confirmation before the immediate escalation.
+8. This decision locks the timing and narrative placement only. It does **not** define the enemy, exact cause of escalation, anomaly ontology, relationship to Star Roads / magic / monsters, exact location, skills available or battle-specific tutorial prompts.
 
 Design implication:
 
@@ -1166,8 +1174,7 @@ Explicitly still OPEN:
 
 - exact water features involved
 - exact number, placement and relationship of the affected locations within the multi-location pattern locked by GD-039
-- exact Yohani-side observation / clue
-- exact Sani-side observation / clue
+- exact evidence details for Yohani's event role and Sani's pattern-confirmation role under GD-042
 - supporting sound, light, particles, traces or NPC reactions
 - exact duration / intermittency of the reverse flow
 - exact relationship between the abnormal behavior and Yohani's first solo battle
@@ -1185,9 +1192,10 @@ Distribution model:
 1. The opening anomaly is not confined to one isolated point and does not affect the entire village as one simultaneous village-wide event.
 2. A small set of related locations shows the same recognizable class of impossible environmental behavior.
 3. Yohani and Sani may encounter different locations or different manifestations within that set, supporting GD-031's requirement that each protagonist contributes distinct evidence rather than replaying the same observation.
-4. The relationship between the locations must be understandable enough that the eventual convergence can reveal `these are connected` without requiring hidden lore knowledge.
-5. The manifestations do not need to occur at exactly the same moment unless a later decision explicitly establishes synchronization.
-6. GD-040 resolves the shared affected rule as **water-flow direction**, and GD-041 resolves the visible subtype as **clear reverse flow**. This decision locks spatial distribution only and does **not** lock the exact water features, number of locations, map coordinates, sequence, protagonist-to-location assignment, cause, Star Road relationship, magic relationship or monster relationship.
+4. GD-042 resolves their clue-role allocation: Yohani directly witnesses the event/danger line; Sani's separate location confirms the same reverse-flow pattern is recurring.
+5. The relationship between the locations must be understandable enough that the eventual convergence can reveal `these are connected` without requiring hidden lore knowledge.
+6. The manifestations do not need to occur at exactly the same moment unless a later decision explicitly establishes synchronization.
+7. GD-040 resolves the shared affected rule as **water-flow direction**, and GD-041 resolves the visible subtype as **clear reverse flow**. This decision locks spatial distribution only and does **not** lock the exact water features, number of locations, map coordinates, sequence, cause, Star Road relationship, magic relationship or monster relationship.
 
 Design implication:
 
@@ -1201,10 +1209,9 @@ Explicitly still OPEN:
 - exact water features
 - exact number of related locations
 - exact locations and map relationship
-- which location Yohani encounters first
-- which location or manifestation Sani investigates
+- exact assignment of specific water features / locations to Yohani and Sani within the GD-042 clue roles
 - whether manifestations are simultaneous, sequential or intermittent
-- exact clues produced at each location
+- exact evidence details produced at each location
 - exact convergence point
 - exact connection between the location pattern and either opening battle
 - exact cause, ontology and world-lore meaning
@@ -1234,14 +1241,15 @@ Design implication:
 Resolution note:
 
 - GD-040 resolves the affected environmental rule in GD-020, GD-030, GD-038 and GD-039 as **water-flow direction**.
-- GD-041 resolves the previously OPEN visible subtype as **clear reverse flow**.
+- GD-041 resolves the visible subtype as **clear reverse flow**.
+- GD-042 resolves the protagonist clue roles around that phenomenon as **Yohani = event witness / first danger; Sani = repeated-pattern confirmation**.
 
 Explicitly still OPEN:
 
 - exact water features involved (for example stream, channel or another approved feature)
 - exact number and placement of affected locations
 - timing / synchronization / intermittency of the manifestations
-- exact Yohani-side clue and Sani-side clue
+- exact evidence details used for each protagonist's locked clue role
 - exact connection to Yohani's first solo battle
 - exact connection to the convergence escalation / first shared battle
 - exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
@@ -1265,24 +1273,65 @@ Design implication:
 
 - The intended 8–10-year-old player can identify the anomaly through ordinary spatial reasoning: water is clearly going back the way it came.
 - Multiple related locations can share one immediately recognizable visual rule without requiring an early lore explanation.
-- Yohani and Sani can still obtain different information from the same phenomenon because the exact water features, locations and clue content remain separate decisions.
+- Yohani and Sani can still obtain different information from the same phenomenon because GD-042 assigns different clue functions while exact water features and evidence remain OPEN.
 - Later escalation can reuse or intensify the reverse-flow motif without requiring the opening itself to begin as a crisis.
 
 Resolution note:
 
-- This resolves the previously OPEN visible water-flow manifestation in GD-020, GD-030, GD-031, GD-038, GD-039 and GD-040: **clear reverse flow**.
-- It does not resolve the exact water features, protagonist-specific clues, battle triggers or world-lore cause.
+- This resolves the visible water-flow manifestation in GD-020, GD-030, GD-031, GD-038, GD-039 and GD-040 as **clear reverse flow**.
+- GD-042 separately resolves the clue-function split around that manifestation.
 
 Explicitly still OPEN:
 
 - exact water features involved
 - exact number and placement of affected locations
 - exact duration, onset, stopping behavior and synchronization / intermittency
-- exact Yohani-side clue
-- exact Sani-side clue
+- exact evidence details for Yohani's event role
+- exact evidence details for Sani's pattern-confirmation role
 - supporting audiovisual details and NPC reactions
 - exact connection to Yohani's first solo battle
 - exact connection to the convergence escalation / first shared battle
+- exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
+
+### GD-042 — Opening Clue Allocation: Event vs Pattern
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani directly witnesses the opening reverse-flow event and its first danger escalation, while Sani independently establishes that the same reverse-flow anomaly is repeating at another related location.**
+
+Clue-allocation model:
+
+1. Yohani's clue function is **event witness**: during his village-errand / investigation line, he directly encounters the clear reverse-flow anomaly established by GD-041.
+2. Yohani's line then reaches the already locked first danger escalation and solo battle under GD-032. The exact enemy and causal mechanism remain OPEN.
+3. Sani's clue function is **pattern confirmation**: during her short non-combat playable segment, she independently encounters or verifies matching reverse-flow behavior at another related location within GD-039's multi-location pattern.
+4. Sani's contribution establishes that the abnormality is **not a one-off local accident**. She does not need to know the cause, ontology or world-lore explanation in order to make that contribution.
+5. At sibling convergence, the combined information should let the player understand the simple relationship `the impossible thing Yohani saw is happening elsewhere too` before the immediate shared-battle escalation locked by GD-036.
+6. The distinction is informational, not hierarchical: Yohani is not required to be oblivious to patterns, and Sani is not required to possess superior lore knowledge. Each protagonist simply contributes a different necessary piece of the opening mystery.
+7. This decision does **not** determine the exact water features, map locations, evidence objects, NPC testimony, timing, dialogue, battle enemy, causal mechanism or world-lore explanation.
+
+Design implication:
+
+- The two playable opening segments no longer risk becoming duplicate demonstrations of the same reverse-flow event.
+- Yohani supplies immediacy and danger; Sani supplies scope and pattern recognition.
+- The mystery remains readable for an independently playing 8–10-year-old as a two-step inference: `something impossible happened` → `it is happening in more than one place`.
+- Sani's investigative contribution supports her established perceptive identity without prematurely activating or explaining her later Insight leader-buff gameplay system.
+- The convergence can reward the player's own recognition before any deeper lore explanation is introduced.
+
+Resolution note:
+
+- This resolves the previously OPEN functional difference between Yohani's and Sani's opening clues in GD-023, GD-028, GD-030, GD-031, GD-038, GD-039, GD-040 and GD-041.
+- Exact clue evidence, water-feature / location assignment, convergence dialogue and anomaly cause remain OPEN.
+
+Explicitly still OPEN:
+
+- exact water feature / location used for Yohani's event
+- exact water feature / location used for Sani's pattern confirmation
+- exact evidence, interaction or observation that makes Sani's confirmation convincing
+- exact timing relationship between the two manifestations
+- exact transition from Yohani's solo battle to Sani's playable segment
+- exact convergence point and dialogue
+- exact enemy / causal mechanism for Yohani's first solo battle
+- exact enemy / causal mechanism for the convergence shared battle
 - exact cause, ontology, Star Road relationship, magic relationship, monster relationship and ancient-civilization relationship
 
 ## Gate Status
@@ -1328,7 +1377,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY INTENSITY + ENVIRONMENTAL ANOMALY FORM + WATER-FLOW RULE + CLEAR REVERSE-FLOW MANIFESTATION + MULTI-LOCATION ANOMALY DISTRIBUTION + EVENT-vs-PATTERN CLUE ALLOCATION + FIRST SOLO BATTLE + NON-COMBAT SANI SOLO SEGMENT + FIRST SHARED BATTLE CONTEXT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES + LEADER SYSTEM INTRODUCTION TIMING LOCKED**
 
 Locked so far:
 
@@ -1340,6 +1389,7 @@ Locked so far:
 - the visible manifestation is **clear reverse flow**: water that normally moves downstream / downward visibly flows back upstream / toward its source direction
 - the same reverse-flow anomaly appears across multiple related locations in or immediately around the village, rather than one isolated point or one simultaneous village-wide event; exact water features, count, locations and timing remain OPEN
 - Yohani and Sani independently discover different clues or perspectives belonging to the same underlying opening anomaly
+- clue allocation is **Yohani = event witness / first danger; Sani = repeated-pattern confirmation**: Yohani directly encounters the reverse-flow event and solo danger escalation, while Sani independently confirms matching reverse flow elsewhere and establishes that the anomaly is not isolated
 - the game's first real battle is a Yohani solo battle that occurs after the anomaly becomes relevant and before the playable Sani segment / sibling convergence
 - after Yohani establishes the initial play grammar, the player receives one short directly playable Sani segment before convergence
 - Sani's pre-convergence playable segment contains no formal battle; her first formal combat occurs after sibling convergence
@@ -1358,4 +1408,4 @@ Locked so far:
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include the exact water features / location allocation, the specific Yohani/Sani clue allocation and convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the exact water-feature / location allocation, exact evidence details and convergence presentation, the exact encounter content of the opening battles, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

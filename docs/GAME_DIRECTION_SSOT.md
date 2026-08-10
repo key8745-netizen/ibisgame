@@ -30,6 +30,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Ancient civilization discovered and used Star Roads; it did not create them.
 - Many Star Roads are now broken, dormant or unusable.
 - The cause of the Star Road breakage remains OPEN.
+- Primary target player age: **8–10 years old**.
 
 ## Existing C01 Boundary
 
@@ -77,18 +78,30 @@ Explicitly rejected for this milestone:
 - Rebuilding C01 itself into the complete JRPG.
 - Designing the entire final game before producing the next playable build.
 
-## Next Open Gate
+### GD-002 — Primary Target Player Age
+
+Status: **LOCKED**
+
+Decision: **8–10 years old**.
+
+Design implication:
+
+- The game must remain a real JRPG rather than being reduced to a preschool-style simplified game.
+- Core JRPG concepts such as HP, MP, equipment, money, levels and command selection may be taught progressively.
+- Chinese text, tutorial pacing, puzzle complexity, battle pressure and navigation must be designed for an 8–10-year-old primary player.
+- Exact reading assumptions, independence level, failure pressure and session length remain OPEN until separately approved.
+
+## Current Open Gate
 
 ### Gate 2 — Target Player
 
-Status: **OPEN**
+Status: **PARTIAL — AGE LOCKED, OTHER ASSUMPTIONS OPEN**
 
-Must define before slice design is locked:
+Still required before slice design is locked:
 
-- target child age / age range
 - reading level assumptions
 - desired independence level (play alone vs. adult assistance)
 - acceptable difficulty / failure pressure
 - approximate play-session length
 
-Agents must not assume these values until approved.
+Agents must not infer these remaining values from the age range alone.

@@ -47,6 +47,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Progression / preparation pressure: **occasional extra preparation is expected** — normal exploration should usually be sufficient, while tougher challenges may reasonably ask for a short loop of extra battles, modest leveling, money saving or equipment improvement rather than long mandatory grinding.
 - Shop / economy pressure: **classic trade-off economy** — on first reaching a new shop tier, the player is not normally expected to afford every useful upgrade for every party member at once; prioritization among equipment and consumables is part of preparation.
 - Battle command set: **shared classic commands plus character-specific command allowance** — all active characters use a common `Attack / Skill or Magic / Item / Defend / Run` baseline, while selected characters may receive one approved character-specific top-level command.
+- Opening playable lead: **Yohani first** — the opening begins with `yohani` as the sole playable character; `sani` joins during the early opening sequence.
 
 ## Existing C01 Boundary
 
@@ -499,6 +500,35 @@ Explicitly still OPEN:
 - command restrictions caused by status effects
 - resource, cooldown or other mechanics for any future character-specific command
 
+### GD-019 — Opening Playable Lead
+
+Status: **LOCKED**
+
+Decision: **Option A — the opening begins with Yohani as the first solo playable character; Sani joins during the early opening sequence.**
+
+Opening structure:
+
+1. The player's first controllable character is `yohani`.
+2. The opening may use Yohani's solo segment to teach basic movement, interaction and immediate local context before introducing party play.
+3. `sani` joins during the early opening sequence rather than being delayed to a much later chapter.
+4. This ordering establishes tutorial sequence only; it does **not** make Sani a secondary protagonist or reduce the locked dual-protagonist identity.
+
+Design implication:
+
+- Basic exploration grammar can be introduced before the player must manage multiple characters or party systems.
+- Sani's arrival can become the natural transition from solo exploration into the dual-protagonist / party structure.
+- The opening must establish both protagonists early enough that the game does not read as a single-protagonist story with a later companion add-on.
+
+Explicitly still OPEN:
+
+- Yohani's immediate opening objective / motivation
+- exact starting location and social context
+- exact event that leads to Sani's introduction
+- how long the solo Yohani segment lasts
+- whether any combat occurs before Sani joins
+- whether field-lead switching becomes available immediately after Sani joins
+- the exact narrative circumstances of their first playable collaboration
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -539,3 +569,15 @@ Locked baseline:
 - battle command set: shared `Attack / Skill or Magic / Item / Defend / Run` grammar with optional approved character-specific top-level commands
 
 Non-blocking numerical, tuning and character-specific details remain explicitly OPEN and must not be invented silently. Gate 3 is closed because the system-level JRPG rule baseline required for later protagonist, world, slice and technical decisions is now defined.
+
+### Gate 4 — Protagonist & Opening
+
+Status: **PARTIAL — OPENING PLAYABLE LEAD LOCKED**
+
+Locked so far:
+
+- the first controllable character is Yohani
+- Sani joins during the early opening sequence
+- this opening order does not alter the locked dual-protagonist status
+
+Still requiring explicit decisions include Yohani's opening motivation / inciting structure, starting context, Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

@@ -43,6 +43,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Character growth model: **classic fixed growth** — level-ups automatically increase character stats, and character-specific skills / magic are learned through predefined progression rather than player-assigned stat points or skill trees.
 - Inventory model: **shared field inventory + limited per-character battle carry slots** — general item management uses a shared inventory, while battle item use is limited to consumables prepared in each character's battle carry slots before combat.
 - Equipment slot model: **character-differentiated** — equipment-slot availability and equip categories may differ by character; exact character slot layouts remain explicitly OPEN.
+- Reserve-party model: **reserve members are supported, but party changes occur outside combat**; active battle composition remains capped at four and in-battle character swapping is not part of the baseline.
 
 ## Existing C01 Boundary
 
@@ -374,6 +375,35 @@ Explicitly still OPEN:
 - two-handed weapon and off-hand interaction rules
 - whether equipment-slot structure can ever change through story progression
 
+### GD-015 — Reserve Party and Party Switching
+
+Status: **LOCKED**
+
+Decision: **Option B — reserve party members are supported, but active-party changes occur outside combat.**
+
+Party model:
+
+1. The overall recruited party may contain more than four characters.
+2. The active battle party remains limited to a maximum of four characters.
+3. Reserve and active members may be exchanged only outside combat through an approved party-management context.
+4. In-battle character switching is not part of the baseline battle system.
+5. This decision does not require the Vertical Slice to contain more than four recruited characters.
+
+Design implication:
+
+- The game can support a broader cast without adding another tactical subsystem to the locked classic round-command flow.
+- Party composition remains a preparation decision made before combat rather than a mid-battle reaction tool.
+- The UI must clearly distinguish active and reserve members and explain where party composition can be changed.
+
+Explicitly still OPEN:
+
+- maximum total recruited / reserve party size
+- exact locations or contexts where party composition may be changed
+- whether reserve members receive EXP and, if so, at what rate
+- whether reserve members recover HP / MP while inactive
+- whether story events can temporarily lock party composition
+- whether equipment and prepared battle items stay attached to reserve members
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -396,7 +426,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT + RESERVE PARTY LOCKED**
 
 Locked so far:
 
@@ -408,5 +438,6 @@ Locked so far:
 - character growth: fixed character-specific level growth with predefined skill / magic acquisition; no stat-point allocation or freeform skill tree
 - inventory: shared general inventory plus limited per-character battle carry slots for consumables
 - equipment: equipment-slot structure may differ by character; exact per-character slot layouts remain OPEN
+- reserve party: recruited party may exceed four; active/reserve changes happen outside combat; no in-battle switching baseline
 
-Still requiring explicit decisions include progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include progression/economy constraints and other rules required by the vertical slice. Agents must not fill these decisions silently.

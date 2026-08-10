@@ -35,6 +35,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Independence target: **fully independent play**; an 8–10-year-old player should be able to understand, navigate and complete the intended experience without required adult explanation or intervention.
 - Difficulty / failure-pressure target: **close to classic Dragon Quest pressure**; resource management, retreat decisions and meaningful defeat consequences are part of the intended learning experience.
 - Intended normal play session: **60–90 minutes**; the game may use full home-console-style JRPG adventure pacing rather than being designed around very short mobile-style sessions.
+- Maximum active battle party size: **4 characters**.
 
 ## Existing C01 Boundary
 
@@ -159,6 +160,20 @@ Design implication:
 - Save / suspend design must still allow the player to stop safely before 60 minutes when real life requires it; 60–90 minutes is a pacing target, not a mandatory uninterrupted commitment.
 - The vertical slice does not automatically have to last 60–90 minutes; its final duration remains a Gate 6 scope decision.
 
+### GD-007 — Maximum Active Battle Party Size
+
+Status: **LOCKED**
+
+Decision: **Option C — maximum active battle party size is 4 characters.**
+
+Design implication:
+
+- The battle system must support up to four simultaneously active party members.
+- Party composition may provide meaningful role and tactical variety beyond the two protagonists.
+- The UI must remain readable for the 8–10 target player even with four active characters and their HP/MP/status information visible.
+- This decision does **not** require the game or vertical slice to begin with four characters.
+- Party acquisition order, reserve-party size, in-battle switching, formation rules and whether the vertical slice ever reaches four active members remain **OPEN**.
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -181,6 +196,10 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **OPEN**
+Status: **PARTIAL — MAX ACTIVE PARTY SIZE LOCKED**
 
-Core rules still requiring explicit decisions include battle-party structure, encounter model confirmation, defeat/revival semantics, save semantics, progression/economy constraints, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Locked so far:
+
+- maximum active battle party: 4
+
+Still requiring explicit decisions include encounter model confirmation, battle command flow, defeat/revival semantics, save semantics, progression/economy constraints, reserve-party rules if needed, and other rules required by the vertical slice. Agents must not fill these decisions silently.

@@ -46,6 +46,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Reserve-party model: **reserve members are supported, but party changes occur outside combat**; active battle composition remains capped at four and in-battle character swapping is not part of the baseline.
 - Progression / preparation pressure: **occasional extra preparation is expected** — normal exploration should usually be sufficient, while tougher challenges may reasonably ask for a short loop of extra battles, modest leveling, money saving or equipment improvement rather than long mandatory grinding.
 - Shop / economy pressure: **classic trade-off economy** — on first reaching a new shop tier, the player is not normally expected to afford every useful upgrade for every party member at once; prioritization among equipment and consumables is part of preparation.
+- Battle command set: **shared classic commands plus character-specific command allowance** — all active characters use a common `Attack / Skill or Magic / Item / Defend / Run` baseline, while selected characters may receive one approved character-specific top-level command.
 
 ## Existing C01 Boundary
 
@@ -467,6 +468,37 @@ Explicitly still OPEN:
 - exact inn / recovery-service pricing
 - banking or protected-money systems, if any
 
+### GD-018 — Baseline Battle Command Set
+
+Status: **LOCKED**
+
+Decision: **Option B — shared classic commands plus character-specific command allowance.**
+
+Battle-command model:
+
+1. Every active party member uses the same baseline command family: `Attack / Skill or Magic / Item / Defend / Run`.
+2. Selected characters may receive one approved character-specific top-level command when it directly reinforces that character's authored gameplay identity.
+3. A character-specific command is an addition to the shared grammar; it must not silently replace the entire baseline command structure with a different per-character menu system.
+4. The baseline does not require every character to have a special command.
+5. Character-specific commands must remain understandable to an independently playing 8–10-year-old and must not depend on hidden rules.
+
+Design implication:
+
+- The player learns one stable classic JRPG command grammar across the whole party.
+- Character identity can still appear directly at the command level where doing so adds meaningful gameplay distinction.
+- The system avoids the complexity of wholly different command menus for every party member.
+- Character-specific commands can later connect to protagonist identity without creating a freeform class/build system.
+
+Explicitly still OPEN:
+
+- exact character-specific command for `yohani`
+- exact character-specific command for `sani`
+- whether future party members receive a character-specific command
+- whether `Skill` and `Magic` are one combined submenu or separate top-level/submenu concepts
+- exact run-success formula and encounters where running is prohibited
+- command restrictions caused by status effects
+- resource, cooldown or other mechanics for any future character-specific command
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -489,9 +521,9 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY + EQUIPMENT + RESERVE PARTY + PREPARATION PRESSURE + ECONOMY LOCKED**
+Status: **CLOSED**
 
-Locked so far:
+Locked baseline:
 
 - maximum active battle party: 4
 - encounter model: hybrid; random encounters remain the ordinary-area baseline, with selected visible special / elite / event enemies
@@ -504,5 +536,6 @@ Locked so far:
 - reserve party: recruited party may exceed four; active/reserve changes happen outside combat; no in-battle switching baseline
 - progression pressure: normal exploration usually suffices; tougher challenges may call for a short extra preparation loop rather than long mandatory grinding
 - economy: new shop tiers should require prioritization rather than allowing every useful upgrade to be purchased immediately; extra short money-preparation loops are allowed but long mandatory gold grinding is not baseline
+- battle command set: shared `Attack / Skill or Magic / Item / Defend / Run` grammar with optional approved character-specific top-level commands
 
-Still requiring explicit decisions include the baseline battle command set and any other rules required by the Vertical Slice. Agents must not fill these decisions silently.
+Non-blocking numerical, tuning and character-specific details remain explicitly OPEN and must not be invented silently. Gate 3 is closed because the system-level JRPG rule baseline required for later protagonist, world, slice and technical decisions is now defined.

@@ -49,6 +49,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Battle command set: **shared classic commands plus character-specific command allowance** — all active characters use a common `Attack / Skill or Magic / Item / Defend / Run` baseline, while selected characters may receive one approved character-specific top-level command.
 - Opening playable lead: **Yohani first** — the opening begins with `yohani` as the sole playable character; `sani` joins during the early opening sequence.
 - Opening inciting structure: **ordinary life disrupted by an anomaly** — Yohani begins with a simple, concrete everyday objective; an abnormal event encountered during that task gradually opens the adventure.
+- Opening starting context: **small familiar home village** — Yohani's ordinary opening life is grounded in a compact village community where people generally know one another before the adventure expands beyond home.
 
 ## Existing C01 Boundary
 
@@ -561,6 +562,40 @@ Explicitly still OPEN:
 - whether combat occurs before or after the anomaly
 - exact narrative stakes at the end of the opening sequence
 
+### GD-021 — Opening Home Village Context
+
+Status: **LOCKED**
+
+Decision: **Option A — Yohani's opening everyday life is grounded in a small, familiar home village.**
+
+Starting-context model:
+
+1. The opening community is compact enough for the player to form a clear mental map and recognize recurring people and places quickly.
+2. The village should feel socially familiar: residents generally know Yohani and one another rather than behaving like anonymous city crowds.
+3. The opening may use this familiarity to establish ordinary routines, local relationships and a sense of home before the adventure expands outward.
+4. Leaving the village or moving beyond its immediate surroundings should be able to feel like a meaningful first expansion of the player's world.
+5. This decision defines the social/spatial scale of the opening only; it does not define the village's name, culture, government, geography or lore.
+
+Design implication:
+
+- The first playable space can teach exploration and interaction without overwhelming the player with too many NPCs, districts or services.
+- A familiar village supports the locked `ordinary life → anomaly → wider adventure` opening rhythm.
+- The eventual transition to route / overworld travel can carry a stronger classic-JRPG sense of leaving home.
+- The village must still feel like a believable fantasy community rather than a tutorial room disguised as a settlement.
+
+Explicitly still OPEN:
+
+- village name
+- exact geography and region
+- political affiliation / kingdom relationship
+- cultural and architectural identity
+- population size and exact NPC count
+- exact buildings, shops and services present
+- Yohani's household / family arrangement
+- exact everyday task performed inside or around the village
+- where and how the anomaly first appears
+- Sani's relationship to the village before her introduction
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -604,7 +639,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE LOCKED**
+Status: **PARTIAL — OPENING LEAD + INCITING STRUCTURE + HOME VILLAGE CONTEXT LOCKED**
 
 Locked so far:
 
@@ -612,5 +647,6 @@ Locked so far:
 - Sani joins during the early opening sequence
 - this opening order does not alter the locked dual-protagonist status
 - Yohani begins with an ordinary everyday objective before an anomaly gradually opens the adventure
+- the opening everyday context is a small, familiar home village
 
-Still requiring explicit decisions include the starting social/location context, Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include Sani's introduction function, initial protagonist gameplay identities and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

@@ -41,6 +41,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Party defeat semantics: **classic Dragon Quest-style consequence** — on full-party defeat, return to the most recent designated revival / recovery point, retain earned EXP and carried items, and lose a portion of currently held money.
 - Save semantics: **classic ritual + modern safety layer** — formal saves occur at designated locations, while autosave and suspend/continue protect real-life interruption without replacing the formal JRPG save structure.
 - Character growth model: **classic fixed growth** — level-ups automatically increase character stats, and character-specific skills / magic are learned through predefined progression rather than player-assigned stat points or skill trees.
+- Inventory model: **shared field inventory + limited per-character battle carry slots** — general item management uses a shared inventory, while battle item use is limited to consumables prepared in each character's battle carry slots before combat.
 
 ## Existing C01 Boundary
 
@@ -309,6 +310,36 @@ Explicitly still OPEN:
 - whether equipment can grant temporary or conditional abilities
 - final role / class identity of each party member
 
+### GD-013 — Inventory and Battle Item Carry Model
+
+Status: **LOCKED**
+
+Decision: **Option C — shared general inventory plus limited per-character battle carry slots.**
+
+Inventory model:
+
+1. Outside combat, ordinary item collection and management use a shared party inventory.
+2. Before combat, consumable battle items can be prepared into limited carry slots assigned to individual active characters.
+3. During combat, a character may use only battle items available in that character's prepared carry slots, unless a later explicitly approved rule says otherwise.
+4. The purpose of the carry limit is to preserve preparation and resource-management decisions without recreating unnecessary old-style inventory-transfer friction during normal exploration.
+
+Design implication:
+
+- General field inventory management stays convenient and readable.
+- Preparing for a route, dungeon or boss still matters because battle access to consumables is intentionally constrained.
+- Character-level preparation can create tactical decisions about who carries healing, status recovery or other consumables.
+- The UI must make shared inventory versus prepared battle inventory visually distinct and understandable to an independently playing 8–10-year-old.
+
+Explicitly still OPEN:
+
+- number of battle carry slots per character
+- whether different characters can have different slot counts
+- stack size per battle carry slot
+- which item categories are eligible for battle carry
+- whether equipment occupies any battle carry capacity
+- when and where prepared battle items can be rearranged or replenished
+- what happens to prepared items when a character leaves the active party
+
 ## Gate Status
 
 ### Gate 1 — Milestone / Scope
@@ -331,7 +362,7 @@ Locked baseline:
 
 ### Gate 3 — Core JRPG Rules
 
-Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH LOCKED**
+Status: **PARTIAL — PARTY + ENCOUNTER + COMMAND FLOW + DEFEAT + SAVE + GROWTH + INVENTORY LOCKED**
 
 Locked so far:
 
@@ -341,5 +372,6 @@ Locked so far:
 - defeat semantics: return to a designated revival point, keep EXP/items, lose a portion of held money
 - save semantics: formal designated saves plus autosave and suspend/continue safety layers
 - character growth: fixed character-specific level growth with predefined skill / magic acquisition; no stat-point allocation or freeform skill tree
+- inventory: shared general inventory plus limited per-character battle carry slots for consumables
 
-Still requiring explicit decisions include progression/economy constraints, reserve-party rules if needed, inventory/equipment handling, and other rules required by the vertical slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include progression/economy constraints, reserve-party rules if needed, equipment-slot structure, and other rules required by the vertical slice. Agents must not fill these decisions silently.

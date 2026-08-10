@@ -62,6 +62,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Field leader model: **free switching during normal exploration with explicit story/tutorial exceptions** — after multiple eligible party members are available, the player may normally change the controlled field leader; specific scenes, tutorials or designed sequences may temporarily lock the leader.
 - Leader buff system: **each playable party character who can serve as leader has a distinct passive leader buff**; the currently designated leader determines which leader buff is active, and leader buffs may affect both combat and exploration while remaining clearly readable and character-themed.
 - Yohani leader-buff identity: **Protection / Guardian** — when Yohani is the leader, the party should feel safer and more stable under pressure in both combat and exploration; exact mechanics and numbers remain OPEN.
+- Sani leader-buff identity: **Insight** — when Sani is the leader, the party should be better at noticing information, anomalies and opportunities in both combat and exploration; exact mechanics and numbers remain OPEN.
 
 ## Existing C01 Boundary
 
@@ -756,7 +757,7 @@ Design implication:
 Explicitly still OPEN:
 
 - exact mechanical expression of `yohani`'s locked Protection / Guardian leader-buff identity (theme resolved by GD-034)
-- exact leader buff for `sani`
+- exact mechanical expression of `sani`'s locked Insight leader-buff identity (theme resolved by GD-035)
 - exact leader buffs for future playable characters
 - numerical magnitude and formulas
 - whether leader buffs scale, upgrade or change through story / level progression
@@ -788,7 +789,7 @@ Design implication:
 Explicitly still OPEN:
 
 - exact combat / exploration mechanics used to express `yohani`'s locked Protection / Guardian theme (theme resolved by GD-034)
-- exact leader buff for `sani`
+- exact combat / exploration mechanics used to express `sani`'s locked Insight theme (theme resolved by GD-035)
 - exact leader buffs for future playable characters
 - exact combat/exploration split for each character
 - numerical magnitude and formulas
@@ -1017,12 +1018,44 @@ Design implication:
 - Yohani's field-leader identity now reinforces his battle identity without turning the leader system into a duplicate class system.
 - The theme gives the intended 8–10-year-old player a simple mental model: choosing Yohani as leader is the safer / steadier choice.
 - Future mechanical tuning may express that promise differently in combat and exploration, but both expressions must remain recognizably part of the same Protection theme.
-- This decision does not define Sani's leader-buff identity; that remains OPEN.
+- Sani's separate leader-buff identity is resolved by GD-035 and does not alter Yohani's Protection / Guardian theme.
 
 Explicitly still OPEN:
 
 - exact combat effect used to express Protection
 - exact exploration effect used to express Protection
+- numerical magnitude and formula
+- whether the effect scales, upgrades or changes later
+- activation / refresh timing
+- exact UI name, icon and explanatory text
+- whether any scripted sequence temporarily suppresses or overrides the effect
+
+### GD-035 — Sani Leader Buff Identity
+
+Status: **LOCKED**
+
+Decision: **Option A — Sani's leader-buff identity is Insight: when she leads, the party should be better at noticing information, anomalies and opportunities.**
+
+Leader-theme model:
+
+1. The theme applies across both combat and exploration, preserving the scope established by GD-027.
+2. In combat, Sani's leader effect should improve the party's ability to recognize useful tactical information, openings or relevant enemy conditions without requiring hidden-rule memorization.
+3. In exploration, the same theme may help the player notice unusual details, useful information, optional opportunities or environmental cues, but it must not turn required progression into a mandatory leader check.
+4. The effect package must read as one simple idea: **Sani leading helps the group notice what others might miss.**
+5. This decision locks the identity and player-facing meaning only; it does not lock a particular weak-point system, reveal mechanic, treasure detector, encounter rule, statistic, trigger or numerical value.
+6. Insight must not silently become an omniscient solution system that automatically reveals every secret, puzzle answer or narrative mystery.
+
+Design implication:
+
+- Sani's field-leader identity complements Yohani's Protection / Guardian theme instead of duplicating it: Yohani makes the party safer, while Sani makes the party more perceptive.
+- The theme reinforces Sani's locked agile magic/support identity and her established opening role as an independent observer/investigator.
+- The intended 8–10-year-old player receives a simple leader-choice model: choose Yohani for steadiness, choose Sani for information and discovery.
+- Future mechanical tuning may express Insight differently in battle and exploration, but both expressions must remain recognizably part of the same theme.
+
+Explicitly still OPEN:
+
+- exact combat effect used to express Insight
+- exact exploration effect used to express Insight
 - numerical magnitude and formula
 - whether the effect scales, upgrades or changes later
 - activation / refresh timing
@@ -1072,7 +1105,7 @@ Non-blocking numerical, tuning and character-specific details remain explicitly 
 
 ### Gate 4 — Protagonist & Opening
 
-Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + YOHANI LEADER THEME LOCKED**
+Status: **PARTIAL — OPENING TASK + INITIAL ANOMALY + FIRST SOLO BATTLE + SHARED CLUE STRUCTURE + NON-COMBAT SANI SOLO SEGMENT + DUAL PLAYABLE INTRODUCTION + PROTAGONIST ROLES + FIELD LEADER + LEADER BUFF SCOPE + BOTH PROTAGONIST LEADER THEMES LOCKED**
 
 Locked so far:
 
@@ -1094,5 +1127,6 @@ Locked so far:
 - each leader-eligible playable character has a distinct passive leader buff, and the current leader determines the active leader buff
 - leader buffs may affect both combat and exploration, while each character's effect package should remain coherent and clearly understandable
 - Yohani's leader-buff identity is **Protection / Guardian**: when he leads, the party should feel safer and more stable under pressure; exact mechanics and numbers remain OPEN
+- Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
-Still requiring explicit decisions include Sani's leader-buff identity, the opening anomaly's concrete clue / convergence presentation, the exact first shared-battle context, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+Still requiring explicit decisions include the opening anomaly's concrete clue / convergence presentation, the exact first shared-battle context, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.

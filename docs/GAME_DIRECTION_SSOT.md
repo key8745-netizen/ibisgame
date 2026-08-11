@@ -2183,3 +2183,64 @@ Locked so far:
 - Sani's leader-buff identity is **Insight**: when she leads, the party should be better at noticing information, anomalies and opportunities; exact mechanics and numbers remain OPEN
 
 Still requiring explicit decisions include exact evidence details and convergence presentation, exact shared opening monster species / name / detailed feature mix within the locked small-quadruped + fantasy-hybrid + neutral-wild constraints, exact territorial-warning presentation / map geometry for the opening solo battle, exact concrete panic animation / rush geometry for the first shared battle, and other protagonist/opening details required by the Vertical Slice. Agents must not fill these decisions silently.
+
+## Gate 4 Decision Reconciliation Addendum — GD-059 through GD-062
+
+This append-only addendum records four player-approved Gate 4 decisions without rewriting earlier decision text. Where earlier sections still list these exact visual questions as OPEN, GD-059 through GD-062 supersede only the stated visual-design level. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-059 — Opening Tutorial Monster Primary Silhouette Feature
+
+Status: **LOCKED**
+
+Decision: **Option A — the shared opening monster species' primary silhouette feature is a pair of large movable ears / ear-crests.**
+
+Decision boundary:
+
+- The paired ear-like / ear-crest structures are prominent enough to be a first-read silhouette cue.
+- Their movement must support readable contrast between normal alert / territorial posture and later panic / disorientation.
+- Exact construction remains OPEN: literal-ear versus crest balance, leaf-like / membrane-like / other fantasy shaping, length, thickness, symmetry, segmentation, surface treatment, coloration and markings.
+- This visual feature does **not** establish a hearing bonus, detection mechanic, magical sensitivity, special sense, lore ability or other gameplay mechanic.
+
+### GD-060 — Opening Tutorial Monster Secondary Silhouette Feature
+
+Status: **LOCKED**
+
+Decision: **Option A — the shared opening monster species' secondary silhouette feature is a bushy long tail.**
+
+Decision boundary:
+
+- The tail is long and visually full / bushy enough to remain readable as a secondary silhouette and motion cue.
+- Tail posture may help communicate controlled vigilance versus panic / disorientation.
+- Exact length ratio, taper, curvature, fur / fantasy-material balance, markings, coloration and animation details remain OPEN.
+- This visual feature does **not** establish agility, balance, speed or any other combat / exploration statistic or mechanic.
+
+### GD-061 — Opening Tutorial Monster Body Proportions
+
+Status: **LOCKED**
+
+Decision: **Option B — the shared opening monster species uses rounded and sturdy body proportions.**
+
+Decision boundary:
+
+- The body should read as compact, rounded and visually substantial rather than lanky, frail or long-legged.
+- Limbs should read as sturdy enough to support believable four-legged wild movement and the locked posture contrast.
+- Exact head-to-body ratio, leg length, torso volume, paw / foot form and pixel-art exaggeration remain OPEN.
+- This is a visual proportion decision only; it does **not** establish HP, Defense, weight, movement speed or any other mechanical property.
+
+### GD-062 — Opening Tutorial Monster Facial Demeanor
+
+Status: **LOCKED**
+
+Decision: **Option B — the shared opening monster species' ordinary facial demeanor is alert / sensitive.**
+
+Decision boundary:
+
+- In its ordinary state, the creature should read as watchful, reactive and cautious.
+- It should not primarily read as friendly-curious / pet-like, nor as permanently predatory, furious or evil-looking.
+- The ordinary alert / sensitive expression supports the first specimen's normal territorial behavior while leaving the second specimen's panic visibly abnormal.
+- Exact eye shape, brow / forehead construction, muzzle / mouth shape, fang visibility and expression range remain OPEN.
+- `Sensitive` is visual demeanor only; it does **not** establish heightened senses, special detection, magical perception, anomaly sensing or any gameplay / lore ability.
+
+### Gate 4 Reconciliation Note
+
+The opening shared monster is now LOCKED at the following high-level visual levels: **small quadrupedal fantasy creature + fantasy-hybrid visual language + neutral-wild tone + large movable ears / ear-crests + bushy long tail + rounded / sturdy proportions + alert / sensitive ordinary facial demeanor**. Exact species identity, species name, detailed feature construction, fur / scale / skin balance, coloration, markings, final field sprite and final battle sprite remain OPEN. GD-059 through GD-062 do not alter the locked same-species / different-individual relationship, normal-versus-panicked behavior contrast, encounter triggers, anomaly causality, Gate 5 lore, or C01 v0.2 boundary.

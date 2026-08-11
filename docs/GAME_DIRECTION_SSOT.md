@@ -2661,3 +2661,39 @@ Decision boundary:
 ### Gate 4 GD-082 through GD-090 Reconciliation Note
 
 The opening monster's ear construction is now additionally LOCKED as **recognizable movable beast-ear bases with mirrored three-part branched crest-plate outer edges; on each side the middle crest branch is longest, the rear branch is intermediate, the front branch is shortest, and the tips are slightly rounded / blunt; the inner ear carries a medium-area subtle off-white / cream accent**. Exact crest curvature / thickness / material micro-detail, exact branch-length ratios, exact inner-ear accent placement, exact boundary geometry, exact palette values, animation poses and final field / battle sprite pixels remain OPEN. These locks do not alter the species' fur-dominant, warm-earth, neutral-wild baseline; they do not establish special senses, flight, plant biology, combat mechanics, ecology, anomaly causality, Gate 5 lore or C01 v0.2.
+
+## Gate 4 Decision Reconciliation Addendum — GD-091 through GD-092
+
+This append-only addendum records two player-approved inner-ear detail decisions confirmed after GD-090. It supersedes only the corresponding previously OPEN inner-ear placement and contour questions. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-091 — Opening Tutorial Monster Inner-Ear Accent Position
+
+Status: **LOCKED**
+
+Decision: **Option A — the off-white / cream inner-ear accent is weighted toward the ear root and lower inner half.**
+
+Decision boundary:
+
+- The accent's visual center of gravity sits toward the base / lower interior of the recognizable beast-ear rather than being centered high in the ear or concentrated near the fantasy crest tips.
+- This keeps the upper three-part crest silhouette visually clear and preserves the outer-edge fantasy feature as the stronger ear read.
+- The accent may extend upward from the lower region, but its dominant mass must remain lower / root-weighted.
+- Exact vertical fraction, width, pixel area and boundary contour are not fixed by GD-091; contour language is further resolved by GD-092.
+- Placement does not establish anatomy, hearing capability, age / sex dimorphism, magic, sensory ability or anomaly-related meaning.
+
+### GD-092 — Opening Tutorial Monster Inner-Ear Accent Contour
+
+Status: **LOCKED**
+
+Decision: **Option B — the lower-root-weighted inner-ear accent uses an upward-tapering teardrop / wedge-like contour.**
+
+Decision boundary:
+
+- The accent begins broader in the lower / root area and narrows gently as it extends upward into the inner ear.
+- The contour should remain one coherent simple region rather than splitting into multiple lobes, branches or decorative micro-patterns.
+- The shape must remain subordinate to the three-part outer crest and readable at small field-sprite scale.
+- Exact height-to-width ratio, curvature, tip roundness, edge softness, asymmetry at pixel level and final palette contrast remain OPEN.
+- The teardrop / wedge contour is a visual organization choice only and carries no biological, magical, elemental, sensory or gameplay meaning.
+
+### Gate 4 GD-091 through GD-092 Reconciliation Note
+
+The opening monster's inner-ear accent is now additionally LOCKED as a **medium-area warm off-white / cream region concentrated toward the ear root / lower inner half, using a single upward-tapering teardrop / wedge-like contour**. Exact contour proportions, edge treatment, pixel coverage and final color values remain OPEN. GD-091 through GD-092 do not alter the mirrored three-part ear-crest structure, fur-dominant warm-earth palette, neutral-wild tone, encounter behavior, anomaly causality, Gate 5 lore or C01 v0.2.

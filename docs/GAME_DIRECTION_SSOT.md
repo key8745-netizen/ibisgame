@@ -59,7 +59,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening anomaly water-feature allocation: **Yohani = village water channel; Sani = nearby natural stream** — Yohani directly witnesses reverse flow in an artificial village waterway, while Sani independently confirms the same reverse-flow behavior in a natural stream near the village; exact positions and whether both features belong to one water system remain OPEN.
 - Opening anomaly temporal relationship: **overlapping manifestations** — the village-water-channel reverse flow and nearby-natural-stream reverse flow occur within an overlapping time window; exact onset, duration and stopping behavior remain OPEN, and overlap does not imply hydrological connection or causal propagation.
 - Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
-- Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse-flow behavior in the nearby stream, establishing that the anomaly is not an isolated accident; exact evidence details and convergence dialogue remain OPEN.
+- Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse flow in the nearby stream, establishing that the anomaly is not an isolated accident; exact evidence details and convergence dialogue remain OPEN.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
 - First solo battle enemy familiarity: **familiar ordinary local monster** — Yohani's first formal battle uses a monster type already known to exist around the village / nearby area; the battle does not by itself establish that the monster is new, transformed or caused by the reverse-flow anomaly, and the exact species and causal relationship remain OPEN.
 - First solo battle enemy count: **1 enemy** — Yohani's first formal battle contains one familiar ordinary local monster, so the first combat lesson does not require multi-target selection; exact species, stats and behavior remain OPEN.
@@ -2244,3 +2244,25 @@ Decision boundary:
 ### Gate 4 Reconciliation Note
 
 The opening shared monster is now LOCKED at the following high-level visual levels: **small quadrupedal fantasy creature + fantasy-hybrid visual language + neutral-wild tone + large movable ears / ear-crests + bushy long tail + rounded / sturdy proportions + alert / sensitive ordinary facial demeanor**. Exact species identity, species name, detailed feature construction, fur / scale / skin balance, coloration, markings, final field sprite and final battle sprite remain OPEN. GD-059 through GD-062 do not alter the locked same-species / different-individual relationship, normal-versus-panicked behavior contrast, encounter triggers, anomaly causality, Gate 5 lore, or C01 v0.2 boundary.
+
+## Gate 4 Decision Reconciliation Addendum — GD-063
+
+This append-only addendum records the next player-approved visual decision without rewriting earlier decision text. Where earlier sections still list `fur / scales / skin balance` or equivalent surface-material language as OPEN, GD-063 supersedes only that high-level surface-material question. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-063 — Opening Tutorial Monster Fur-Dominant Surface Language
+
+Status: **LOCKED**
+
+Decision: **Option A — the shared opening monster species uses a fur-dominant body-surface language.**
+
+Decision boundary:
+
+- The creature's ordinary first-read body surface is primarily fur-covered rather than primarily scaled, smooth-skinned or hard-plated.
+- `Fur-dominant` does not require every visible surface to be fur. Small localized scale-like, skin-like or hard fantasy structures may still be used when later approved, but they must not replace fur as the dominant overall surface read.
+- The locked bushy long tail remains compatible with this fur-dominant direction; exact tail material treatment is still OPEN within that boundary.
+- Exact fur length, density, softness, tufting, regional variation, grooming / wildness, localized non-fur placement, coloration and markings remain OPEN.
+- This is a visual-design decision only. It does **not** establish climate adaptation, body temperature, tamability, ecology, magical properties, combat stats or any anomaly relationship.
+
+### Gate 4 GD-063 Reconciliation Note
+
+The opening shared monster's high-level visual identity is now **small quadrupedal fantasy creature + fantasy-hybrid visual language + neutral-wild tone + large movable ears / ear-crests + bushy long tail + rounded / sturdy proportions + alert / sensitive ordinary facial demeanor + fur-dominant body surface**. Exact species identity, species name, detailed ear / tail / face construction, fur length and localized material mix, coloration, markings, final field sprite and final battle sprite remain OPEN. GD-063 does not alter the same-species / different-individual relationship, normal-versus-panicked behavior contrast, encounter triggers, anomaly causality, Gate 5 lore, or C01 v0.2 boundary.

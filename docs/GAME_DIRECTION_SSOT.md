@@ -2266,3 +2266,25 @@ Decision boundary:
 ### Gate 4 GD-063 Reconciliation Note
 
 The opening shared monster's high-level visual identity is now **small quadrupedal fantasy creature + fantasy-hybrid visual language + neutral-wild tone + large movable ears / ear-crests + bushy long tail + rounded / sturdy proportions + alert / sensitive ordinary facial demeanor + fur-dominant body surface**. Exact species identity, species name, detailed ear / tail / face construction, fur length and localized material mix, coloration, markings, final field sprite and final battle sprite remain OPEN. GD-063 does not alter the same-species / different-individual relationship, normal-versus-panicked behavior contrast, encounter triggers, anomaly causality, Gate 5 lore, or C01 v0.2 boundary.
+
+## Gate 4 Decision Reconciliation Addendum — GD-064
+
+This append-only addendum records the next player-approved visual decision without rewriting earlier decision text. Where GD-059 leaves the exact ear / ear-crest construction OPEN, GD-064 supersedes only that high-level construction question. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-064 — Opening Tutorial Monster Beast-Ear Base with Fantasy Edge Crest
+
+Status: **LOCKED**
+
+Decision: **Option B — the shared opening monster species uses a recognizable movable beast-ear base with an original fantasy extension / crest language concentrated along the outer ear silhouette.**
+
+Decision boundary:
+
+- The paired structures retain a clearly readable animal-ear-like base so upright alertness, angled caution, flattening / pinning back and other broad emotional positions can remain legible in field animation.
+- The fantasy identity is carried by the ear's outer-edge silhouette through later-approved extensions, crest plates, branching tips, layered flares or comparable original shaping rather than by replacing the ear with a wholly unrelated appendage.
+- The design must still comply with GD-057: it must not collapse the species into a literal real-world dog, fox, cat or other single-animal analogue, and it must remain original rather than copying a recognizable copyrighted creature design.
+- Exact outer-edge geometry, number of extensions / segments, curvature, taper, inner-ear construction, symmetry, length, thickness, coloration, markings and whether localized crest material is fur-like or another approved fantasy material remain OPEN within GD-063's fur-dominant overall body boundary.
+- This is a visual construction decision only. It does **not** establish enhanced hearing, special senses, magical perception, anomaly detection, communication powers or any combat / exploration mechanic.
+
+### Gate 4 GD-064 Reconciliation Note
+
+The opening shared monster's primary head silhouette is now **large movable beast-ear bases with fantasy outer-edge crest / extension shaping**. This preserves the readable normal-alert-versus-panicked ear-language required by the opening behavior contrast while strengthening the species' original fantasy identity. Exact ear-edge geometry, material treatment, coloration, markings and final sprite construction remain OPEN. GD-064 does not alter GD-063's fur-dominant body surface, the same-species / different-individual relationship, encounter behavior, anomaly causality, Gate 5 lore or C01 v0.2 boundary.

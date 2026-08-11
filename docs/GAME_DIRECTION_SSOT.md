@@ -2333,3 +2333,159 @@ Decision boundary:
 ### Gate 4 GD-066 Reconciliation Note
 
 The opening shared monster's color identity is now **warm earth-tone dominant base palette + simple two-tone regional color blocking**. Exact color values, exact anatomical color split, secondary accent colors, small non-dominant marks and final sprite palette remain OPEN. GD-066 does not alter the locked silhouette, fur-dominant surface language, behavior contrast, same-species / different-individual continuity, anomaly causality, Gate 5 lore or C01 v0.2 boundary.
+
+## Gate 4 Decision Reconciliation Addendum — GD-067 through GD-078
+
+This append-only addendum reconciles twelve player-approved visual decisions that were confirmed in conversation after GD-066 but had not yet been persisted. It supersedes only the corresponding previously OPEN detail-level questions. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-067 — Opening Tutorial Monster Forehead Horn Bud
+
+Status: **LOCKED**
+
+Decision: **Option B — the species has one very short forehead horn / horn bud as a secondary hard fantasy feature.**
+
+Decision boundary:
+
+- Exactly one small horn bud is present on the forehead.
+- It is intentionally subordinate to the large movable ear / ear-crest silhouette and must not become the creature's primary silhouette anchor.
+- The feature helps prevent the design from collapsing into a literal fox / dog / cat analogue while remaining visually simple at pixel scale.
+- Exact size ratio, base width, surface detail and final sprite pixels remain OPEN.
+- The horn bud does **not** establish a charge attack, elemental affinity, magical conduit, rarity marker, age / sex marker, social rank or anomaly-related ability.
+
+### GD-068 — Forehead Horn-Bud Material Language
+
+Status: **LOCKED**
+
+Decision: **Option A — the forehead horn bud uses a natural horn / bone-like material language.**
+
+Decision boundary:
+
+- The feature should read as an ordinary biological hard structure of the species rather than crystal, metal or overtly magical material.
+- Exact horn-versus-bone visual balance, surface grooves, sheen, color and weathering remain OPEN.
+- This material language does not establish biology beyond visible appearance, nor any magical, elemental or combat property.
+
+### GD-069 — Forehead Horn-Bud Direction
+
+Status: **LOCKED**
+
+Decision: **Option A — the short forehead horn bud angles slightly backward.**
+
+Decision boundary:
+
+- The high-level directional read is gently backward rather than vertical or forward-thrusting.
+- The backward angle keeps the feature secondary and avoids implying a head-first charging specialization.
+- Exact angle in degrees, curvature and sprite exaggeration remain OPEN.
+
+### GD-070 — Forehead Horn-Bud Shape
+
+Status: **LOCKED**
+
+Decision: **Option A — the horn bud uses a short simple conical shape.**
+
+Decision boundary:
+
+- The feature is one compact cone rather than a forked horn, plate, blade or broad blunt block.
+- Exact tip roundness, base flare, taper and surface texture remain OPEN.
+- The shape remains a visual identity cue only and does not establish offensive mechanics.
+
+### GD-071 — Opening Tutorial Monster Eye Shape
+
+Status: **LOCKED**
+
+Decision: **Option A — the ordinary eye shape is slightly almond-shaped.**
+
+Decision boundary:
+
+- The eye should sit between round mascot-like eyes and narrow aggressive slits, supporting the locked alert / sensitive demeanor.
+- The same eye construction must be capable of reading as focused / watchful in the normal specimen and visibly distressed in the panicked specimen through later-approved expression changes.
+- Exact size, tilt, eyelid thickness, brow relationship and pixel construction remain OPEN.
+
+### GD-072 — Opening Tutorial Monster Pupil Shape
+
+Status: **LOCKED**
+
+Decision: **Option A — the species uses round pupils.**
+
+Decision boundary:
+
+- Round pupils are the ordinary species baseline rather than vertical slits or elongated pupils.
+- This choice supports a watchful neutral-wild read without introducing an automatically predatory visual cue.
+- Exact pupil size and dilation / expression treatment remain OPEN.
+- Pupil shape does not imply special night vision, sensory ability or gameplay mechanics.
+
+### GD-073 — Opening Tutorial Monster Iris Color Family
+
+Status: **LOCKED**
+
+Decision: **Option A — the iris color family is amber / honey.**
+
+Decision boundary:
+
+- The ordinary iris read is a warm amber / honey family compatible with the warm earth-tone body palette.
+- Exact hue, saturation, brightness, highlight pixels and contrast remain OPEN.
+- Iris color does not establish elemental affinity, magical power, rarity or anomaly sensitivity.
+
+### GD-074 — Opening Tutorial Monster Muzzle Proportion
+
+Status: **LOCKED**
+
+Decision: **Option B — the species uses a medium-length muzzle with an alert small-wild-creature read.**
+
+Decision boundary:
+
+- The muzzle should not be extremely short / round and pet-like, nor long / sharply pointed enough to collapse the design into a fox / canine analogue.
+- Exact muzzle width, bridge shape, cheek transition, jaw depth and head-to-muzzle ratio remain OPEN.
+- The muzzle proportion is visual only and does not establish diet or predatory ecology.
+
+### GD-075 — Opening Tutorial Monster Nose Shape
+
+Status: **LOCKED**
+
+Decision: **Option A — the nose is small, rounded and triangular.**
+
+Decision boundary:
+
+- The nose must remain readable at sprite scale without becoming a large flattened snout or a tiny dot-only mascot nose.
+- Exact triangle proportions, nostril indication, surface highlight and pixel construction remain OPEN.
+
+### GD-076 — Opening Tutorial Monster Nose Color
+
+Status: **LOCKED**
+
+Decision: **Option A — the nose is dark brown.**
+
+Decision boundary:
+
+- Dark brown should integrate naturally with the locked warm earth-tone palette without becoming a harsh black focal point.
+- Exact value, saturation and highlight color remain OPEN.
+- Nose color has no lore, elemental or mechanical meaning.
+
+### GD-077 — Opening Tutorial Monster Mouth-Line Language
+
+Status: **LOCKED**
+
+Decision: **Option A — the ordinary mouth line is short and visually neutral / steady.**
+
+Decision boundary:
+
+- The baseline mouth should not read as a permanent smile, permanent frown or sharply predatory mouth corner.
+- The mouth supports the species' neutral-wild, alert / sensitive ordinary demeanor while leaving warning and panic expressions to later animation decisions.
+- Exact line thickness, corner shape, lower-jaw contour and expression-frame deformation remain OPEN.
+
+### GD-078 — Opening Tutorial Monster Ordinary Teeth Visibility
+
+Status: **LOCKED**
+
+Decision: **Option A — teeth are not normally visible in the species' ordinary resting / alert facial read.**
+
+Decision boundary:
+
+- The normal baseline face does not show persistent fangs or exposed teeth.
+- This preserves the neutral-wild read and avoids making the species look inherently vicious.
+- Whether teeth become briefly visible in a later-approved territorial-warning, attack, pain or panic animation remains OPEN; GD-078 does not forbid context-specific exposure.
+- Exact tooth number, shape, size and combat-frame visibility remain OPEN.
+- Teeth visibility does not establish diet, predatory ecology or special combat mechanics.
+
+### Gate 4 GD-067 through GD-078 Reconciliation Note
+
+The opening shared monster's currently LOCKED high-level visual identity is now: **small rounded / sturdy quadrupedal fantasy-hybrid wild creature; fur-dominant warm earth-tone two-region palette; large movable beast-ear bases with fantasy outer-edge crest shaping; bushy long tail; one very short natural horn / bone-like backward-angled conical forehead horn bud; alert / sensitive face with slightly almond-shaped eyes, round pupils, amber / honey irises, a medium-length alert-wild-creature muzzle, small rounded triangular dark-brown nose, short neutral mouth line, and no normally visible teeth**. Exact species name, exact color values, exact regional color split, ear-edge geometry, tail proportions, facial micro-details, warning / panic animation details, final field sprite and final battle sprite remain OPEN. These visual locks do not alter encounter behavior, anomaly causality, Gate 5 lore, monster ecology or C01 v0.2.

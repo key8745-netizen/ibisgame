@@ -1025,7 +1025,7 @@ Design implication:
 - The opening avoids teaching two separate one-character combat tutorials before introducing the real multi-character party grammar.
 - Sani's pre-convergence segment can differentiate itself from Yohani's through investigation and pattern recognition rather than duplicating battle structure.
 - The natural-stream observation provides a clear contrast to Yohani's artificial village water-channel event.
-- Sani's first formal combat appearance can immediately show the contrast between Yohani's stable physical role and Sani's speed / magic / support role.
+- Sani's first formal combat appearance can immediately show the contrast between Yohani's stability and Sani's speed / magic / support role.
 
 Explicitly still OPEN:
 
@@ -2697,3 +2697,26 @@ Decision boundary:
 ### Gate 4 GD-091 through GD-092 Reconciliation Note
 
 The opening monster's inner-ear accent is now additionally LOCKED as a **medium-area warm off-white / cream region concentrated toward the ear root / lower inner half, using a single upward-tapering teardrop / wedge-like contour**. Exact contour proportions, edge treatment, pixel coverage and final color values remain OPEN. GD-091 through GD-092 do not alter the mirrored three-part ear-crest structure, fur-dominant warm-earth palette, neutral-wild tone, encounter behavior, anomaly causality, Gate 5 lore or C01 v0.2.
+
+## Gate 4 Decision Reconciliation Addendum — GD-093
+
+This append-only addendum records the next player-approved inner-ear proportion decision without rewriting earlier decision text. Where GD-092 leaves the exact height-to-width ratio OPEN, GD-093 supersedes only that high-level proportion question. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-093 — Opening Tutorial Monster Tall-Slender Inner-Ear Accent Proportion
+
+Status: **LOCKED**
+
+Decision: **Option A — the off-white / cream inner-ear accent uses a relatively tall, slender height-to-width proportion.**
+
+Decision boundary:
+
+- The accent remains governed by GD-091 and GD-092: it is still concentrated toward the ear root / lower inner half and still uses one upward-tapering teardrop / wedge-like contour.
+- Relative to a balanced or short-wide shape, the accent extends more visibly upward and reads narrower for its height while keeping its visual mass rooted in the lower inner ear.
+- GD-090's medium overall coverage remains controlling; `tall / slender` changes proportion rather than expanding the accent to fill most of the ear interior.
+- The accent must remain subordinate to the mirrored three-part outer ear crest and must not intrude into or visually replace the crest branches.
+- Exact height-to-width ratio, vertical reach, base width, taper rate, edge softness, pixel coverage and final palette values remain OPEN.
+- This is a visual proportion decision only and does **not** establish anatomy, hearing capability, sensory specialization, magic, elemental affinity or anomaly-related meaning.
+
+### Gate 4 GD-093 Reconciliation Note
+
+The opening monster's inner-ear accent is now LOCKED as a **medium-area, lower-root-weighted, tall-slender off-white / cream upward-tapering teardrop / wedge region**. Exact numeric ratio, edge treatment, pixel dimensions and final palette values remain OPEN. GD-093 does not alter the mirrored three-part ear-crest structure, fur-dominant warm-earth palette, neutral-wild tone, encounter behavior, anomaly causality, Gate 5 lore or C01 v0.2 boundary.

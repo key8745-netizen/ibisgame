@@ -2538,3 +2538,126 @@ Decision boundary:
 ### Gate 4 GD-079 through GD-081 Reconciliation Note
 
 The opening shared monster's eye / facial read is now additionally LOCKED as **medium-sized, medium-spaced, slightly almond-shaped eyes with round pupils, amber / honey irises and a subtle darker eye-surround accent**. The species remains neutral-wild and alert / sensitive rather than mascot-cute or inherently vicious. Exact pixel dimensions, exact inter-eye ratio, exact eye-surround geometry / color, detailed expression frames and final field / battle sprite construction remain OPEN. GD-079 through GD-081 do not alter GD-066's two-tone regional marking baseline, encounter behavior, anomaly causality, Gate 5 lore, monster ecology or C01 v0.2.
+
+## Gate 4 Decision Reconciliation Addendum — GD-082 through GD-090
+
+This append-only addendum records nine player-approved ear / ear-crest visual decisions confirmed after GD-081. It supersedes only the corresponding previously OPEN ear-edge and inner-ear detail questions. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-082 — Opening Tutorial Monster Branched Crest-Plate Ear Edge
+
+Status: **LOCKED**
+
+Decision: **Option B — the fantasy outer edge of each movable beast-ear uses a branched crest-plate silhouette language.**
+
+Decision boundary:
+
+- The underlying structure remains a recognizable movable beast-ear base under GD-064.
+- Fantasy identity is carried by clean crest-like branches / plates projecting from the outer ear silhouette rather than by leaf-like or membrane-wave construction.
+- The crest language must remain simple enough to preserve ear posture readability at field-sprite scale.
+- Exact branch count is resolved by GD-083; exact curvature, base transition, thickness, material micro-detail and final pixel construction remain OPEN.
+- The crest does not establish plant biology, flight, magical sensing, communication powers or combat mechanics.
+
+### GD-083 — Opening Tutorial Monster Three Ear-Crest Branches Per Side
+
+Status: **LOCKED**
+
+Decision: **Option B — each ear's fantasy outer-edge crest uses three visible branches / crest plates as its structural baseline.**
+
+Decision boundary:
+
+- Each side uses three crest branches / plates rather than two or intentionally irregular branch counts.
+- The three-part structure must remain subordinate to the readable beast-ear base rather than replacing the ear with a separate crown-like organ.
+- Their relative lengths are resolved by GD-084 and GD-086.
+- Exact branch width, spacing, curvature, base overlap and pixel count remain OPEN.
+
+### GD-084 — Opening Tutorial Monster Ear-Crest Length Rhythm
+
+Status: **LOCKED**
+
+Decision: **Option A — within each three-part ear crest, the middle branch is longest while the front and rear branches are shorter.**
+
+Decision boundary:
+
+- The three branches do not use equal length.
+- The middle branch forms the primary crest peak; the front and rear branches remain secondary.
+- GD-086 further resolves the front-versus-rear ordering.
+- Exact length ratios and amount of exaggeration at field / battle sprite scale remain OPEN.
+
+### GD-085 — Opening Tutorial Monster Ear-Crest Tip Shape
+
+Status: **LOCKED**
+
+Decision: **Option A — the crest-branch tips terminate in slightly rounded / blunt points rather than sharp spikes.**
+
+Decision boundary:
+
+- The branches may taper, but the terminal read should remain softly rounded rather than weapon-like or needle-sharp.
+- This supports the species' neutral-wild baseline and avoids turning the ear crest into an inherently aggressive visual cue.
+- Exact radius, taper rate and pixel-level tip construction remain OPEN.
+- Tip shape does not establish defensive armor, attack capability or hardness beyond later-approved visual material treatment.
+
+### GD-086 — Opening Tutorial Monster Ear-Crest Front-to-Rear Length Order
+
+Status: **LOCKED**
+
+Decision: **Option A — the front crest branch is shortest, the rear branch is intermediate, and the middle branch remains longest.**
+
+Decision boundary:
+
+- The locked length order is `front shortest → rear intermediate → middle longest`.
+- The resulting silhouette may read as having a mild rearward flow, but this is a visual rhythm only and does not imply aerodynamics, speed or locomotion mechanics.
+- Exact ratios and curvature remain OPEN.
+
+### GD-087 — Opening Tutorial Monster Mirrored Ear-Crest Structure
+
+Status: **LOCKED**
+
+Decision: **Option A — left and right ear-crest anatomy uses a mirrored structural layout.**
+
+Decision boundary:
+
+- Branch count, ordering and baseline geometry are bilaterally mirrored rather than intentionally species-level asymmetric.
+- This decision governs anatomy / design construction, not every animation frame: the two movable ears may still adopt different poses when later-approved behavior or expression requires it.
+- Individual damage, temporary deformation or special variants are not established by this decision and remain outside the opening baseline unless later approved.
+
+### GD-088 — Opening Tutorial Monster Subtle Light Inner-Ear Region
+
+Status: **LOCKED**
+
+Decision: **Option B — the beast-ear base includes a subtle lighter inner-ear fur / color region.**
+
+Decision boundary:
+
+- The light inner-ear region adds structural depth without becoming a high-contrast mascot-style ear insert.
+- It remains subordinate to the ear's primary silhouette and the fantasy outer-edge crest.
+- Color family is resolved by GD-089 and coverage scale by GD-090.
+- Exact position, boundary shape, edge softness, fur texture and relation to the three crest branches remain OPEN.
+
+### GD-089 — Opening Tutorial Monster Cream Inner-Ear Color Family
+
+Status: **LOCKED**
+
+Decision: **Option A — the lighter inner-ear region uses an off-white / cream color family.**
+
+Decision boundary:
+
+- The inner-ear accent should remain warm enough to harmonize with GD-065's warm earth-tone body palette.
+- Exact hue, saturation, brightness and final pixel palette values remain OPEN.
+- The color does not establish age, sex, rarity, magic, elemental affinity or anomaly relationship.
+
+### GD-090 — Opening Tutorial Monster Medium Inner-Ear Accent Coverage
+
+Status: **LOCKED**
+
+Decision: **Option B — the off-white / cream inner-ear region occupies a medium amount of the readable inner-ear area.**
+
+Decision boundary:
+
+- The accent is large enough to read clearly at intended sprite scale but does not fill nearly the entire ear interior.
+- It must not overpower the warm-earth outer ear or the three-part fantasy crest silhouette.
+- Exact anatomical placement and distribution inside the ear remain OPEN and are the next decision question.
+- Exact pixel area, boundary contour and contrast remain OPEN.
+
+### Gate 4 GD-082 through GD-090 Reconciliation Note
+
+The opening monster's ear construction is now additionally LOCKED as **recognizable movable beast-ear bases with mirrored three-part branched crest-plate outer edges; on each side the middle crest branch is longest, the rear branch is intermediate, the front branch is shortest, and the tips are slightly rounded / blunt; the inner ear carries a medium-area subtle off-white / cream accent**. Exact crest curvature / thickness / material micro-detail, exact branch-length ratios, exact inner-ear accent placement, exact boundary geometry, exact palette values, animation poses and final field / battle sprite pixels remain OPEN. These locks do not alter the species' fur-dominant, warm-earth, neutral-wild baseline; they do not establish special senses, flight, plant biology, combat mechanics, ecology, anomaly causality, Gate 5 lore or C01 v0.2.

@@ -2288,3 +2288,25 @@ Decision boundary:
 ### Gate 4 GD-064 Reconciliation Note
 
 The opening shared monster's primary head silhouette is now **large movable beast-ear bases with fantasy outer-edge crest / extension shaping**. This preserves the readable normal-alert-versus-panicked ear-language required by the opening behavior contrast while strengthening the species' original fantasy identity. Exact ear-edge geometry, material treatment, coloration, markings and final sprite construction remain OPEN. GD-064 does not alter GD-063's fur-dominant body surface, the same-species / different-individual relationship, encounter behavior, anomaly causality, Gate 5 lore or C01 v0.2 boundary.
+
+## Gate 4 Decision Reconciliation Addendum — GD-065
+
+This append-only addendum records the next player-approved visual decision without rewriting earlier decision text. Where earlier sections still leave the opening monster's broad coloration direction OPEN, GD-065 supersedes only the high-level base-color-family question. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-065 — Opening Tutorial Monster Warm Earth-Tone Base Palette
+
+Status: **LOCKED**
+
+Decision: **Option A — the shared opening monster species uses a warm earth-tone dominant base palette.**
+
+Decision boundary:
+
+- The creature's ordinary first-read body-color family is centered on warm natural hues such as brown, russet / reddish brown, ochre, sand, beige or cream rather than a primarily cool blue-gray / violet family or a primarily pale neutral family.
+- This decision locks only the broad dominant color family. Exact hue, saturation, value, number of tones, body-region distribution, underfur / highlight color and pixel-art palette entries remain OPEN.
+- Markings and accent colors remain OPEN, including possible ear-crest edges, inner ears, tail tip, eyes or other later-approved focal details; any such accents must not replace the warm earth-tone family as the dominant overall body read.
+- Final sprite colors should preserve clear readability against the intended village / grass / water environments, but this decision does not lock exact background colors, contrast ratios or map palette values.
+- This is a visual-design decision only. It does **not** establish camouflage, preferred habitat, climate adaptation, diet, elemental affinity, magical property, social meaning or any relationship to the reverse-flow anomaly.
+
+### Gate 4 GD-065 Reconciliation Note
+
+The opening shared monster's high-level visual identity is now **small quadrupedal fantasy creature + fantasy-hybrid visual language + neutral-wild tone + large movable beast-ear bases with fantasy outer-edge crest shaping + bushy long tail + rounded / sturdy proportions + alert / sensitive ordinary facial demeanor + fur-dominant body surface + warm earth-tone dominant base palette**. Exact species identity, species name, exact color values, markings, accent colors, detailed feature construction, final field sprite and final battle sprite remain OPEN. GD-065 does not alter encounter behavior, same-species / different-individual continuity, anomaly causality, Gate 5 lore or C01 v0.2 boundary.

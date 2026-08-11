@@ -2489,3 +2489,52 @@ Decision boundary:
 ### Gate 4 GD-067 through GD-078 Reconciliation Note
 
 The opening shared monster's currently LOCKED high-level visual identity is now: **small rounded / sturdy quadrupedal fantasy-hybrid wild creature; fur-dominant warm earth-tone two-region palette; large movable beast-ear bases with fantasy outer-edge crest shaping; bushy long tail; one very short natural horn / bone-like backward-angled conical forehead horn bud; alert / sensitive face with slightly almond-shaped eyes, round pupils, amber / honey irises, a medium-length alert-wild-creature muzzle, small rounded triangular dark-brown nose, short neutral mouth line, and no normally visible teeth**. Exact species name, exact color values, exact regional color split, ear-edge geometry, tail proportions, facial micro-details, warning / panic animation details, final field sprite and final battle sprite remain OPEN. These visual locks do not alter encounter behavior, anomaly causality, Gate 5 lore, monster ecology or C01 v0.2.
+
+## Gate 4 Decision Reconciliation Addendum — GD-079 through GD-081
+
+This append-only addendum records three player-approved visual decisions that were confirmed after GD-078 but were not yet persisted. It supersedes only the corresponding previously OPEN facial-detail questions. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-079 — Opening Tutorial Monster Eye Size
+
+Status: **LOCKED**
+
+Decision: **Option B — the species uses medium-sized eyes relative to its face.**
+
+Decision boundary:
+
+- The eyes should not be so small that the alert / panic expression contrast becomes difficult to read at intended sprite scale.
+- The eyes should not be oversized enough to push the species toward a mascot-like or strongly juvenile first impression.
+- Medium size is the ordinary species baseline and must remain compatible with the slightly almond-shaped eye construction locked by GD-071.
+- Exact eye width / height ratio, pixel dimensions, iris-to-eye ratio, eyelid thickness and expression-frame scaling remain OPEN.
+- Eye size does not establish age, sex, intelligence, sensory capability or any gameplay / lore mechanic.
+
+### GD-080 — Opening Tutorial Monster Eye Spacing
+
+Status: **LOCKED**
+
+Decision: **Option B — the species uses medium inter-eye spacing.**
+
+Decision boundary:
+
+- The eyes are neither unusually close-set nor unusually wide-set as the ordinary baseline.
+- This spacing supports the locked neutral-wild, alert / sensitive read without making the face unnecessarily severe or strongly juvenile / mascot-like.
+- Exact spacing ratio relative to head width, exact eye placement and pixel-level asymmetry remain OPEN.
+- Eye spacing does not establish binocular ability, field of view, intelligence, predatory ecology or any gameplay / lore property.
+
+### GD-081 — Opening Tutorial Monster Subtle Dark Eye-Surround Marking
+
+Status: **LOCKED**
+
+Decision: **Option B — the species has a subtle darker color region around the eyes rather than no eye-surround marking or a strong mask-like marking.**
+
+Decision boundary:
+
+- The eye-surround region is a restrained, low-dominance dark accent that strengthens eye readability without becoming the creature's primary facial pattern.
+- It must not become a broad, high-contrast mask motif that makes the design read primarily like a specific real-world animal analogue.
+- GD-081 is subordinate to GD-066's simple two-tone regional marking language: the eye-surround may function as a small secondary accent, but it must not convert the species into stripe-, spot-, mask- or micro-pattern-dominant coloration.
+- Exact shape, extent, edge softness, symmetry, color value, contrast and relationship to the main two-tone regional split remain OPEN.
+- The marking has no camouflage, age / sex, social-rank, magical, elemental, sensory or anomaly-related meaning.
+
+### Gate 4 GD-079 through GD-081 Reconciliation Note
+
+The opening shared monster's eye / facial read is now additionally LOCKED as **medium-sized, medium-spaced, slightly almond-shaped eyes with round pupils, amber / honey irises and a subtle darker eye-surround accent**. The species remains neutral-wild and alert / sensitive rather than mascot-cute or inherently vicious. Exact pixel dimensions, exact inter-eye ratio, exact eye-surround geometry / color, detailed expression frames and final field / battle sprite construction remain OPEN. GD-079 through GD-081 do not alter GD-066's two-tone regional marking baseline, encounter behavior, anomaly causality, Gate 5 lore, monster ecology or C01 v0.2.

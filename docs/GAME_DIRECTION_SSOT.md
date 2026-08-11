@@ -2310,3 +2310,26 @@ Decision boundary:
 ### Gate 4 GD-065 Reconciliation Note
 
 The opening shared monster's high-level visual identity is now **small quadrupedal fantasy creature + fantasy-hybrid visual language + neutral-wild tone + large movable beast-ear bases with fantasy outer-edge crest shaping + bushy long tail + rounded / sturdy proportions + alert / sensitive ordinary facial demeanor + fur-dominant body surface + warm earth-tone dominant base palette**. Exact species identity, species name, exact color values, markings, accent colors, detailed feature construction, final field sprite and final battle sprite remain OPEN. GD-065 does not alter encounter behavior, same-species / different-individual continuity, anomaly causality, Gate 5 lore or C01 v0.2 boundary.
+
+## Gate 4 Decision Reconciliation Addendum — GD-066
+
+This append-only addendum records the next player-approved visual decision without rewriting earlier decision text. Where earlier sections still leave the opening monster's high-level marking language OPEN, GD-066 supersedes only that broad organization question. Gate 4 remains **PARTIAL** and implementation authorization remains **NOT GRANTED**.
+
+### GD-066 — Opening Tutorial Monster Simple Two-Tone Regional Marking Language
+
+Status: **LOCKED**
+
+Decision: **Option A — the shared opening monster species uses simple two-tone regional color blocking rather than stripe-dominant or spot-dominant body markings.**
+
+Decision boundary:
+
+- The species should read through a small number of broad color regions, with a darker warm-earth region and a lighter complementary warm-earth region forming the primary body-color organization.
+- A typical later implementation may place darker color across upper / outer body surfaces and lighter color across underside, chest, muzzle or comparable readable regions, but the exact anatomical split is still OPEN and is not fixed by GD-066.
+- Exact boundary shape, region size, asymmetry, hue values, saturation, contrast, underfur treatment and pixel-art palette entries remain OPEN.
+- Small secondary marks or accent details may still be approved later, but they must not turn the species' primary read into stripes, spots, mottling or visually noisy micro-patterning.
+- The marking language should remain readable at small field-sprite scale and must not depend on fine texture to identify the species.
+- This is a visual-design decision only. It does **not** establish camouflage, sex / age dimorphism, social rank, subspecies, elemental affinity, habitat adaptation, magical property or any relationship to the reverse-flow anomaly.
+
+### Gate 4 GD-066 Reconciliation Note
+
+The opening shared monster's color identity is now **warm earth-tone dominant base palette + simple two-tone regional color blocking**. Exact color values, exact anatomical color split, secondary accent colors, small non-dominant marks and final sprite palette remain OPEN. GD-066 does not alter the locked silhouette, fur-dominant surface language, behavior contrast, same-species / different-individual continuity, anomaly causality, Gate 5 lore or C01 v0.2 boundary.

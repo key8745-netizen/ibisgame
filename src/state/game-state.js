@@ -1,6 +1,6 @@
 import { CHARACTER_IDS, ITEM_IDS, MAP_IDS } from '../content/ids.js';
 import { OPENING_PHASE, OPENING_PHASES } from '../content/opening.js';
-import { KNOWN_ENCOUNTER_IDS } from '../content/encounters.js';
+import { ENCOUNTERS, KNOWN_ENCOUNTER_IDS } from '../content/encounters.js';
 import { ENEMY_STATS } from '../content/enemies.js';
 import { GAME_MODES, isGameMode } from './modes.js';
 import { validateCommand } from '../battle/commands.js';
@@ -62,9 +62,10 @@ function validateBattle(b, state) {
   if (typeof b.encounterId !== 'string' || b.encounterId.length === 0) return false;
   if (!VALID_BATTLE_CONTEXTS.has(b.context)) return false;
 
-  // Authored encounters must be in the static registry; random/boss may use any non-empty id
+  // Authored encounters must be in the static registry with a matching registered context
   if (b.context === 'authored-solo' || b.context === 'authored-shared') {
     if (!KNOWN_ENCOUNTER_IDS.has(b.encounterId)) return false;
+    if (ENCOUNTERS[b.encounterId].context !== b.context) return false;
   }
 
   if (!VALID_BATTLE_PHASES.has(b.phase)) return false;
@@ -96,6 +97,7 @@ function validateBattle(b, state) {
   for (const [charId, cmd] of Object.entries(b.pendingCommands)) {
     if (cmd !== null) {
       if (!isPlainObject(cmd) || typeof cmd.type !== 'string') return false;
+      if ((state.party?.members[charId]?.hp ?? 0) <= 0) return false;
       const battleCtx = {
         context: b.context,
         mp: state.party?.members[charId]?.mp ?? 0,
@@ -230,6 +232,8 @@ export function validateGameState(candidate) {
   if (candidate.battle !== null
       && candidate.mode !== 'battle'
       && !(candidate.mode === 'pause' && candidate.pause?.resumeMode === 'battle')) return null;
+  // Pause-battle inverse: resumeMode='battle' requires an active battle object
+  if (candidate.mode === 'pause' && candidate.pause?.resumeMode === 'battle' && candidate.battle === null) return null;
 
   return structuredClone(candidate);
 }

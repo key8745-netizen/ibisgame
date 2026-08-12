@@ -4,7 +4,8 @@ import { ABILITY_IDS, CHARACTER_IDS, ENEMY_IDS, MAP_IDS } from '../src/content/i
 import { OPENING_PHASE, OPENING_ENCOUNTERS } from '../src/content/opening.js';
 import { createBattleEntry } from '../src/battle/battle-state.js';
 import { COMMAND_TYPES, validateCommand } from '../src/battle/commands.js';
-import { resolveRound, submitCommand, resolveEnemyAction } from '../src/battle/resolver.js';
+import { resolveRound, submitCommand, resolveEnemyAction, resolveEnemyActionWindow } from '../src/battle/resolver.js';
+import { SaveStore } from '../src/save/storage.js';
 import { makeRng, lcgNext } from '../src/battle/rng.js';
 import { createInitialGameState, validateGameState } from '../src/state/game-state.js';
 import { getSaniConditionBand } from '../src/rpg/insight.js';
@@ -282,6 +283,13 @@ test('validateGameState rejects non-null pending command that fails validation',
   assert.equal(validateGameState(state), null);
 });
 
+test('validateGameState rejects non-null pendingCommand for a fallen (hp=0) party member', () => {
+  const state = makeSoloState();
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 0;
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  assert.equal(validateGameState(state), null);
+});
+
 test('validateGameState accepts partial pendingCommands (one filled, one null)', () => {
   const state = makeSharedState();
   // Only Yohani's command is filled; Sani's remains null
@@ -305,6 +313,13 @@ test('validateGameState rejects authored-solo battle when openingPhase is not SO
 test('validateGameState rejects authored-shared battle when openingPhase is not SHARED_PANIC', () => {
   const state = makeSharedState();
   state.progression.openingPhase = OPENING_PHASE.SOLO_APPROACH;
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects authored encounterId whose registered context does not match battle.context', () => {
+  // SHARED_ENC is registered as 'authored-shared'; forcing context='authored-solo' mismatches
+  const state = makeSoloState();
+  state.battle.encounterId = SHARED_ENC; // registered context is 'authored-shared', not 'authored-solo'
   assert.equal(validateGameState(state), null);
 });
 
@@ -370,6 +385,14 @@ test('validateGameState accepts mode=field with pause=null', () => {
   state.mode = 'field';
   state.pause = null;
   assert.ok(validateGameState(state));
+});
+
+test('validateGameState rejects pause.resumeMode=battle when battle is null (bidirectional invariant)', () => {
+  const state = createInitialGameState();
+  state.mode = 'pause';
+  state.pause = { resumeMode: 'battle' };
+  // battle is already null in initial state — inverse invariant must reject this
+  assert.equal(validateGameState(state), null);
 });
 
 // ── validateCommand ──────────────────────────────────────────────────────────
@@ -507,15 +530,23 @@ test('submitCommand: rejects when no battle in state', () => {
   assert.equal(r.result, 'invalid-context');
 });
 
+test('submitCommand: rejects fallen actor (hp=0)', () => {
+  const state = makeSoloState();
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 0;
+  const r = submitCommand(state, CHARACTER_IDS.YOHANI, ATK0);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'fallen-actor');
+});
+
 // ── resolveRound — phase/precondition guards ─────────────────────────────────
 
-test('resolveRound rejects state with invalid phase (caught by prevalidation)', () => {
-  // validateGameState only accepts 'command-selection'; 'resolving' fails prevalidation
+test('resolveRound rejects state with invalid phase', () => {
+  // Pre-check fires before validateGameState, so phase mismatch surfaces as 'invalid-phase'
   const state = makeSoloState();
   state.battle.phase = 'resolving';
   const r = resolveRound(state);
   assert.equal(r.ok, false);
-  assert.equal(r.result, 'invalid-context');
+  assert.equal(r.result, 'invalid-phase');
 });
 
 test('resolveRound returns precondition-failed when commands not all filled', () => {
@@ -523,6 +554,16 @@ test('resolveRound returns precondition-failed when commands not all filled', ()
   const r = resolveRound(state);
   assert.equal(r.ok, false);
   assert.equal(r.result, 'precondition-failed');
+});
+
+test('resolveRound: fallen party member skipped for readiness; living member satisfies', () => {
+  const state = makeSharedState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 0; // Yohani fallen — command stays null
+  state.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
+  const r = resolveRound(state);
+  // Sani is the sole living member and has a command — round should proceed
+  assert.equal(r.ok, true);
+  assert.ok(r.roundResult.outcome !== undefined);
 });
 
 // ── resolveRound — ongoing ───────────────────────────────────────────────────
@@ -817,6 +858,65 @@ test('resolveEnemyAction: DEFEND halves incoming damage (same variance, with/wit
   assert.equal(dmgDefend, Math.ceil(dmgNormal / 2));
 });
 
+// ── resolveEnemyActionWindow — AoE action-window tests ───────────────────────
+
+test('resolveEnemyActionWindow: guard consumed once after all deliveries (multi-target AoE)', () => {
+  // Yohani guards Sani. Enemy delivers 1 hit to Yohani then 1 hit to Sani.
+  // Guard protects Sani only; b.activeGuard is cleared after all deliveries finish.
+  const b = {
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    pendingCommands: { [CHARACTER_IDS.YOHANI]: null, [CHARACTER_IDS.SANI]: null },
+    activeGuard: { guarderId: CHARACTER_IDS.YOHANI, targetId: CHARACTER_IDS.SANI },
+    context: 'authored-shared',
+    round: 1,
+    snapshotLeaderId: CHARACTER_IDS.YOHANI,
+  };
+  const state = {
+    party: {
+      members: {
+        [CHARACTER_IDS.YOHANI]: { level: 1, hp: 100 },
+        [CHARACTER_IDS.SANI]: { level: 1, hp: 100 },
+      },
+    },
+  };
+  const deliveries = [
+    { targetId: CHARACTER_IDS.YOHANI, hitCount: 1 },
+    { targetId: CHARACTER_IDS.SANI, hitCount: 1 },
+  ];
+  const { events } = resolveEnemyActionWindow(b, state, 0, deliveries, makeRng(5));
+
+  const intercepts = events.filter((e) => e.kind === 'guard-intercept');
+  assert.equal(intercepts.length, 1, 'guard intercepts only the guarded target (Sani)');
+  assert.equal(intercepts[0].originalTargetId, CHARACTER_IDS.SANI);
+  assert.equal(b.activeGuard, null, 'guard cleared once after all deliveries');
+
+  assert.ok(events.some((e) => e.kind === 'enemy-attack' && e.targetId === CHARACTER_IDS.YOHANI), 'Yohani also attacked');
+  assert.ok(events.some((e) => e.kind === 'enemy-attack' && e.targetId === CHARACTER_IDS.SANI), 'Sani also attacked');
+});
+
+test('resolveEnemyActionWindow: guard applies across same-target deliveries within one window', () => {
+  // Two separate deliveries to the same guarded target (Sani).
+  // Guard applies to each delivery since b.activeGuard is only cleared at window end.
+  const b = {
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    pendingCommands: { [CHARACTER_IDS.SANI]: null },
+    activeGuard: { guarderId: CHARACTER_IDS.YOHANI, targetId: CHARACTER_IDS.SANI },
+    context: 'authored-solo',
+    round: 1,
+    snapshotLeaderId: CHARACTER_IDS.YOHANI,
+  };
+  const state = { party: { members: { [CHARACTER_IDS.SANI]: { level: 1, hp: 100 } } } };
+  const deliveries = [
+    { targetId: CHARACTER_IDS.SANI, hitCount: 1 },
+    { targetId: CHARACTER_IDS.SANI, hitCount: 1 },
+  ];
+  const { events } = resolveEnemyActionWindow(b, state, 0, deliveries, makeRng(5));
+
+  const intercepts = events.filter((e) => e.kind === 'guard-intercept');
+  assert.equal(intercepts.length, 2, 'guard applies to each delivery within the window');
+  assert.equal(b.activeGuard, null, 'guard cleared exactly once after window ends');
+});
+
 // ── resolveRound — Yohani leader protection ──────────────────────────────────
 
 test('leader protection: yohani-protection event emitted when Yohani leads round-1 random', () => {
@@ -908,6 +1008,31 @@ test('tryMigrate: v1 m2Stub battle is cleared and migration proceeds', () => {
   assert.equal(result.version, 2);
   assert.equal(result.battle, null);
   assert.equal(result.mode, 'field');
+});
+
+// ── SaveStore suspend round-trip ─────────────────────────────────────────────
+
+test('SaveStore: partial battle commands survive writeSuspend → readSuspend round-trip', () => {
+  const storage = new Map();
+  const mockStorage = {
+    setItem(key, value) { storage.set(key, value); },
+    getItem(key) { return storage.get(key) ?? null; },
+  };
+  const store = new SaveStore(mockStorage);
+
+  const state = makeSharedState(42);
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0; // Yohani submitted
+  // Sani's command stays null (partial round-in-progress)
+
+  store.writeSuspend(state);
+  const recovered = store.readSuspend();
+
+  assert.ok(recovered, 'readSuspend returns a valid state');
+  assert.ok(recovered.battle, 'battle object preserved');
+  assert.deepEqual(recovered.battle.pendingCommands[CHARACTER_IDS.YOHANI], ATK0, 'submitted command preserved');
+  assert.equal(recovered.battle.pendingCommands[CHARACTER_IDS.SANI], null, 'null command preserved');
+  assert.equal(recovered.battle.encounterId, state.battle.encounterId, 'encounterId preserved');
+  assert.equal(recovered.battle.round, 1, 'round preserved');
 });
 
 // ── getSaniConditionBand ─────────────────────────────────────────────────────

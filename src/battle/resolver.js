@@ -35,16 +35,14 @@ function buildActors(battle) {
   return actors;
 }
 
-// Resolve a single enemy action window (one or more hits against a target).
-// Guard modifier applies to ALL hits in the window; guard is consumed only after
-// the whole action window completes, not on the first hit.
-// Exported for action-window test coverage.
-export function resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rngIn) {
+// Per-target hit loop. Does NOT mutate b.activeGuard; returns guardConsumed flag
+// so resolveEnemyActionWindow can track guard usage across the full action window.
+function applyTargetHits(b, state, enemyIdx, targetId, hitCount, rngIn, guardConsumedIn) {
   const events = [];
   const stats = ENEMY_STATS[b.enemyIds[enemyIdx]];
   const target = state.party.members[targetId];
   let rng = rngIn;
-  let guardConsumedThisAction = false;
+  let guardConsumed = guardConsumedIn;
 
   for (let hit = 0; hit < hitCount; hit++) {
     rng = lcgNext(rng);
@@ -55,12 +53,12 @@ export function resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rngIn
       damage = Math.ceil(damage / 2);
     }
 
-    // 護援 (Guard Aid): applies to every hit in this action window; guard expires after window ends.
+    // 護援 (Guard Aid): applies to every hit in this action window; b.activeGuard cleared after window.
     if (b.activeGuard?.targetId === targetId) {
       const originalDamage = damage;
       damage = Math.max(1, Math.floor(damage * GUARD_AID_REDUCTION));
       events.push({ kind: 'guard-intercept', guarderId: b.activeGuard.guarderId, originalTargetId: targetId, originalDamage, reducedDamage: damage });
-      guardConsumedThisAction = true;
+      guardConsumed = true;
     }
 
     // Yohani leader first-round protection (random encounters only, party-wide).
@@ -74,11 +72,39 @@ export function resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rngIn
     if (target.hp <= 0) break;
   }
 
-  if (guardConsumedThisAction) {
+  return { events, rng, guardConsumed };
+}
+
+// Canonical multi-delivery enemy action. deliveries = [{ targetId, hitCount }].
+// 護援 (Guard Aid) applies to all deliveries targeting the guarded character;
+// guard is cleared exactly once after all deliveries complete.
+// Exported for action-window test coverage.
+export function resolveEnemyActionWindow(b, state, enemyIdx, deliveries, rngIn) {
+  const events = [];
+  let rng = rngIn;
+  let guardConsumed = false;
+
+  for (const { targetId, hitCount } of deliveries) {
+    const target = state.party.members[targetId];
+    if (!target || target.hp <= 0) continue;
+    const { events: targetEvents, rng: nextRng, guardConsumed: consumed } =
+      applyTargetHits(b, state, enemyIdx, targetId, hitCount, rng, guardConsumed);
+    rng = nextRng;
+    guardConsumed = consumed;
+    events.push(...targetEvents);
+  }
+
+  if (guardConsumed) {
     b.activeGuard = null;
   }
 
   return { events, rng };
+}
+
+// Single-target wrapper — delegates to resolveEnemyActionWindow.
+// Preserved for direct test coverage of single-target action windows.
+export function resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rngIn) {
+  return resolveEnemyActionWindow(b, state, enemyIdx, [{ targetId, hitCount }], rngIn);
 }
 
 // Authored victory transition prevalidation result codes.
@@ -165,9 +191,11 @@ export function submitCommand(currentGameState, characterId, command) {
   if (!battle.partyIds.includes(characterId)) return { ok: false, result: 'invalid-actor' };
 
   const member = currentGameState.party.members[characterId];
+  if (!member || member.hp <= 0) return { ok: false, result: 'fallen-actor' };
+
   const battleCtx = {
     context: battle.context,
-    mp: member?.mp ?? 0,
+    mp: member.mp,
     enemies: battle.enemies,
     partyIds: battle.partyIds,
   };
@@ -186,20 +214,24 @@ export function submitCommand(currentGameState, characterId, command) {
 }
 
 export function resolveRound(currentGameState) {
-  // Prevalidate incoming state before any mutation.
+  // Pre-check before validateGameState so a wrong phase returns 'invalid-phase', not 'invalid-context'.
+  if (!currentGameState?.battle) return { ok: false, result: 'invalid-context' };
+  if (currentGameState.battle.phase !== 'command-selection') return { ok: false, result: 'invalid-phase' };
+
   const validated = validateGameState(currentGameState);
   if (!validated) return { ok: false, result: 'invalid-context' };
   if (!validated.battle) return { ok: false, result: 'invalid-context' };
 
-  const battle = validated.battle;
-  if (battle.phase !== 'command-selection') return { ok: false, result: 'invalid-phase' };
-  if (!battle.partyIds.every((id) => battle.pendingCommands[id] !== null)) {
-    return { ok: false, result: 'precondition-failed' };
-  }
-
   // Work on the validated clone — already a structuredClone from validateGameState.
   const state = validated;
   const b = state.battle;
+
+  // Fallen actors (hp=0) are not required for round readiness.
+  const livingIds = b.partyIds.filter((id) => state.party.members[id].hp > 0);
+  if (!livingIds.every((id) => b.pendingCommands[id] !== null)) {
+    return { ok: false, result: 'precondition-failed' };
+  }
+
   b.phase = 'resolving';
 
   let rng = b.rngState;
@@ -209,7 +241,9 @@ export function resolveRound(currentGameState) {
   // Guard Aid (護援) is established from the committed command set BEFORE any
   // initiative actions execute. An enemy faster than Yohani cannot bypass a
   // committed guard because the effect is active from the start of the round.
+  // Fallen actors cannot establish guard effects.
   for (const id of b.partyIds) {
+    if (state.party.members[id].hp <= 0) continue;
     const cmd = b.pendingCommands[id];
     if (cmd?.type === COMMAND_TYPES.ABILITY && cmd.abilityId === ABILITY_IDS.GUARD_AID) {
       const targetId = b.partyIds[cmd.targetIdx];
@@ -304,7 +338,7 @@ export function resolveRound(currentGameState) {
         if (!target || target.hp <= 0) continue;
 
         const hitCount = cmd.hitCount ?? 1;
-        const { events: actionEvents, rng: nextRng } = resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rng);
+        const { events: actionEvents, rng: nextRng } = resolveEnemyActionWindow(b, state, enemyIdx, [{ targetId, hitCount }], rng);
         rng = nextRng;
         events.push(...actionEvents);
       }

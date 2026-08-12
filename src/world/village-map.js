@@ -45,6 +45,11 @@ export function moveVillagePosition(position, dx, dy) {
   return next;
 }
 
+export function isReverseFlowActive(state) {
+  if (state.progression.openingPhase === OPENING_PHASE.DELIVERY) return false;
+  return state.progression.flags.localStarMarkerStabilized !== true;
+}
+
 function wr(p, camera, x, y, w, h, color) {
   p.rect(x - camera.x, y - camera.y, w, h, color);
 }
@@ -97,7 +102,7 @@ export function drawVillage(p, camera, state, time) {
   drawBuilding(p, camera, BUILDINGS[3], '#745347');
 
   const phase = state.progression.openingPhase;
-  const reverse = phase !== OPENING_PHASE.DELIVERY && phase !== OPENING_PHASE.COMPLETE;
+  const reverse = isReverseFlowActive(state);
   drawWater(p, camera, time, reverse);
   drawStream(p, camera, time, reverse);
 

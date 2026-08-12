@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check src/main.js && node --check src/engine/input.js && node --check src/engine/loop.js && node --check src/state/game-state.js && node --check src/save/storage.js",
+    "check": "node --check src/main.js && node --check src/engine/input.js && node --check src/engine/loop.js && node --check src/state/game-state.js && node --check src/save/storage.js && node --check src/content/opening.js && node --check src/events/opening-director.js && node --check src/world/village-map.js && node --check src/world/field-controller.js",
     "test": "node --test tests/*.test.js"
   }
 }

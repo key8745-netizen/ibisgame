@@ -6,14 +6,10 @@ export function calcDefeatMoneyLoss(money) {
   return Math.floor(money * 0.25);
 }
 
-// Apply victory rewards to a cloned state. Mutates and returns the clone.
-// Sets battle.phase='complete'. Does NOT clear battle — resolver handles phase transitions.
-export function completeBattleVictory(state) {
+// Apply EXP and money victory rewards to state.party.members (battle.partyIds only).
+// Does NOT set battle.phase or clear battle — the caller (resolver) handles that.
+export function applyVictoryRewards(state) {
   const battle = state.battle;
-
-  // Idempotent guard: rewards already applied when phase is already complete
-  if (battle.phase === 'complete') return state;
-
   const expGain = battle.enemies.reduce((sum, _, i) => sum + (ENEMY_STATS[battle.enemyIds[i]]?.expReward ?? 0), 0);
   const moneyGain = battle.enemies.reduce((sum, _, i) => sum + (ENEMY_STATS[battle.enemyIds[i]]?.moneyReward ?? 0), 0);
 
@@ -24,21 +20,17 @@ export function completeBattleVictory(state) {
   }
 
   state.economy.money += moneyGain;
-  state.battle.phase = 'complete';
-  return state;
 }
 
-// Apply defeat penalties to a cloned state. Mutates and returns the clone.
-// Sets battle.phase='complete'. Does NOT clear battle — resolver handles phase transitions.
-export function completeBattleDefeat(state) {
-  // Idempotent guard
-  if (state.battle.phase === 'complete') return state;
-
+// Apply defeat penalties: money loss + HP/MP restore for battle.partyIds only.
+// Reserve members (not in battle.partyIds) are NOT affected.
+// Does NOT clear battle or set mode — the caller (resolver) handles that.
+export function applyDefeatPenalties(state) {
+  const battle = state.battle;
   const loss = calcDefeatMoneyLoss(state.economy.money);
   state.economy.money = Math.max(0, state.economy.money - loss);
 
-  // Restore HP/MP to full for all members
-  for (const id of Object.keys(state.party.members)) {
+  for (const id of battle.partyIds) {
     const m = state.party.members[id];
     state.party.members[id] = {
       ...m,
@@ -47,17 +39,11 @@ export function completeBattleDefeat(state) {
     };
   }
 
-  // Use battle-entry revival point snapshot if available, else fall back to progression
-  if (state.battle.snapshotRevivalPoint) {
-    state.field.mapId = state.battle.snapshotRevivalPoint.mapId;
-    state.field.x = state.battle.snapshotRevivalPoint.x;
-    state.field.y = state.battle.snapshotRevivalPoint.y;
-  } else if (state.progression.revivalPoint) {
-    state.field.mapId = state.progression.revivalPoint.mapId;
-    state.field.x = state.progression.revivalPoint.x;
-    state.field.y = state.progression.revivalPoint.y;
+  // Restore field position to revival point snapshot from battle entry
+  const rp = battle.snapshotRevivalPoint ?? state.progression.revivalPoint;
+  if (rp) {
+    state.field.mapId = rp.mapId;
+    state.field.x = rp.x;
+    state.field.y = rp.y;
   }
-
-  state.battle.phase = 'complete';
-  return state;
 }

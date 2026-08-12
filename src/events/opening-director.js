@@ -23,7 +23,11 @@ function setFieldActor(state, id, x, y) {
 
 function beginBattle(state, encounter) {
   state.mode = 'battle';
-  state.battle = createBattleEntry(encounter.id);
+  state.battle = createBattleEntry(encounter.id, Date.now(), {
+    partyIds: state.party.activeIds,
+    leaderId: state.field.leaderId,
+    revivalPoint: state.progression.revivalPoint,
+  });
 }
 
 export function applyOpeningEvent(state, event) {

@@ -2,15 +2,16 @@ import { CHARACTER_IDS, ITEM_IDS, MAP_IDS } from '../content/ids.js';
 import { OPENING_PHASE, OPENING_PHASES } from '../content/opening.js';
 import { KNOWN_ENCOUNTER_IDS } from '../content/encounters.js';
 import { ENEMY_STATS } from '../content/enemies.js';
-import { isGameMode } from './modes.js';
+import { GAME_MODES, isGameMode } from './modes.js';
 
 export const SAVE_VERSION = 2;
 const KNOWN_CHARACTERS = new Set(Object.values(CHARACTER_IDS));
 const KNOWN_MAPS = new Set(Object.values(MAP_IDS));
 const KNOWN_OPENING_PHASES = new Set(OPENING_PHASES);
 
-const VALID_BATTLE_CONTEXTS = new Set(['authored-solo', 'authored-shared', 'random']);
-const VALID_BATTLE_PHASES = new Set(['command-selection', 'complete']);
+const VALID_BATTLE_CONTEXTS = new Set(['authored-solo', 'authored-shared', 'random', 'boss']);
+const VALID_BATTLE_PHASES = new Set(['command-selection']);
+const VALID_RESUME_MODES = new Set(GAME_MODES.filter((m) => m !== 'pause'));
 
 export function createInitialGameState() {
   return {
@@ -58,10 +59,9 @@ const isPlainObject = (value) => value !== null && typeof value === 'object' && 
 function validateBattle(b, state) {
   if (!isPlainObject(b)) return false;
   if (typeof b.encounterId !== 'string' || b.encounterId.length === 0) return false;
-  // P0-08: encounterId must be a known encounter
   if (!KNOWN_ENCOUNTER_IDS.has(b.encounterId)) return false;
   if (!VALID_BATTLE_CONTEXTS.has(b.context)) return false;
-  if (!VALID_BATTLE_PHASES.has(b.phase)) return false;  // 'resolving' always rejected
+  if (!VALID_BATTLE_PHASES.has(b.phase)) return false;
   if (!isFiniteInt(b.round) || b.round < 1) return false;
   if (!Array.isArray(b.partyIds) || b.partyIds.length < 1) return false;
 
@@ -70,7 +70,7 @@ function validateBattle(b, state) {
   if (partySet.size !== b.partyIds.length) return false;
   if ([...partySet].some((id) => !KNOWN_CHARACTERS.has(id))) return false;
 
-  // authored context constraints
+  // authored context party composition constraints
   if (b.context === 'authored-solo') {
     if (b.partyIds.length !== 1 || b.partyIds[0] !== CHARACTER_IDS.YOHANI) return false;
   }
@@ -85,30 +85,56 @@ function validateBattle(b, state) {
   const cmdKeys = new Set(Object.keys(b.pendingCommands));
   if (cmdKeys.size !== partySet.size) return false;
   if ([...partySet].some((id) => !cmdKeys.has(id))) return false;
-  // P0-08: pendingCommands values must be null or a plain object with a string type
   for (const v of Object.values(b.pendingCommands)) {
     if (v !== null && (!isPlainObject(v) || typeof v.type !== 'string')) return false;
   }
 
-  // P0-08: battle.partyIds must match party.activeIds exactly (same set, same order)
+  // battle.partyIds must match party.activeIds exactly (same set, same order)
   if (!Array.isArray(state.party?.activeIds)) return false;
   if (b.partyIds.length !== state.party.activeIds.length) return false;
   if (b.partyIds.some((id, i) => id !== state.party.activeIds[i])) return false;
 
   if (!Array.isArray(b.enemyIds) || b.enemyIds.length < 1) return false;
-  // P0-08: all enemyIds must be known
   if (b.enemyIds.some((id) => !ENEMY_STATS[id])) return false;
   if (!Array.isArray(b.enemies) || b.enemies.length !== b.enemyIds.length) return false;
   for (const enemy of b.enemies) {
     if (!isPlainObject(enemy)) return false;
+    if (typeof enemy.instanceId !== 'string' || enemy.instanceId.length === 0) return false;
     if (!isFiniteInt(enemy.hp) || enemy.hp < 0) return false;
     if (!isFiniteInt(enemy.maxHp) || enemy.maxHp < 1) return false;
     if (enemy.hp > enemy.maxHp) return false;
   }
 
+  // partyCombatState: keys must exactly match partyIds, each value is plain object with statusFlags
+  if (!isPlainObject(b.partyCombatState)) return false;
+  const combatKeys = new Set(Object.keys(b.partyCombatState));
+  if (combatKeys.size !== partySet.size) return false;
+  if ([...partySet].some((id) => !combatKeys.has(id))) return false;
+  for (const v of Object.values(b.partyCombatState)) {
+    if (!isPlainObject(v) || !isPlainObject(v.statusFlags)) return false;
+  }
+
   if (!isFiniteInt(b.rngState) || b.rngState <= 0) return false;
-  if (typeof b.leaderEffectUsed !== 'boolean') return false;
-  if (typeof b.snapshotLeaderId !== 'string') return false;
+
+  // snapshotLeaderId must be a known character
+  if (!KNOWN_CHARACTERS.has(b.snapshotLeaderId)) return false;
+
+  // snapshotRevivalPoint must have a valid map and finite coordinates
+  if (!isPlainObject(b.snapshotRevivalPoint)) return false;
+  if (!KNOWN_MAPS.has(b.snapshotRevivalPoint.mapId)) return false;
+  if (!Number.isFinite(b.snapshotRevivalPoint.x) || !Number.isFinite(b.snapshotRevivalPoint.y)) return false;
+
+  // activeGuard: null or plain object with known-character guarderId and targetId
+  if (b.activeGuard !== null) {
+    if (!isPlainObject(b.activeGuard)) return false;
+    if (!KNOWN_CHARACTERS.has(b.activeGuard.guarderId)) return false;
+    if (!KNOWN_CHARACTERS.has(b.activeGuard.targetId)) return false;
+  }
+
+  // Authored context ↔ opening phase cross-validation
+  const openingPhase = state.progression?.openingPhase;
+  if (b.context === 'authored-solo' && openingPhase !== OPENING_PHASE.SOLO_APPROACH) return false;
+  if (b.context === 'authored-shared' && openingPhase !== OPENING_PHASE.SHARED_PANIC) return false;
 
   return true;
 }
@@ -129,7 +155,7 @@ export function validateGameState(candidate) {
   if (active.size !== candidate.party.activeIds.length) return null;
   if ([...active].some((id) => !KNOWN_CHARACTERS.has(id))) return null;
 
-  // leaderId must be in party.activeIds (not field.activeIds — that field does not exist)
+  // leaderId must be in party.activeIds
   if (!active.has(candidate.field.leaderId)) return null;
 
   if (!isPlainObject(candidate.party.members)) return null;
@@ -165,10 +191,12 @@ export function validateGameState(candidate) {
   if (!isPlainObject(candidate.progression.revivalPoint)) return null;
   if (!KNOWN_MAPS.has(candidate.progression.revivalPoint.mapId)) return null;
 
-  // pause: null when not paused, or plain object with string resumeMode
-  if (candidate.pause !== null) {
+  // Pause contract: mode='pause' ↔ pause object with valid non-pause resumeMode; mode≠'pause' → pause=null
+  if (candidate.mode === 'pause') {
     if (!isPlainObject(candidate.pause)) return null;
-    if (typeof candidate.pause.resumeMode !== 'string') return null;
+    if (!VALID_RESUME_MODES.has(candidate.pause.resumeMode)) return null;
+  } else {
+    if (candidate.pause !== null) return null;
   }
 
   if (candidate.battle !== null) {
@@ -176,7 +204,6 @@ export function validateGameState(candidate) {
   }
 
   // mode↔battle cross-check
-  // 'battle' mode requires battle present; battle present requires mode 'battle' or paused battle ('pause' with resumeMode='battle')
   if (candidate.mode === 'battle' && candidate.battle === null) return null;
   if (candidate.battle !== null
       && candidate.mode !== 'battle'

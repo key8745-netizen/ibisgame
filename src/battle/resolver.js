@@ -3,10 +3,11 @@ import { ENEMY_STATS } from '../content/enemies.js';
 import { attackAtLevel, defenseAtLevel, maxHpAtLevel, speedOf } from '../rpg/stats.js';
 import { applyVictoryRewards, applyDefeatPenalties } from '../rpg/economy.js';
 import { validateGameState } from '../state/game-state.js';
-import { COMMAND_TYPES } from './commands.js';
+import { COMMAND_TYPES, validateCommand } from './commands.js';
 import { selectEnemyCommand } from './ai.js';
 import { lcgNext, lcgVariance } from './rng.js';
 import { applyOpeningEvent, OPENING_EVENT } from '../events/opening-director.js';
+import { OPENING_PHASE } from '../content/opening.js';
 
 const GUARD_AID_REDUCTION = 0.5;
 const LEADER_PROTECTION_REDUCTION = 0.5;
@@ -34,47 +35,170 @@ function buildActors(battle) {
   return actors;
 }
 
-// Apply the authored opening event for victory, then always clear battle state.
-// Called on a structuredClone — safe to mutate.
-function applyVictoryTransition(state) {
-  applyVictoryRewards(state);
+// Resolve a single enemy action window (one or more hits against a target).
+// Guard modifier applies to ALL hits in the window; guard is consumed only after
+// the whole action window completes, not on the first hit.
+// Exported for action-window test coverage.
+export function resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rngIn) {
+  const events = [];
+  const stats = ENEMY_STATS[b.enemyIds[enemyIdx]];
+  const target = state.party.members[targetId];
+  let rng = rngIn;
+  let guardConsumedThisAction = false;
 
-  if (state.battle.context === 'authored-solo') {
-    applyOpeningEvent(state, OPENING_EVENT.SOLO_BATTLE_RESOLVED);
-  } else if (state.battle.context === 'authored-shared') {
-    applyOpeningEvent(state, OPENING_EVENT.SHARED_BATTLE_RESOLVED);
+  for (let hit = 0; hit < hitCount; hit++) {
+    rng = lcgNext(rng);
+    const def = defenseAtLevel(targetId, target.level);
+    let damage = physDamage(stats.attack, def, lcgVariance(rng, 2));
+
+    if (b.pendingCommands[targetId]?.type === COMMAND_TYPES.DEFEND) {
+      damage = Math.ceil(damage / 2);
+    }
+
+    // 護援 (Guard Aid): applies to every hit in this action window; guard expires after window ends.
+    if (b.activeGuard?.targetId === targetId) {
+      const originalDamage = damage;
+      damage = Math.max(1, Math.floor(damage * GUARD_AID_REDUCTION));
+      events.push({ kind: 'guard-intercept', guarderId: b.activeGuard.guarderId, originalTargetId: targetId, originalDamage, reducedDamage: damage });
+      guardConsumedThisAction = true;
+    }
+
+    // Yohani leader first-round protection (random encounters only, party-wide).
+    if (b.context === 'random' && b.round === 1 && b.snapshotLeaderId === CHARACTER_IDS.YOHANI) {
+      damage = Math.max(1, Math.ceil(damage * LEADER_PROTECTION_REDUCTION));
+      events.push({ kind: 'yohani-protection', targetId });
+    }
+
+    target.hp = Math.max(0, target.hp - damage);
+    events.push({ kind: 'enemy-attack', enemyIdx, targetId, damage });
+    if (target.hp <= 0) break;
   }
 
-  // Always clear battle — handles random encounters and cases where opening event
-  // returned false (wrong phase in test states without full opening flow)
+  if (guardConsumedThisAction) {
+    b.activeGuard = null;
+  }
+
+  return { events, rng };
+}
+
+// Authored victory transition prevalidation result codes.
+const VICTORY_RESULT = Object.freeze({
+  RESOLVED: 'resolved',
+  INVALID_CONTEXT: 'invalid-context',
+  INVALID_PHASE: 'invalid-phase',
+  ALREADY_COMPLETED: 'already-completed',
+  PRECONDITION_FAILED: 'precondition-failed',
+});
+
+// Apply the authored opening event for victory, then clear battle state.
+// Called on a structuredClone — safe to mutate.
+// Returns a VICTORY_RESULT code.
+function applyVictoryTransition(state) {
+  const b = state.battle;
+
+  // Prevalidate authored context ↔ opening phase before any reward mutation.
+  if (b.context === 'authored-solo') {
+    if (state.progression.openingPhase !== OPENING_PHASE.SOLO_APPROACH) {
+      return VICTORY_RESULT.INVALID_PHASE;
+    }
+    if (state.progression.flags.soloBattleResolved) {
+      return VICTORY_RESULT.ALREADY_COMPLETED;
+    }
+  } else if (b.context === 'authored-shared') {
+    if (state.progression.openingPhase !== OPENING_PHASE.SHARED_PANIC) {
+      return VICTORY_RESULT.INVALID_PHASE;
+    }
+    if (state.progression.flags.sharedBattleResolved) {
+      return VICTORY_RESULT.ALREADY_COMPLETED;
+    }
+  }
+
+  // All prevalidation passed — apply rewards and authored event.
+  applyVictoryRewards(state);
+
+  if (b.context === 'authored-solo') {
+    const ok = applyOpeningEvent(state, OPENING_EVENT.SOLO_BATTLE_RESOLVED);
+    if (!ok) return VICTORY_RESULT.INVALID_PHASE;
+  } else if (b.context === 'authored-shared') {
+    const ok = applyOpeningEvent(state, OPENING_EVENT.SHARED_BATTLE_RESOLVED);
+    if (!ok) return VICTORY_RESULT.INVALID_PHASE;
+  } else {
+    // random / boss: no authored opening event; just clear battle
+    state.battle = null;
+    state.mode = 'field';
+  }
+
+  // For authored contexts, opening-director.js clears battle and sets mode=field.
+  // If it somehow didn't (e.g., test state without full opening flow), clear explicitly.
   if (state.battle !== null) {
     state.battle = null;
     state.mode = 'field';
   }
+
+  return VICTORY_RESULT.RESOLVED;
 }
 
 // Apply defeat penalties and clear battle state. Called on a structuredClone.
+// Returns defeatRecord for the presentation layer.
 function applyDefeatTransition(state) {
-  applyDefeatPenalties(state);
+  const moneyLost = applyDefeatPenalties(state);
+  state.field.controlledId = state.field.leaderId;
   state.battle = null;
   state.mode = 'field';
+  return { moneyLost, retainedEXP: true, retainedItems: true };
 }
 
 // Apply escape outcome: clear battle, return to field.
 function applyEscapeTransition(state) {
+  state.field.controlledId = state.field.leaderId;
   state.battle = null;
   state.mode = 'field';
 }
 
-export function resolveRound(currentGameState) {
+// Submit a single player command into a battle's pending-command slot.
+// Validates the command authoritatively against the current battle context.
+// Returns { ok, result, nextGameState? }.
+export function submitCommand(currentGameState, characterId, command) {
   if (!currentGameState?.battle) return { ok: false, result: 'invalid-context' };
   const battle = currentGameState.battle;
+  if (battle.phase !== 'command-selection') return { ok: false, result: 'invalid-phase' };
+  if (!battle.partyIds.includes(characterId)) return { ok: false, result: 'invalid-actor' };
+
+  const member = currentGameState.party.members[characterId];
+  const battleCtx = {
+    context: battle.context,
+    mp: member?.mp ?? 0,
+    enemies: battle.enemies,
+    partyIds: battle.partyIds,
+  };
+
+  if (!validateCommand(command, characterId, battleCtx)) {
+    return { ok: false, result: 'invalid-command' };
+  }
+
+  const state = structuredClone(currentGameState);
+  state.battle.pendingCommands[characterId] = command;
+
+  const nextGameState = validateGameState(state);
+  if (!nextGameState) return { ok: false, result: 'precondition-failed' };
+
+  return { ok: true, result: 'submitted', nextGameState };
+}
+
+export function resolveRound(currentGameState) {
+  // Prevalidate incoming state before any mutation.
+  const validated = validateGameState(currentGameState);
+  if (!validated) return { ok: false, result: 'invalid-context' };
+  if (!validated.battle) return { ok: false, result: 'invalid-context' };
+
+  const battle = validated.battle;
   if (battle.phase !== 'command-selection') return { ok: false, result: 'invalid-phase' };
   if (!battle.partyIds.every((id) => battle.pendingCommands[id] !== null)) {
     return { ok: false, result: 'precondition-failed' };
   }
 
-  const state = structuredClone(currentGameState);
+  // Work on the validated clone — already a structuredClone from validateGameState.
+  const state = validated;
   const b = state.battle;
   b.phase = 'resolving';
 
@@ -83,7 +207,7 @@ export function resolveRound(currentGameState) {
 
   // ── PRE-ROUND EFFECT INITIALIZATION ──────────────────────────────────────────
   // Guard Aid (護援) is established from the committed command set BEFORE any
-  // initiative actions execute.  An enemy faster than Yohani cannot bypass a
+  // initiative actions execute. An enemy faster than Yohani cannot bypass a
   // committed guard because the effect is active from the start of the round.
   for (const id of b.partyIds) {
     const cmd = b.pendingCommands[id];
@@ -107,6 +231,8 @@ export function resolveRound(currentGameState) {
   let runEscaped = false;
 
   for (const actor of actors) {
+    if (runEscaped) break; // successful escape terminates the encounter resolution
+
     if (actor.kind === 'party') {
       const id = actor.id;
       const member = state.party.members[id];
@@ -128,16 +254,13 @@ export function resolveRound(currentGameState) {
 
       } else if (cmd.type === COMMAND_TYPES.ABILITY) {
         if (cmd.abilityId === ABILITY_IDS.GUARD_AID) {
-          // Effect already pre-initialized; emit event for presentation layer
           const targetId = b.partyIds[cmd.targetIdx];
           events.push({ kind: 'guard-aid', actorId: id, targetId });
 
         } else if (cmd.abilityId === ABILITY_IDS.STAR_FLAME) {
           const enemy = b.enemies[cmd.targetIdx];
           if (!enemy || enemy.hp <= 0) continue;
-          const mpCost = 3;
-          if (member.mp < mpCost) continue;
-          member.mp -= mpCost;
+          member.mp -= 3;
           rng = lcgNext(rng);
           const damage = Math.max(1, 6 + (member.level - 1) * 2 + lcgVariance(rng, 2));
           enemy.hp = Math.max(0, enemy.hp - damage);
@@ -145,9 +268,7 @@ export function resolveRound(currentGameState) {
           if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
 
         } else if (cmd.abilityId === ABILITY_IDS.MINOR_HEAL) {
-          const mpCost = 4;
-          if (member.mp < mpCost) continue;
-          member.mp -= mpCost;
+          member.mp -= 4;
           const targetId = b.partyIds[cmd.targetIdx];
           const target = state.party.members[targetId];
           const healAmt = 8 + (member.level - 1) * 2;
@@ -161,10 +282,12 @@ export function resolveRound(currentGameState) {
           events.push({ kind: 'run-blocked', actorId: id, reason: 'not-random-encounter' });
         } else {
           rng = lcgNext(rng);
-          // 75% success: escaped if rng % 4 !== 0
           const escaped = (rng % 4) !== 0;
           events.push({ kind: 'run-attempt', actorId: id, escaped });
-          if (escaped) runEscaped = true;
+          if (escaped) {
+            runEscaped = true;
+            break; // stop all further actions immediately
+          }
         }
       }
 
@@ -174,42 +297,16 @@ export function resolveRound(currentGameState) {
       const enemy = b.enemies[enemyIdx];
       if (enemy.hp <= 0) continue;
       const cmd = enemyCmds[enemyIdx];
-      const stats = ENEMY_STATS[b.enemyIds[enemyIdx]];
 
       if (cmd.type === COMMAND_TYPES.ATTACK) {
         const targetId = b.partyIds[cmd.targetIdx];
         const target = state.party.members[targetId];
         if (!target || target.hp <= 0) continue;
 
-        rng = lcgNext(rng);
-        const def = defenseAtLevel(targetId, target.level);
-        let damage = physDamage(stats.attack, def, lcgVariance(rng, 2));
-
-        // Defend reduction applies regardless of initiative order
-        if (b.pendingCommands[targetId]?.type === COMMAND_TYPES.DEFEND) {
-          damage = Math.ceil(damage / 2);
-        }
-
-        // 護援 (Guard Aid): if the targeted ally is guarded, apply damage reduction.
-        // Guard was pre-initialized before the action loop; consumes on first qualifying hit.
-        // If no qualifying hit occurs this round, activeGuard persists to next round.
-        if (b.activeGuard?.targetId === targetId) {
-          const originalDamage = damage;
-          damage = Math.max(1, Math.floor(damage * GUARD_AID_REDUCTION));
-          events.push({ kind: 'guard-intercept', guarderId: b.activeGuard.guarderId, originalTargetId: targetId, originalDamage, reducedDamage: damage });
-          b.activeGuard = null; // consumed
-        }
-
-        // Yohani leader first-round protection (random encounters only).
-        // Party-wide: applies to any party member targeted in round 1.
-        // Full-round: not consumed per-hit; expires at round boundary naturally (round advances to 2).
-        if (b.context === 'random' && b.round === 1 && b.snapshotLeaderId === CHARACTER_IDS.YOHANI) {
-          damage = Math.max(1, Math.ceil(damage * LEADER_PROTECTION_REDUCTION));
-          events.push({ kind: 'yohani-protection', targetId });
-        }
-
-        target.hp = Math.max(0, target.hp - damage);
-        events.push({ kind: 'enemy-attack', enemyIdx, targetId, damage });
+        const hitCount = cmd.hitCount ?? 1;
+        const { events: actionEvents, rng: nextRng } = resolveEnemyAction(b, state, enemyIdx, targetId, hitCount, rng);
+        rng = nextRng;
+        events.push(...actionEvents);
       }
     }
   }
@@ -231,14 +328,17 @@ export function resolveRound(currentGameState) {
     b.round += 1;
     b.phase = 'command-selection';
     b.pendingCommands = Object.fromEntries(b.partyIds.map((id) => [id, null]));
-    // activeGuard is NOT cleared here — it persists if no qualifying enemy action consumed it
+    // activeGuard is NOT cleared — it persists if no qualifying enemy action consumed it
     state.battle = b;
   } else if (outcome === 'victory') {
     state.battle = b;
-    applyVictoryTransition(state);
+    const transitionResult = applyVictoryTransition(state);
+    if (transitionResult !== VICTORY_RESULT.RESOLVED) {
+      return { ok: false, result: transitionResult };
+    }
   } else if (outcome === 'defeat') {
     state.battle = b;
-    applyDefeatTransition(state);
+    roundResult.defeatRecord = applyDefeatTransition(state);
   } else {
     // escaped
     state.battle = b;

@@ -1,19 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ABILITY_IDS, CHARACTER_IDS, MAP_IDS } from '../src/content/ids.js';
-import { OPENING_PHASE } from '../src/content/opening.js';
-import { OPENING_ENCOUNTERS } from '../src/content/opening.js';
-import { RANDOM_ENCOUNTER_DEFS } from '../src/content/encounters.js';
+import { ABILITY_IDS, CHARACTER_IDS, ENEMY_IDS, MAP_IDS } from '../src/content/ids.js';
+import { OPENING_PHASE, OPENING_ENCOUNTERS } from '../src/content/opening.js';
 import { createBattleEntry } from '../src/battle/battle-state.js';
 import { COMMAND_TYPES, validateCommand } from '../src/battle/commands.js';
-import { resolveRound } from '../src/battle/resolver.js';
+import { resolveRound, submitCommand, resolveEnemyAction } from '../src/battle/resolver.js';
+import { makeRng, lcgNext } from '../src/battle/rng.js';
 import { createInitialGameState, validateGameState } from '../src/state/game-state.js';
 import { getSaniConditionBand } from '../src/rpg/insight.js';
+import { tryMigrate } from '../src/save/migration.js';
 
 const SOLO_ENC = OPENING_ENCOUNTERS.SOLO.id;
 const SHARED_ENC = OPENING_ENCOUNTERS.SHARED.id;
-const RANDOM_SOLO_ENC = RANDOM_ENCOUNTER_DEFS.SOLO_CROWN_EAR.id;
-const RANDOM_SHARED_ENC = RANDOM_ENCOUNTER_DEFS.SHARED_CROWN_EAR.id;
+const RANDOM_ENCOUNTER_ID = 'random-crown-ear'; // test fixture; not in KNOWN_ENCOUNTER_IDS
 
 const ATK0 = { type: COMMAND_TYPES.ATTACK, targetIdx: 0 };
 const DEFEND = { type: COMMAND_TYPES.DEFEND };
@@ -45,27 +44,47 @@ function makeSharedState(seed = 42) {
   return state;
 }
 
-function makeRandomSoloState(seed = 42) {
+// Constructs a random-context battle state directly (bypassing createBattleEntry/ENCOUNTERS).
+// Accepts any encounterId that is not in KNOWN_ENCOUNTER_IDS; validator only requires non-empty string.
+function makeTestRandomBattleState(seed = 42, { shared = false } = {}) {
   const state = createInitialGameState();
   state.mode = 'battle';
-  state.battle = createBattleEntry(RANDOM_SOLO_ENC, seed, {
-    partyIds: [CHARACTER_IDS.YOHANI],
-    leaderId: CHARACTER_IDS.YOHANI,
-    revivalPoint: REVIVAL_POINT,
-  });
+  const partyIds = shared
+    ? [CHARACTER_IDS.YOHANI, CHARACTER_IDS.SANI]
+    : [CHARACTER_IDS.YOHANI];
+  if (shared) state.party.activeIds = [CHARACTER_IDS.YOHANI, CHARACTER_IDS.SANI];
+  state.battle = {
+    encounterId: RANDOM_ENCOUNTER_ID,
+    context: 'random',
+    partyIds,
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    phase: 'command-selection',
+    round: 1,
+    pendingCommands: Object.fromEntries(partyIds.map((id) => [id, null])),
+    enemies: [{ instanceId: 'crown-ear-beast-0', hp: 18, maxHp: 18 }],
+    partyCombatState: Object.fromEntries(partyIds.map((id) => [id, { statusFlags: {} }])),
+    rngState: makeRng(seed),
+    activeGuard: null,
+    snapshotLeaderId: CHARACTER_IDS.YOHANI,
+    snapshotRevivalPoint: { ...REVIVAL_POINT },
+  };
   return state;
 }
 
-function makeRandomSharedState(seed = 42) {
-  const state = createInitialGameState();
-  state.mode = 'battle';
-  state.party.activeIds = [CHARACTER_IDS.YOHANI, CHARACTER_IDS.SANI];
-  state.battle = createBattleEntry(RANDOM_SHARED_ENC, seed, {
-    partyIds: [CHARACTER_IDS.YOHANI, CHARACTER_IDS.SANI],
-    leaderId: CHARACTER_IDS.YOHANI,
-    revivalPoint: REVIVAL_POINT,
-  });
-  return state;
+// Finds the first seed (1..500) where a solo random RUN attempt escapes deterministically.
+// Simulates: 1 AI rng step + 1 run rng step; escape when result % 4 !== 0.
+function findEscapingSoloRandomState() {
+  for (let seed = 1; seed <= 500; seed++) {
+    let rng = makeRng(seed);
+    rng = lcgNext(rng); // AI command selection for 1 enemy
+    rng = lcgNext(rng); // run attempt
+    if ((rng % 4) !== 0) {
+      const s = makeTestRandomBattleState(seed);
+      s.battle.pendingCommands[CHARACTER_IDS.YOHANI] = { type: COMMAND_TYPES.RUN };
+      return s;
+    }
+  }
+  throw new Error('findEscapingSoloRandomState: no escaping seed in 1..500');
 }
 
 // ── createBattleEntry ────────────────────────────────────────────────────────
@@ -162,7 +181,7 @@ test('validateGameState accepts valid shared battle state', () => {
 });
 
 test('validateGameState accepts valid random solo battle state', () => {
-  const state = makeRandomSoloState();
+  const state = makeTestRandomBattleState(42);
   assert.ok(validateGameState(state));
 });
 
@@ -181,6 +200,17 @@ test('validateGameState rejects battle.phase = complete', () => {
 test('validateGameState rejects battle without instanceId on enemy', () => {
   const state = makeSoloState();
   delete state.battle.enemies[0].instanceId;
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects duplicate instanceId across enemies', () => {
+  const state = makeTestRandomBattleState(42);
+  // inject a second enemy with the same instanceId
+  state.battle.enemyIds = [ENEMY_IDS.CROWN_EAR_BEAST, ENEMY_IDS.CROWN_EAR_BEAST];
+  state.battle.enemies = [
+    { instanceId: 'crown-ear-beast-0', hp: 18, maxHp: 18 },
+    { instanceId: 'crown-ear-beast-0', hp: 18, maxHp: 18 }, // duplicate
+  ];
   assert.equal(validateGameState(state), null);
 });
 
@@ -214,9 +244,28 @@ test('validateGameState rejects snapshotLeaderId not a known character', () => {
   assert.equal(validateGameState(state), null);
 });
 
+test('validateGameState rejects rngState = 0', () => {
+  const state = makeTestRandomBattleState(42);
+  state.battle.rngState = 0;
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects rngState > 0xFFFFFFFF', () => {
+  const state = makeTestRandomBattleState(42);
+  state.battle.rngState = 0x100000000; // 2^32 — one above max uint32
+  assert.equal(validateGameState(state), null);
+});
+
 test('validateGameState rejects activeGuard with unknown guarderId', () => {
   const state = makeSoloState();
   state.battle.activeGuard = { guarderId: 'unknown', targetId: CHARACTER_IDS.YOHANI };
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects activeGuard with member outside battle.partyIds', () => {
+  // Solo battle: partyIds=[YOHANI]. SANI is a known character but not in partyIds.
+  const state = makeSoloState();
+  state.battle.activeGuard = { guarderId: CHARACTER_IDS.YOHANI, targetId: CHARACTER_IDS.SANI };
   assert.equal(validateGameState(state), null);
 });
 
@@ -224,6 +273,20 @@ test('validateGameState rejects pendingCommands keys differing from partyIds', (
   const state = makeSoloState();
   state.battle.pendingCommands[CHARACTER_IDS.SANI] = null;
   assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects non-null pending command that fails validation', () => {
+  const state = makeSoloState();
+  state.battle.enemies[0].hp = 0; // dead enemy
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0; // targeting dead enemy
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState accepts partial pendingCommands (one filled, one null)', () => {
+  const state = makeSharedState();
+  // Only Yohani's command is filled; Sani's remains null
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  assert.ok(validateGameState(state));
 });
 
 test('validateGameState rejects authored-solo with two-member partyIds', () => {
@@ -281,8 +344,6 @@ test('validateGameState rejects mode=pause when pause is null', () => {
 
 test('validateGameState rejects mode=pause with resumeMode=pause', () => {
   const state = createInitialGameState();
-  state.mode = 'field';
-  // manually force pause state
   const clone = structuredClone(state);
   clone.mode = 'pause';
   clone.pause = { resumeMode: 'pause' };
@@ -387,14 +448,74 @@ test('validateCommand rejects run in authored-shared context', () => {
   assert.equal(validateCommand({ type: COMMAND_TYPES.RUN }, CHARACTER_IDS.SANI, { context: 'authored-shared' }), false);
 });
 
+// ── submitCommand ────────────────────────────────────────────────────────────
+
+test('submitCommand: accepts valid attack, returns nextGameState with command set', () => {
+  const state = makeSoloState();
+  const r = submitCommand(state, CHARACTER_IDS.YOHANI, ATK0);
+  assert.equal(r.ok, true);
+  assert.equal(r.result, 'submitted');
+  assert.ok(r.nextGameState);
+  assert.deepEqual(r.nextGameState.battle.pendingCommands[CHARACTER_IDS.YOHANI], ATK0);
+});
+
+test('submitCommand: rejects command for actor not in partyIds', () => {
+  const state = makeSoloState(); // SANI is not in partyIds for solo
+  const r = submitCommand(state, CHARACTER_IDS.SANI, DEFEND);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-actor');
+});
+
+test('submitCommand: rejects star-flame when Sani has insufficient MP', () => {
+  const state = makeSharedState();
+  state.party.members[CHARACTER_IDS.SANI].mp = 2;
+  const cmd = { type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.STAR_FLAME, targetIdx: 0 };
+  const r = submitCommand(state, CHARACTER_IDS.SANI, cmd);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-command');
+});
+
+test('submitCommand: rejects minor-heal when Sani has insufficient MP', () => {
+  const state = makeSharedState();
+  state.party.members[CHARACTER_IDS.SANI].mp = 3;
+  const cmd = { type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.MINOR_HEAL, targetIdx: 0 };
+  const r = submitCommand(state, CHARACTER_IDS.SANI, cmd);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-command');
+});
+
+test('submitCommand: rejects attack targeting dead enemy', () => {
+  const state = makeSoloState();
+  state.battle.enemies[0].hp = 0;
+  const r = submitCommand(state, CHARACTER_IDS.YOHANI, ATK0);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-command');
+});
+
+test('submitCommand: rejects when battle phase is not command-selection', () => {
+  const state = makeSoloState();
+  state.battle.phase = 'resolving';
+  const r = submitCommand(state, CHARACTER_IDS.YOHANI, ATK0);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-phase');
+});
+
+test('submitCommand: rejects when no battle in state', () => {
+  const state = createInitialGameState();
+  const r = submitCommand(state, CHARACTER_IDS.YOHANI, ATK0);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-context');
+});
+
 // ── resolveRound — phase/precondition guards ─────────────────────────────────
 
-test('resolveRound returns invalid-phase when phase is not command-selection', () => {
+test('resolveRound rejects state with invalid phase (caught by prevalidation)', () => {
+  // validateGameState only accepts 'command-selection'; 'resolving' fails prevalidation
   const state = makeSoloState();
   state.battle.phase = 'resolving';
   const r = resolveRound(state);
   assert.equal(r.ok, false);
-  assert.equal(r.result, 'invalid-phase');
+  assert.equal(r.result, 'invalid-context');
 });
 
 test('resolveRound returns precondition-failed when commands not all filled', () => {
@@ -463,6 +584,18 @@ test('authored-shared victory advances openingPhase to LEADER_TUTORIAL', () => {
   assert.equal(r.nextGameState.mode, 'field');
 });
 
+test('victory prevalidation: already-completed flag prevents re-entry, no rewards applied', () => {
+  const state = makeSoloState(42);
+  state.battle.enemies[0].hp = 1;
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  // Manually mark as already resolved — flags are not validated by validateGameState
+  state.progression.flags.soloBattleResolved = true;
+  const r = resolveRound(state);
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'already-completed');
+  assert.equal(r.nextGameState, undefined);
+});
+
 // ── resolveRound — defeat ────────────────────────────────────────────────────
 
 test('resolveRound outcome=defeat: battle=null and mode=field', () => {
@@ -474,6 +607,32 @@ test('resolveRound outcome=defeat: battle=null and mode=field', () => {
   assert.equal(r.roundResult.outcome, 'defeat');
   assert.equal(r.nextGameState.battle, null);
   assert.equal(r.nextGameState.mode, 'field');
+});
+
+test('defeat: roundResult.defeatRecord contains moneyLost, retainedEXP, retainedItems', () => {
+  const state = makeSoloState(42);
+  state.economy.money = 100;
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 1;
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
+  const r = resolveRound(state);
+  assert.equal(r.ok, true);
+  assert.equal(r.roundResult.outcome, 'defeat');
+  assert.ok(r.roundResult.defeatRecord);
+  assert.equal(r.roundResult.defeatRecord.moneyLost, 25); // 25% of 100
+  assert.equal(r.roundResult.defeatRecord.retainedEXP, true);
+  assert.equal(r.roundResult.defeatRecord.retainedItems, true);
+});
+
+test('defeat: field.controlledId restored to field.leaderId', () => {
+  const state = makeSoloState(42);
+  state.field.leaderId = CHARACTER_IDS.YOHANI;
+  state.field.controlledId = CHARACTER_IDS.SANI; // controlled differs from leader before defeat
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 1;
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
+  const r = resolveRound(state);
+  assert.equal(r.ok, true);
+  assert.equal(r.roundResult.outcome, 'defeat');
+  assert.equal(r.nextGameState.field.controlledId, CHARACTER_IDS.YOHANI);
 });
 
 test('defeat applies 25% money loss', () => {
@@ -511,17 +670,17 @@ test('defeat does NOT restore reserve members outside partyIds', () => {
 
 // ── resolveRound — run/escape ────────────────────────────────────────────────
 
-test('run blocked in authored context emits run-blocked event', () => {
+test('run in authored context rejected by submitCommand before round can start', () => {
+  // validateCommand rejects RUN in authored-solo; submitCommand surfaces this as invalid-command.
+  // A RUN command can never reach the actor loop in a non-random encounter.
   const state = makeSoloState(42);
-  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = { type: COMMAND_TYPES.RUN };
-  const r = resolveRound(state);
-  assert.equal(r.ok, true);
-  assert.ok(r.roundResult.events.some((e) => e.kind === 'run-blocked'));
-  assert.equal(r.roundResult.outcome, 'ongoing');
+  const r = submitCommand(state, CHARACTER_IDS.YOHANI, { type: COMMAND_TYPES.RUN });
+  assert.equal(r.ok, false);
+  assert.equal(r.result, 'invalid-command');
 });
 
 test('run in random context emits run-attempt event with escaped flag', () => {
-  const state = makeRandomSoloState(42);
+  const state = makeTestRandomBattleState(42);
   state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = { type: COMMAND_TYPES.RUN };
   const r = resolveRound(state);
   assert.equal(r.ok, true);
@@ -531,7 +690,7 @@ test('run in random context emits run-attempt event with escaped flag', () => {
 });
 
 test('run escape clears battle and sets mode=field', () => {
-  const state = makeRandomSoloState(42);
+  const state = makeTestRandomBattleState(42);
   state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = { type: COMMAND_TYPES.RUN };
   const r = resolveRound(state);
   assert.equal(r.ok, true);
@@ -544,6 +703,20 @@ test('run escape clears battle and sets mode=field', () => {
     assert.equal(r.roundResult.outcome, 'ongoing');
     assert.ok(r.nextGameState.battle !== null);
   }
+});
+
+test('successful run terminates actor loop: no enemy-attack events after escape', () => {
+  // findEscapingSoloRandomState guarantees escape so assertion always runs
+  const state = findEscapingSoloRandomState();
+  const r = resolveRound(state);
+  assert.equal(r.ok, true);
+  const runEvt = r.roundResult.events.find((e) => e.kind === 'run-attempt');
+  assert.ok(runEvt, 'run-attempt event must appear');
+  assert.equal(runEvt.escaped, true, 'this seed should escape');
+  assert.equal(r.roundResult.outcome, 'escaped');
+  const runIdx = r.roundResult.events.indexOf(runEvt);
+  const afterRun = r.roundResult.events.slice(runIdx + 1);
+  assert.ok(!afterRun.some((e) => e.kind === 'enemy-attack'), 'no enemy-attack after successful escape');
 });
 
 // ── resolveRound — guard-aid ─────────────────────────────────────────────────
@@ -592,11 +765,63 @@ test('guard is pre-initialized before initiative loop (guard-aid event emitted)'
   assert.ok(r.roundResult.events.some((e) => e.kind === 'guard-aid'));
 });
 
+// ── resolveEnemyAction — direct action-window tests ─────────────────────────
+
+test('resolveEnemyAction: guard applies to all hits in window, consumed after window', () => {
+  // Use authored-solo context so leader-protection does not fire
+  const b = {
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    pendingCommands: { [CHARACTER_IDS.SANI]: null }, // not defending
+    activeGuard: { guarderId: CHARACTER_IDS.YOHANI, targetId: CHARACTER_IDS.SANI },
+    context: 'authored-solo',
+    round: 1,
+    snapshotLeaderId: CHARACTER_IDS.YOHANI,
+  };
+  const state = { party: { members: { [CHARACTER_IDS.SANI]: { level: 1, hp: 100 } } } };
+  const { events } = resolveEnemyAction(b, state, 0, CHARACTER_IDS.SANI, 2, makeRng(5));
+
+  const guardEvents = events.filter((e) => e.kind === 'guard-intercept');
+  const attackEvents = events.filter((e) => e.kind === 'enemy-attack');
+  assert.equal(guardEvents.length, 2, 'both hits intercepted by guard');
+  assert.equal(attackEvents.length, 2);
+  // Guard consumed after the entire action window
+  assert.equal(b.activeGuard, null);
+  // Each attack's damage equals the guard-reduced amount
+  for (let i = 0; i < guardEvents.length; i++) {
+    assert.equal(attackEvents[i].damage, guardEvents[i].reducedDamage);
+  }
+});
+
+test('resolveEnemyAction: DEFEND halves incoming damage (same variance, with/without defend)', () => {
+  const makeB = (withDefend) => ({
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    pendingCommands: { [CHARACTER_IDS.YOHANI]: withDefend ? DEFEND : ATK0 },
+    activeGuard: null,
+    context: 'authored-solo',
+    round: 2,
+    snapshotLeaderId: CHARACTER_IDS.YOHANI,
+  });
+  const rng = makeRng(7);
+  const { events: evDef } = resolveEnemyAction(
+    makeB(true),
+    { party: { members: { [CHARACTER_IDS.YOHANI]: { level: 1, hp: 100 } } } },
+    0, CHARACTER_IDS.YOHANI, 1, rng,
+  );
+  const { events: evNone } = resolveEnemyAction(
+    makeB(false),
+    { party: { members: { [CHARACTER_IDS.YOHANI]: { level: 1, hp: 100 } } } },
+    0, CHARACTER_IDS.YOHANI, 1, rng,
+  );
+  const dmgDefend = evDef.find((e) => e.kind === 'enemy-attack').damage;
+  const dmgNormal = evNone.find((e) => e.kind === 'enemy-attack').damage;
+  assert.equal(dmgDefend, Math.ceil(dmgNormal / 2));
+});
+
 // ── resolveRound — Yohani leader protection ──────────────────────────────────
 
 test('leader protection: yohani-protection event emitted when Yohani leads round-1 random', () => {
   // seed=42 shared: beast targets Yohani (index 0)
-  const state = makeRandomSharedState(42);
+  const state = makeTestRandomBattleState(42, { shared: true });
   state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
   state.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
   const r = resolveRound(state);
@@ -606,7 +831,7 @@ test('leader protection: yohani-protection event emitted when Yohani leads round
 
 test('leader protection: applies to Sani when she is targeted in round-1 random (seed=1)', () => {
   // seed=1 shared: beast targets Sani (index 1)
-  const state = makeRandomSharedState(1);
+  const state = makeTestRandomBattleState(1, { shared: true });
   state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
   state.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
   const r = resolveRound(state);
@@ -623,7 +848,7 @@ test('leader protection: NOT applied in authored-solo context', () => {
 });
 
 test('leader protection: NOT applied in round 2', () => {
-  const state = makeRandomSoloState(42);
+  const state = makeTestRandomBattleState(42);
   state.battle.round = 2;
   state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
   const r = resolveRound(state);
@@ -645,24 +870,6 @@ test('star-flame deducts 3 MP from Sani', () => {
   assert.equal(r.nextGameState.party.members[CHARACTER_IDS.SANI].mp, 9);
 });
 
-test('star-flame is skipped when Sani has insufficient MP', () => {
-  const state = makeSharedState(42);
-  state.party.members[CHARACTER_IDS.SANI].mp = 2;
-  const beastHpBefore = state.battle.enemies[0].hp;
-  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
-  state.battle.pendingCommands[CHARACTER_IDS.SANI] = {
-    type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.STAR_FLAME, targetIdx: 0,
-  };
-  const r = resolveRound(state);
-  assert.equal(r.ok, true);
-  // No ability event emitted for star-flame
-  assert.ok(!r.roundResult.events.some((e) => e.kind === 'ability' && e.abilityId === ABILITY_IDS.STAR_FLAME));
-  // Beast HP unchanged by Sani (Yohani only defended)
-  assert.equal(r.nextGameState.battle.enemies[0].hp, beastHpBefore);
-  // MP not deducted
-  assert.equal(r.nextGameState.party.members[CHARACTER_IDS.SANI].mp, 2);
-});
-
 test('minor-heal deducts 4 MP from Sani and heals target', () => {
   const state = makeSharedState(42);
   state.party.members[CHARACTER_IDS.SANI].mp = 12;
@@ -677,19 +884,30 @@ test('minor-heal deducts 4 MP from Sani and heals target', () => {
   assert.ok(r.nextGameState.party.members[CHARACTER_IDS.YOHANI].hp > 10);
 });
 
-test('minor-heal is skipped when Sani has insufficient MP', () => {
-  const state = makeSharedState(42);
-  state.party.members[CHARACTER_IDS.SANI].mp = 3;
-  const yohaniHpBefore = state.party.members[CHARACTER_IDS.YOHANI].hp;
-  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
-  state.battle.pendingCommands[CHARACTER_IDS.SANI] = {
-    type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.MINOR_HEAL, targetIdx: 0,
+// ── migration ────────────────────────────────────────────────────────────────
+
+test('tryMigrate: v1 non-stub battle is rejected (returns null)', () => {
+  const v1State = {
+    version: 1,
+    mode: 'battle',
+    battle: { someField: 'some-value' }, // not an m2Stub — should be rejected
   };
-  const r = resolveRound(state);
-  assert.equal(r.ok, true);
-  assert.ok(!r.roundResult.events.some((e) => e.kind === 'ability' && e.abilityId === ABILITY_IDS.MINOR_HEAL));
-  // MP unchanged
-  assert.equal(r.nextGameState.party.members[CHARACTER_IDS.SANI].mp, 3);
+  assert.equal(tryMigrate(v1State), null);
+});
+
+test('tryMigrate: v1 m2Stub battle is cleared and migration proceeds', () => {
+  const v1State = {
+    version: 1,
+    mode: 'battle',
+    battle: { m2Stub: true },
+    progression: {},
+    // minimal required fields for migration to not crash
+  };
+  const result = tryMigrate(v1State);
+  assert.ok(result !== null);
+  assert.equal(result.version, 2);
+  assert.equal(result.battle, null);
+  assert.equal(result.mode, 'field');
 });
 
 // ── getSaniConditionBand ─────────────────────────────────────────────────────

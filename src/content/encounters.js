@@ -1,4 +1,4 @@
-import { CHARACTER_IDS, ENEMY_IDS } from './ids.js';
+import { CHARACTER_IDS } from './ids.js';
 import { OPENING_ENCOUNTERS } from './opening.js';
 
 export const ENCOUNTER_CONTEXT = Object.freeze({
@@ -25,27 +25,12 @@ export const OPENING_ENCOUNTER_DEFS = Object.freeze({
   }),
 });
 
-// Random encounters: partyIds is null — party composition comes from party.activeIds snapshot at entry
-export const RANDOM_ENCOUNTER_DEFS = Object.freeze({
-  SOLO_CROWN_EAR: Object.freeze({
-    id: 'random-solo-crown-ear',
-    context: ENCOUNTER_CONTEXT.RANDOM,
-    partyIds: null,
-    enemyIds: Object.freeze([ENEMY_IDS.CROWN_EAR_BEAST]),
-  }),
-  SHARED_CROWN_EAR: Object.freeze({
-    id: 'random-shared-crown-ear',
-    context: ENCOUNTER_CONTEXT.RANDOM,
-    partyIds: null,
-    enemyIds: Object.freeze([ENEMY_IDS.CROWN_EAR_BEAST]),
-  }),
-});
+// Random encounter definitions are M3-C scope — not registered here.
+// Tests that exercise random context use direct battle-state fixtures.
 
 export const ENCOUNTERS = Object.freeze({
   [OPENING_ENCOUNTER_DEFS.SOLO.id]: OPENING_ENCOUNTER_DEFS.SOLO,
   [OPENING_ENCOUNTER_DEFS.SHARED.id]: OPENING_ENCOUNTER_DEFS.SHARED,
-  [RANDOM_ENCOUNTER_DEFS.SOLO_CROWN_EAR.id]: RANDOM_ENCOUNTER_DEFS.SOLO_CROWN_EAR,
-  [RANDOM_ENCOUNTER_DEFS.SHARED_CROWN_EAR.id]: RANDOM_ENCOUNTER_DEFS.SHARED_CROWN_EAR,
 });
 
 export const KNOWN_ENCOUNTER_IDS = Object.freeze(new Set(Object.keys(ENCOUNTERS)));

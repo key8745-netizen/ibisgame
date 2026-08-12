@@ -3,6 +3,7 @@ import { OPENING_PHASE, OPENING_PHASES } from '../content/opening.js';
 import { KNOWN_ENCOUNTER_IDS } from '../content/encounters.js';
 import { ENEMY_STATS } from '../content/enemies.js';
 import { GAME_MODES, isGameMode } from './modes.js';
+import { validateCommand } from '../battle/commands.js';
 
 export const SAVE_VERSION = 2;
 const KNOWN_CHARACTERS = new Set(Object.values(CHARACTER_IDS));
@@ -59,8 +60,13 @@ const isPlainObject = (value) => value !== null && typeof value === 'object' && 
 function validateBattle(b, state) {
   if (!isPlainObject(b)) return false;
   if (typeof b.encounterId !== 'string' || b.encounterId.length === 0) return false;
-  if (!KNOWN_ENCOUNTER_IDS.has(b.encounterId)) return false;
   if (!VALID_BATTLE_CONTEXTS.has(b.context)) return false;
+
+  // Authored encounters must be in the static registry; random/boss may use any non-empty id
+  if (b.context === 'authored-solo' || b.context === 'authored-shared') {
+    if (!KNOWN_ENCOUNTER_IDS.has(b.encounterId)) return false;
+  }
+
   if (!VALID_BATTLE_PHASES.has(b.phase)) return false;
   if (!isFiniteInt(b.round) || b.round < 1) return false;
   if (!Array.isArray(b.partyIds) || b.partyIds.length < 1) return false;
@@ -85,8 +91,19 @@ function validateBattle(b, state) {
   const cmdKeys = new Set(Object.keys(b.pendingCommands));
   if (cmdKeys.size !== partySet.size) return false;
   if ([...partySet].some((id) => !cmdKeys.has(id))) return false;
-  for (const v of Object.values(b.pendingCommands)) {
-    if (v !== null && (!isPlainObject(v) || typeof v.type !== 'string')) return false;
+
+  // Validate each non-null pending command against authoritative battle context
+  for (const [charId, cmd] of Object.entries(b.pendingCommands)) {
+    if (cmd !== null) {
+      if (!isPlainObject(cmd) || typeof cmd.type !== 'string') return false;
+      const battleCtx = {
+        context: b.context,
+        mp: state.party?.members[charId]?.mp ?? 0,
+        enemies: b.enemies ?? [],
+        partyIds: b.partyIds,
+      };
+      if (!validateCommand(cmd, charId, battleCtx)) return false;
+    }
   }
 
   // battle.partyIds must match party.activeIds exactly (same set, same order)
@@ -97,9 +114,13 @@ function validateBattle(b, state) {
   if (!Array.isArray(b.enemyIds) || b.enemyIds.length < 1) return false;
   if (b.enemyIds.some((id) => !ENEMY_STATS[id])) return false;
   if (!Array.isArray(b.enemies) || b.enemies.length !== b.enemyIds.length) return false;
+
+  const instanceIds = new Set();
   for (const enemy of b.enemies) {
     if (!isPlainObject(enemy)) return false;
     if (typeof enemy.instanceId !== 'string' || enemy.instanceId.length === 0) return false;
+    if (instanceIds.has(enemy.instanceId)) return false; // instanceId must be unique
+    instanceIds.add(enemy.instanceId);
     if (!isFiniteInt(enemy.hp) || enemy.hp < 0) return false;
     if (!isFiniteInt(enemy.maxHp) || enemy.maxHp < 1) return false;
     if (enemy.hp > enemy.maxHp) return false;
@@ -114,7 +135,8 @@ function validateBattle(b, state) {
     if (!isPlainObject(v) || !isPlainObject(v.statusFlags)) return false;
   }
 
-  if (!isFiniteInt(b.rngState) || b.rngState <= 0) return false;
+  // rngState must be a non-zero uint32
+  if (!isFiniteInt(b.rngState) || b.rngState <= 0 || b.rngState > 0xFFFFFFFF) return false;
 
   // snapshotLeaderId must be a known character
   if (!KNOWN_CHARACTERS.has(b.snapshotLeaderId)) return false;
@@ -124,11 +146,11 @@ function validateBattle(b, state) {
   if (!KNOWN_MAPS.has(b.snapshotRevivalPoint.mapId)) return false;
   if (!Number.isFinite(b.snapshotRevivalPoint.x) || !Number.isFinite(b.snapshotRevivalPoint.y)) return false;
 
-  // activeGuard: null or plain object with known-character guarderId and targetId
+  // activeGuard: null or plain object with both members in battle.partyIds
   if (b.activeGuard !== null) {
     if (!isPlainObject(b.activeGuard)) return false;
-    if (!KNOWN_CHARACTERS.has(b.activeGuard.guarderId)) return false;
-    if (!KNOWN_CHARACTERS.has(b.activeGuard.targetId)) return false;
+    if (!partySet.has(b.activeGuard.guarderId)) return false;
+    if (!partySet.has(b.activeGuard.targetId)) return false;
   }
 
   // Authored context ↔ opening phase cross-validation

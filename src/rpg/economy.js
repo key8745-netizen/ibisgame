@@ -46,4 +46,6 @@ export function applyDefeatPenalties(state) {
     state.field.x = rp.x;
     state.field.y = rp.y;
   }
+
+  return loss;
 }

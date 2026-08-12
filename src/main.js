@@ -60,7 +60,12 @@ function resize() { fitPixelCanvas(canvas, frame); }
 window.addEventListener('resize', resize, { passive: true });
 resize();
 
-document.querySelector('#menuButton')?.addEventListener('click', () => input.set(ACTIONS.MENU, true));
+function pulseAction(action) {
+  input.set(action, true);
+  input.set(action, false);
+}
+
+document.querySelector('#menuButton')?.addEventListener('click', () => pulseAction(ACTIONS.MENU));
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && state.mode === 'field') setMode('pause', '裝置切到背景，遊戲已安全暫停。');
 });

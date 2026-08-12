@@ -3349,3 +3349,261 @@ Gate status after GD-122:
 - Gate 7: **OPEN / NOT YET AUTHORIZED**
 
 **Implementation authorization remains NOT GRANTED.** `JRPG Development Baseline v1.0 — IMPLEMENTATION READY` may not be declared until Gate 7 Production / Technical Baseline is resolved and reviewed. C01 Visual Upgrade v0.2 remains a separate implementation line and is not modified by GD-116 through GD-122.
+
+## Gate 7 Authorized Production / Technical Baseline Addendum — GD-123 through GD-129
+
+This addendum records the player's explicit authorization to complete the final pre-implementation gate. Gate 7 is grounded in the repository's already-proven C01 technical foundation — native browser JavaScript modules, HTML5 Canvas 2D, DOM presentation, a fixed-step loop, localStorage validation, zero-build Netlify deployment and dependency-free logic tests — but the post-v0.2 JRPG Vertical Slice remains a separate implementation line. Reuse of proven technical patterns is allowed; C01 story semantics, field-ability semantics and content are not imported into the JRPG merely because code is reusable.
+
+### GD-123 — Runtime, Display and Input Baseline
+
+Status: **LOCKED**
+
+Decision: **The JRPG Vertical Slice is a browser-first static web game using a 480×270 logical pixel-playfield, Canvas 2D for the pixel world / battle scene, and high-resolution DOM UI for readable text and menus, with desktop keyboard and touch-device controls as required first-class inputs.**
+
+Runtime / display baseline:
+
+- No installation, native executable or app-store package is required for the Vertical Slice.
+- Supported release targets are current evergreen desktop Chromium browsers, current Safari on macOS / iOS, and current Chrome-class Android browsers. Firefox desktop is a compatibility target; any core-play failure remains a bug even if minor visual differences are tolerated.
+- The world / battle image uses a logical **480×270** Canvas with nearest-neighbor / pixelated presentation and no smoothing.
+- Desktop / fullscreen presentation uses the largest fitting **integer scale** with letterboxing rather than stretching the pixel image. When an integer scale cannot reasonably fit on a small touch viewport, the page may responsively fit the logical image while preserving crisp nearest-neighbor rendering; gameplay coordinates remain 480×270 logical pixels.
+- Text-heavy JRPG UI — dialogue, battle commands, party status, item / equipment menus, shop, save, tutorials and objective text — is DOM-based and may render at device resolution rather than being constrained to low-resolution Canvas glyphs.
+- `prefers-reduced-motion` remains supported. Required information may not depend solely on shake, flashing or animation.
+
+Desktop input baseline:
+
+- `Arrow keys / WASD`: field movement and menu navigation.
+- `Z / Space / Enter`: interact / confirm / advance dialogue.
+- `X / Shift`: cancel in menus; when no blocking UI is open in normal field exploration, this input performs the unlocked field-leader switch.
+- `Esc`: open / close the main pause-menu layer or back out of a non-destructive UI level.
+
+Touch baseline:
+
+- Touch UI supplies directional input plus distinct **Confirm / Cancel / Menu / Leader** actions.
+- Multi-touch input must not cause held directions or buttons to stick after pointer cancellation / focus loss.
+- Touch controls must remain outside critical dialogue / battle text areas and respect safe-area insets.
+
+Explicitly not required for this slice:
+
+- gamepad support;
+- native mobile packaging;
+- mouse-only gameplay;
+- online multiplayer or network account input.
+
+### GD-124 — Software Architecture and Content-State Boundary
+
+Status: **LOCKED**
+
+Decision: **The Vertical Slice keeps the repository's simple zero-runtime-dependency browser architecture, but the JRPG must be modular and data-driven rather than expanding the C01 single-scenario structure into one monolithic game file.**
+
+Architecture baseline:
+
+1. Use native **ES modules + HTML + CSS + Canvas 2D + DOM**. No React, Vue, Phaser, Unity export, bundler, package-runtime framework or other dependency is introduced unless a later explicit architecture override demonstrates a concrete need.
+2. Runtime code is separated by responsibility into at least these conceptual layers, regardless of exact file names:
+   - engine / timing / input / audio / pixel rendering;
+   - world / map / collision / event transition;
+   - battle rules / command resolution / enemy AI;
+   - party / progression / inventory / equipment / economy;
+   - save / validation / migration;
+   - content definitions for maps, NPCs, enemies, items, equipment, dialogue and events;
+   - DOM presentation / accessibility UI.
+3. One authoritative game-state model owns progression. DOM elements and Canvas presentation **read state; they do not become an independent gameplay source of truth**.
+4. Content uses stable string IDs and declarative data modules. Enemy definitions, items, equipment, encounter groups, map/event IDs and dialogue references must not be scattered as unrelated magic constants through rendering code.
+5. Battle calculation and save validation must be callable as deterministic / testable logic without requiring the DOM renderer.
+6. State transitions between `title / field / menu / dialogue-event / battle / shop-or-service / save / pause / ending` are explicit. A scene must not infer mode solely from which HTML element happens to be visible.
+7. Reusable C01 utilities may be selectively ported or generalized only after checking that they carry no C01 story or field-ability assumption. C01 content modules themselves are not the foundation of JRPG lore or progression.
+8. The JRPG must not retroactively reinterpret the C01 compass, glows or bridge-rescue mechanics as Star-Road systems.
+
+Implementation freedom:
+
+- Exact filenames, class-versus-function style and internal module count are implementation choices provided the responsibility boundaries above remain clear and testable.
+- No architecture work may add a backend, database or network service merely to solve a local single-player Vertical Slice problem.
+
+### GD-125 — Save, Suspend, Revival and Local Persistence Baseline
+
+Status: **LOCKED**
+
+Decision: **The Vertical Slice uses versioned local browser persistence with three formal manual-save slots, one rolling autosave and one interruption-resume snapshot; there is no account or cloud-save requirement.**
+
+Persistence baseline:
+
+- JRPG saves use a namespace separate from all C01 save keys; the implementation may use a family such as `ibisgame-jrpg-v1:*`.
+- Save payloads are explicitly versioned and validated before load. Unknown IDs, non-finite numbers, impossible coordinates, invalid party composition and malformed collections must be rejected or sanitized according to documented rules rather than trusted blindly.
+- There are **3 formal manual save slots**. In this Vertical Slice, formal saving is available through the designated 溪石村 save interaction established in Gate 6.
+- There is **1 rolling autosave** used for safety / progress continuity, not historical save-scumming. Valid triggers include completed area transitions, completed non-repeatable story-state commits and completed battle resolution; no autosave is taken in the middle of command selection or before an unresolved random battle merely to create a reroll point.
+- There is **1 suspend / interruption snapshot**. It may be refreshed when the page is backgrounded or the player explicitly suspends. On resume it acts as continuation, not as a permanent extra manual slot; it is superseded by the next safe committed state.
+- Manual / autosave / suspend UI must be visibly distinguishable.
+- No C01 save is auto-migrated into JRPG progression. They are different products / milestones.
+- Cloud sync, login, cross-device account restore and server persistence are **DEFERRED**.
+
+Defeat / revival baseline for the slice:
+
+- On full-party defeat, retain EXP and inventory, lose **25% of currently held money rounded down**, return to the latest designated revival / recovery point, restore active party HP / MP to full and clear ordinary temporary battle status conditions.
+- The defeat flow must explicitly tell the player what was retained and how much money was lost.
+- A defeat must not silently reload a pre-battle autosave and erase the locked consequence.
+
+### GD-126 — Slice Mechanics Completion and Tuning Authority
+
+Status: **LOCKED**
+
+Decision: **All gameplay semantics required to implement the Vertical Slice are now fixed; exact combat / economy numbers not listed as semantic constants become implementation-tunable inside explicit acceptance boundaries rather than remaining governance-level OPEN questions.**
+
+Slice-specific mechanical baseline:
+
+- Yohani and Sani begin the slice at **Level 1**. Normal first-clear play should bring the party naturally into approximately the **Level 2–3** range before 石環守衛; no hard level gate is allowed.
+- No character-specific extra top-level battle command is required in this slice. Yohani uses the common command grammar with a `Skill` submenu; Sani uses it with a `Magic` submenu.
+- Yohani's first authored skill is **`護援`**: a simple ally-protection action that temporarily reduces damage received by one chosen ally during the current / next resolved enemy action window. Exact MP cost and reduction percentage are tunable, but the skill must visibly reinforce his front-line guardian identity rather than become a damage spell.
+- Sani begins shared combat with two simple spells: **`星火`**, a single-target magical damage spell, and **`微癒`**, a single-target HP recovery spell. Names are original to this project and do not import Dragon Quest spell naming.
+- `Run` is available in ordinary random encounters. It is unavailable in the authored opening tutorial battles and 石環守衛 boss battle, with a clear UI explanation rather than a silent failure.
+- Each active character has **3 battle-item carry slots**; each slot holds one consumable type with up to **2 uses** prepared from shared inventory. Equipment does not consume these carry slots.
+- Yohani's slice equipment slots are **Weapon / Armor / Shield / Accessory**.
+- Sani's slice equipment slots are **Weapon / Armor / Focus / Accessory**; she does not use shields in the slice. `Focus` is an equipment category supporting her magic/support identity, not a new magic system.
+
+Leader-buff implementation for the slice:
+
+- **Yohani — Protection / Guardian:** while Yohani is current field leader, the party receives a clearly shown **first-round protection effect** on entering ordinary random battles, reducing incoming damage during round 1. Exact reduction is tunable inside balance tests; the effect does not stack with itself and does not trivialize boss telegraphs.
+- **Sani — Insight:** while Sani is current field leader, battle UI shows a coarse enemy condition band such as `穩定 / 受傷 / 危急` rather than exact hidden HP, and nearby **optional** exploration clues / treasure opportunities may receive a restrained visual hint. Mandatory progression and puzzle solutions must never require Sani to be leader.
+- The guided leader-switch tutorial under GD-107 must show the practical difference in plain language.
+
+Encounter / balance authority:
+
+- Exact HP, MP, Attack, Defense, Agility, spell power, EXP, gold, prices, encounter-meter values, AI weights and boss numbers are **IMPLEMENTATION-TUNABLE**, not freely inventable semantics.
+- Initial tuning must satisfy all of these acceptance constraints:
+  - the first Yohani solo battle is normally understandable in roughly **3–5 rounds** and cannot defeat a healthy correctly-playing Yohani with one ordinary enemy hit;
+  - the first shared battle normally demonstrates both protagonists within roughly **3–6 rounds**;
+  - ordinary non-boss encounters should usually resolve in roughly **2–5 rounds** when the party is appropriately prepared;
+  - 石環守衛 should normally last roughly **6–10 rounds** at intended progression and must include a clearly telegraphed stronger action for which `Defend` is visibly useful;
+  - ignoring that telegraph is meaningfully dangerous but must not become an unavoidable full-party one-shot from a healthy expected-level state;
+  - a player who explores normally, opens reasonable treasure and fights normal encounters can reach the boss without mandatory grinding; after a loss, a short preparation loop of equipment / items / approximately one or two levels is sufficient;
+  - the first 溪石村 shop visit does not provide enough money to buy every meaningful upgrade plus every desired consumable; at least one understandable trade-off must exist;
+  - no required numeric grind should add more than roughly **10 minutes** to a normal first-clear route.
+
+Any change that alters command semantics, leader identities, defeat rules, equipment-slot identities, required party composition or the Gate 6 content loop is **not tuning** and requires a new explicit decision / override.
+
+### GD-127 — Quality, Accessibility, Performance, Security and Child-Privacy Baseline
+
+Status: **LOCKED**
+
+Decision: **Release acceptance requires functional correctness, anti-softlock coverage, readable child-facing UX, predictable performance and a privacy-minimal static application; these are release gates rather than optional polish.**
+
+Quality / automated-logic coverage:
+
+- Pure / deterministic tests must cover at minimum:
+  - save validation, malformed values and version handling;
+  - formal / autosave / suspend restoration invariants;
+  - battle round selection and resolution order;
+  - Defend and boss telegraph behavior;
+  - defeat / revival money loss and retained EXP / items;
+  - inventory, battle-carry limits and equipment compatibility;
+  - leader switching and one-active-leader-buff invariant;
+  - random-encounter eligibility and event-battle exclusions;
+  - required map reachability, dungeon shortcut and puzzle reset / solvability;
+  - progression flags from new game through boss, return and slice completion;
+  - restoration from every supported committed save category without creating a progression softlock.
+- C01's existing BFS / save-validation discipline is a reference pattern; Gate 7 does not require copying its exact tests when the JRPG graph differs.
+
+Performance baseline:
+
+- Simulation uses a fixed **60 Hz** step or equivalent deterministic fixed-step model separated from render refresh.
+- Rendering target is **60 FPS** on ordinary supported desktop hardware; supported touch devices must remain playable without sustained sub-30-FPS behavior or input starvation.
+- Large maps / art may be pre-rendered, cached or chunked so the main render loop does not rebuild static expensive resources every frame.
+- Frame-time spikes after browser background / resume must be clamped; the game pauses / safely resumes rather than simulating a long hidden interval.
+- Audio scheduling must tolerate normal browser focus / autoplay constraints and never block progression if audio is unavailable.
+
+Accessibility / child-readability baseline:
+
+- Required information is not communicated by color alone; labels / icons / shape or text accompany color coding where needed.
+- DOM controls have meaningful accessible names and keyboard focus behavior.
+- Dialogue / menu text remains high-resolution and readable at the target screen sizes.
+- Reduced-motion mode removes nonessential shake / flashing / heavy motion without hiding required state changes.
+- Tutorial prompts can be revisited through an in-game help / controls surface after their first appearance.
+
+Security / privacy baseline:
+
+- The Vertical Slice has **no login, no advertising SDK, no analytics tracker, no behavioral profiling and no collection of child personal information**.
+- Runtime assets and scripts are served locally from the project / deployment. Third-party remote executable scripts are not part of the baseline.
+- No secrets, API keys or credentials belong in client code or repository content.
+- Avoid `eval`, dynamic code execution and unvalidated HTML from save data. Player-controlled / persisted strings must not be injected into DOM as trusted HTML.
+- Netlify deployment keeps restrictive security headers appropriate to a static game; camera, microphone and geolocation remain disabled because the game does not need them.
+
+### GD-128 — Implementation Branch, CI, Preview and Delivery Workflow
+
+Status: **LOCKED**
+
+Decision: **The JRPG Vertical Slice will be implemented on its own reviewed branch and PR, with the docs SSOT as the design authority; C01 branches are not modified as a side effect.**
+
+Workflow baseline:
+
+1. Actual coding begins only after a separate explicit implementation-start instruction.
+2. At implementation start, fresh-check `main`, PR #1 / `agent/playable-slice`, and `docs/game-direction-ssot` before choosing the base commit. The intended new branch name is **`agent/jrpg-vertical-slice-v1`**.
+3. The default integration strategy is to branch from the then-current `main` and selectively port / generalize proven C01 technical utilities when useful, rather than making the JRPG branch depend on C01 story content. If repository reality at that moment makes another base safer, that base change must be reported before coding; C01 semantics still remain isolated.
+4. No direct implementation commits go to `main` or `docs/game-direction-ssot`.
+5. Implementation work should be staged in reviewable milestones, at minimum: foundation/state → field/world → battle/RPG systems → Gate-6 content → persistence/QA → visual/audio/readability polish.
+6. Each milestone must fresh-read the current SSOT before changes and must not reinterpret unresolved global-game lore outside the slice.
+
+CI / deployment baseline:
+
+- Runtime remains zero-build for deployment: Netlify publish directory `.` and no required client build command.
+- A GitHub Actions check may use the runner's built-in Node environment for `node --check` and dependency-free pure-logic test runners; **no npm runtime dependency is required merely to have CI**.
+- Browser-specific acceptance is verified on a Netlify deploy preview using the supported desktop / touch matrix before merge.
+- The implementation PR must show test status, preview URL and a concise verification checklist for new game → ending, save / resume, defeat, route retreat, dungeon puzzle, boss, reduced-motion and touch input.
+- Security headers established by the static deployment are retained / strengthened rather than removed for convenience.
+- Final assets must be project-owned / properly licensed and stored locally; reference to Dragon Quest V remains design grammar only.
+
+C01 boundary:
+
+- Neither this workflow nor eventual JRPG implementation authorizes merging, rewriting or declaring visual PASS for C01 PR #1.
+- Any reuse from C01 must be technically scoped and stripped of C01-only narrative assumptions.
+
+### GD-129 — Gate 7 Closure and JRPG Development Baseline v1.0 Audit
+
+Status: **LOCKED — GATE 7 CLOSED / BASELINE IMPLEMENTATION READY**
+
+Audit conclusion:
+
+All seven pre-implementation gates are now resolved sufficiently for the authorized Vertical Slice:
+
+- Gate 1 — milestone / scope: **CLOSED**
+- Gate 2 — target player: **CLOSED**
+- Gate 3 — core JRPG rules: **CLOSED**
+- Gate 4 — protagonists / opening: **CLOSED**
+- Gate 5 — minimum world lore: **CLOSED**
+- Gate 6 — Vertical Slice content: **CLOSED**
+- Gate 7 — production / technical baseline: **CLOSED**
+
+The implementation baseline now includes:
+
+- original classic-fantasy JRPG direction and information boundaries;
+- Yohani / Sani opening, combat-role and leader-theme identities;
+- a complete 60–75 minute `溪石村 → 舊石坡 → 古石丘 → 石環守衛 → return` content loop;
+- browser runtime, 480×270 pixel playfield and high-resolution DOM UI baseline;
+- keyboard + touch control contracts;
+- modular zero-runtime-dependency ES-module architecture and state ownership boundary;
+- concrete local save / autosave / suspend / defeat semantics;
+- slice-level abilities, equipment-slot structure, battle-carry limits and leader-buff semantics;
+- explicit implementation-tuning authority with measurable balance boundaries;
+- QA, accessibility, performance, security and child-privacy requirements;
+- dedicated implementation branch / PR / Netlify-preview workflow.
+
+Previously OPEN exact numbers such as final enemy HP, exact shop prices, exact EXP yields, encounter weights and animation frame counts are no longer pre-implementation governance blockers when they fall inside GD-126 / GD-127 tuning and acceptance constraints. They may be tuned during implementation and verification. Semantic changes remain governed: an implementation agent may not change the story reveal budget, command grammar, defeat semantics, leader identities, party structure, required locations, boss identity or Star-Road truth under the label of tuning.
+
+Still intentionally OPEN / DEFERRED for the **larger game**, without blocking this Vertical Slice:
+
+- ultimate Star-Road origin / purpose and global breakage cause;
+- fate of 星衡文明;
+- broader kingdoms, religion, geopolitics and future regions;
+- protagonist ancestry / family destiny questions;
+- future party-member identities and reserve-party details beyond slice needs;
+- monster recruitment, casino / minigames and other held future systems;
+- final whole-game progression curves and late-game content;
+- exact next-town / Chapter 2 design.
+
+C01 remains separate:
+
+- C01 Visual Upgrade v0.2 and PR #1 retain their own implementation / visual-verification status.
+- GD-123 through GD-129 do not merge C01, grant C01 Visual PASS or reinterpret its compass / glow / rescue mechanics as Star-Road lore.
+
+Formal declaration:
+
+**`JRPG Development Baseline v1.0 — IMPLEMENTATION READY`**
+
+This declaration means the design gates no longer block implementation of the Vertical Slice. It does **not** mean implementation has already started, nor does it authorize an agent to push code without a separate explicit implementation-start instruction from the player.

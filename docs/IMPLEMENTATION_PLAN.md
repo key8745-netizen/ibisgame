@@ -8,6 +8,8 @@ Status: ACTIVE
 
 ### M1 — Foundation / State
 
+Status: **COMPLETE**
+
 Goal: establish the technical shell without implementing Gate-6 story content.
 
 Deliverables:
@@ -31,11 +33,32 @@ Exit criteria:
 
 ### M2 — Field / World / Opening
 
+Status: **COMPLETE — battle implementation remains intentionally delegated to M3**
+
 Goal: implement 溪石村 exploration and the locked GD-100～GD-109 opening sequence.
 
-Includes movement, collision, NPC/event graph, reverse-flow presentation, authored 冠耳獸 encounters, Sani handoff/convergence and leader tutorial.
+Delivered:
+- scrollable 溪石村 field foundation with collision, water channel, natural stream and authored event points
+- Yohani delivery errand and reverse-flow observation
+- normal territorial 冠耳獸 warning / deliberate approach scene
+- explicit M2→M3 battle integration boundary for the solo encounter
+- Sani playable stream-confirmation segment using the leaf-current test
+- sibling convergence that combines observations without assigning Star-Road causality
+- panicked second 冠耳獸 field behavior and uncontrolled rush scene
+- explicit M2→M3 battle integration boundary for the shared encounter
+- post-battle subdued/flee state and limited protagonist inference
+- required Yohani→Sani leader-switch tutorial, then normal field-leader switching
+- return-to-village report and opening completion flag
+- reverse-flow state remains active after the opening report and can end only when later content records local 星標 stabilization
+- automated event-order, collision, leader-lock and anomaly-persistence coverage
+
+M2 integration note:
+- `battle` mode currently uses an explicit **M2 integration stub** so the complete opening event graph can be verified before M3 exists.
+- The stub is temporary production scaffolding, not final gameplay semantics. M3 must replace it with the locked party-wide command battle system without changing the M2 story/event ordering.
 
 ### M3 — Battle / RPG Systems
+
+Status: **NEXT**
 
 Goal: implement party-wide round command flow, HP/MP/EXP, abilities, inventory carry slots, equipment, economy, random encounters, defeat/revival and leader effects.
 

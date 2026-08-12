@@ -15,4 +15,7 @@ export const ENEMY_IDS = Object.freeze({
   STONE_RING_GUARDIAN: 'stone-ring-guardian',
 });
 
-export const ITEM_IDS = Object.freeze({ INSCRIBED_STONE_FRAGMENT: 'inscribed-stone-fragment' });
+export const ITEM_IDS = Object.freeze({
+  LUNCH_PARCEL: 'lunch-parcel',
+  INSCRIBED_STONE_FRAGMENT: 'inscribed-stone-fragment',
+});

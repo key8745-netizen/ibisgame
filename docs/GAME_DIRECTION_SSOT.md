@@ -3007,3 +3007,156 @@ Gate status after GD-109:
 - Gate 7: **OPEN / NOT YET AUTHORIZED**
 
 **Implementation authorization remains NOT GRANTED.** No work may declare `JRPG Development Baseline v1.0 — IMPLEMENTATION READY` until Gates 5 through 7 are resolved and reviewed. C01 Visual Upgrade v0.2 remains a separate implementation line and is not modified by GD-094 through GD-109.
+
+## Gate 5 Authorized World-Lore Addendum — GD-110 through GD-115
+
+This addendum records the player's explicit authorization to complete Gate 5 using the **classic-fantasy world-design grammar and information density associated with SFC-era Dragon Quest V as a reference**, while preserving 《未完成的星路》 as an original work. The reference governs broad design grammar only: an immediately understandable lived-in fantasy world, ordinary settlements and travel, magic and monsters as accepted realities, ancient ruins and legends, and deeper truths revealed gradually through adventure. It does **not** authorize copying Dragon Quest characters, places, monsters, spell names, religions, legendary bloodlines, artifacts, plot events, dialogue, visual assets, or world-specific lore.
+
+### GD-110 — Minimum World Grammar and Star Road Ontology
+
+Status: **LOCKED**
+
+Decision: **The ordinary world uses a straightforward classic-fantasy social grammar, while Star Roads are rare natural magical pathways woven through the world and only partially understood by modern people.**
+
+World baseline:
+
+- Villages, towns, roads, kingdoms, inns, shops, temples / shrines, wilderness and ancient ruins can exist as ordinary parts of the world without requiring encyclopedic explanation.
+- Magic and monsters are accepted facts of life. A villager may know that magic exists or that monsters live beyond safe roads without understanding cosmology.
+- Star Roads are **not roads built by people** and are not an ancient transportation technology disguised as magic. They are naturally occurring pathways / lines of order in the world itself and predate known civilization, preserving the earlier locked baseline.
+- A Star Road is normally invisible or only indirectly perceptible. It can influence how place, direction and passage behave around it when strongly active or unstable, but ordinary people do not possess a scientific model of that effect.
+- Stable Star Roads are not required to create obvious supernatural effects in everyday life. Their existence should feel like an old world mystery under familiar fantasy life rather than a ubiquitous high-concept system.
+- Modern knowledge is uneven: scholars, ruin-keepers, travelers and local legends may know fragments, while most people know only stories, old place names or warnings.
+
+Boundary:
+
+- Exact creator / ultimate origin of Star Roads remains **OPEN**; natural existence does not answer why the world contains them.
+- Exact global network geometry, number of roads, destination rules, travel mechanics and any future field ability remain outside Gate 5.
+- C01 compass / glow presentation receives no retroactive magical or Star-Road meaning from this decision.
+
+### GD-111 — Magic Exists Independently of Star Roads
+
+Status: **LOCKED**
+
+Decision: **Ordinary magic is a real, learnable part of the world and does not originate from Star Roads.**
+
+Magic baseline:
+
+- People can learn and use spells / magical techniques through ordinary fantasy traditions, aptitude, teaching and character progression.
+- `MP` remains the gameplay representation of a character's usable magical capacity; Gate 5 does not require an in-world scientific definition of MP.
+- A person does not need access to a Star Road in order to cast normal magic.
+- Star Roads may participate in unusual magical or environmental phenomena when a story event explicitly establishes that relationship, but they are not the universal fuel, spell network or hidden technology behind all magic.
+- Temples, healers, sages, traveling practitioners or other familiar fantasy institutions may use magic without automatically possessing special Star-Road knowledge.
+
+Boundary:
+
+- Exact source of magical talent, schools of magic, religious relationship to magic, spell taxonomy and metaphysical origin of MP remain **OPEN / DEFERRED** unless required by later content.
+- No Dragon Quest spell names, deity system or franchise-specific magical cosmology is imported.
+
+### GD-112 — Monster Ontology and Opening Creature Disturbance
+
+Status: **LOCKED**
+
+Decision: **Monsters are an ordinary category of living / supernatural creatures within the world's ecology rather than beings that are automatically evil, anomaly-created or Star-Road-born; the panicked opening 冠耳獸 is temporarily disoriented by the same local Star-Road instability that produces the reverse-flow event.**
+
+Monster baseline:
+
+- Some monsters are territorial or dangerous, some avoid people, and later stories may establish other forms of coexistence. `Monster` is a practical fantasy-world category, not a moral alignment.
+- 冠耳獸 is an ordinary local species and is not created, transformed or newly spawned by the opening anomaly.
+- The first solo specimen remains a valid example of normal species behavior.
+- The second specimen's panic is caused by temporary exposure to the local directional disturbance associated with the unstable Star-Road area. It is **disoriented**, not corrupted, possessed, mind-controlled or mutated.
+- This is not a special sensory power of 冠耳獸. The effect is environmental and can disturb living creatures unevenly depending on location, timing and exposure; GD-062 / GD-064 therefore remain intact and do not become hidden anomaly-sensing traits.
+- The first specimen behaving normally does not imply immunity; the disturbance is local / intermittent enough that two individuals can experience different conditions.
+
+Knowledge boundary:
+
+- This is an author-level world truth. Yohani and Sani do **not** know it during the opening and GD-106's limited inference remains controlling for what they may say.
+- Exact wider monster taxonomy, origin of all monsters, taming / recruitment semantics and ecological simulation remain outside Gate 5.
+
+### GD-113 — The Star-Balance Civilization and Ancient Star Markers
+
+Status: **LOCKED**
+
+Decision: **A lost ancient culture known by modern scholars as the `星衡文明` discovered and mapped portions of the natural Star Roads and built `星標` structures at important locations to observe, mark and stabilize access to them; it did not create the Star Roads.**
+
+Ancient-civilization baseline:
+
+- `星衡文明` is a modern scholarly / conventional label. What its people called themselves may remain unknown.
+- The civilization learned enough about Star Roads to locate crossings, recognize unstable sections and construct fixed `星標` — stone-built marker / anchor structures that help identify or steady a local relationship to a Star Road.
+- 星標 may use carved stone, crafted metal, inscriptions and clearly fantasy-compatible magical craft. Their first-read presentation must remain **ancient fantasy ruin**, not science-fiction machinery, circuitry, computers or industrial technology.
+- Many 星標 are now buried, broken, repurposed, forgotten or mistaken for ordinary ruins because the associated Star Roads are dormant or damaged.
+- Modern people possess fragments of this knowledge; no surviving institution is assumed to fully understand the entire ancient system.
+
+Boundary:
+
+- The fate of 星衡文明 remains **OPEN**.
+- The cause of widespread Star-Road breakage remains **OPEN**.
+- Whether 星衡文明 contributed to, witnessed or merely survived some part of the breakage remains **OPEN**.
+- No special bloodline, chosen hero, hereditary key or protagonist-family connection is established.
+
+### GD-114 — Opening Anomaly Author Truth and Reveal Budget
+
+Status: **LOCKED**
+
+Decision: **The opening reverse-flow incident is a local directional distortion produced by an unstable damaged / dormant Star-Road segment associated with a forgotten 星標 near the village; the Vertical Slice may reveal the Star-Road connection, but it must not reveal the ultimate cause of the wider Star-Road failure.**
+
+Author truth:
+
+1. A forgotten / buried 星標 exists in the broader village-edge area and remains physically associated with a damaged or largely dormant Star Road.
+2. During the opening incident, that local Star-Road segment briefly enters an unstable active state instead of returning to a healthy stable state.
+3. The instability distorts local directional order strongly enough that water in more than one nearby feature can visibly flow against its ordinary direction. The village channel and natural stream therefore do **not** need to be hydrologically connected for the matching event to occur.
+4. The same local disturbance can temporarily disorient nearby creatures, explaining the second 冠耳獸 under GD-112 without turning the species into an anomaly detector.
+5. The first solo 冠耳獸's ordinary territorial encounter remains narratively adjacent but is not required to have been caused by the disturbance.
+
+Player-knowledge / reveal boundary:
+
+- During the opening sequence through GD-109, the siblings know only their observations and the abnormal creature behavior. They do not identify a Star Road or 星標 as the cause.
+- Gate 6 may let the Vertical Slice discover the forgotten 星標 / associated ruin and establish a **credible connection between the local anomalies and a damaged Star Road**.
+- By the end of the Vertical Slice, the player may know `this local incident is connected to an old Star Road / 星標`, but the story must still preserve the larger questions: **why did this segment become active now, why are so many Star Roads broken, what ultimately created / governs them, and whether anyone intentionally caused the present disturbance.**
+- The local explanation should answer one adventure-sized question while opening a larger world-sized question, preserving the classic-JRPG gradual-reveal rhythm.
+
+### GD-115 — Gate 5 Minimum World Lore Closure Audit
+
+Status: **LOCKED — GATE 5 CLOSED**
+
+Audit conclusion:
+
+Gate 5 now contains enough world truth to author the Vertical Slice without requiring agents to invent the core cosmology:
+
+- the surface world follows a readable classic-fantasy grammar rather than a high-concept technological setting;
+- magic is genuine, ordinary and independent of Star Roads;
+- monsters are ordinary world creatures and are not automatically evil or anomaly-created;
+- Star Roads are naturally existing, ancient magical pathways / lines of order that predate known civilization and can affect local directional / spatial behavior when unstable;
+- the lost `星衡文明` discovered and mapped Star Roads and built ancient fantasy `星標` structures to mark / observe / stabilize local access, but did not create the Roads;
+- the opening reverse-flow event and the second 冠耳獸's disorientation share a local underlying Star-Road instability, while the siblings do not know that during the opening;
+- a forgotten 星標 near the village provides the local Vertical-Slice mystery anchor;
+- the Vertical Slice may reveal the local Star-Road connection without solving the global mystery.
+
+Intentionally still OPEN / DEFERRED:
+
+- the ultimate origin / creator / metaphysical purpose of Star Roads;
+- the cause of widespread Star-Road breakage;
+- why the village-area segment becomes unstable at this particular time;
+- whether an antagonist, accident, natural cycle or other force is involved in the wider problem;
+- the fate of 星衡文明 and the full extent of its knowledge;
+- exact religion / deities / church or temple theology;
+- exact kingdoms, political map, village culture and broader geopolitics;
+- full magic taxonomy, magic's ultimate source and detailed MP metaphysics;
+- origin and taxonomy of all monsters, monster recruitment and broader ecology;
+- protagonist ancestry, family destiny, chosen-one status or any special hereditary relationship to Star Roads;
+- exact Star-Road gameplay / traversal mechanics, which belong to later design and must not be inferred from lore alone.
+
+Reference boundary:
+
+The *Dragon Quest V* reference remains **design grammar, pacing and fantasy readability only**. 《未完成的星路》 must not copy or substitute franchise-specific names, characters, monster designs, legendary equipment, bloodline structures, religions, destinations, plot arcs, scene sequences or other protected expression.
+
+Gate status after GD-115:
+
+- Gate 1: **CLOSED**
+- Gate 2: **CLOSED**
+- Gate 3: **CLOSED**
+- Gate 4: **CLOSED**
+- Gate 5: **CLOSED**
+- Gate 6: **OPEN / NOT YET AUTHORIZED**
+- Gate 7: **OPEN / NOT YET AUTHORIZED**
+
+**Implementation authorization remains NOT GRANTED.** `JRPG Development Baseline v1.0 — IMPLEMENTATION READY` may not be declared until Gates 6 and 7 are resolved and reviewed. C01 Visual Upgrade v0.2 remains a separate implementation line and receives no retroactive Star-Road / magic reinterpretation from GD-110 through GD-115.

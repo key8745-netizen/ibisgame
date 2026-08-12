@@ -2720,3 +2720,290 @@ Decision boundary:
 ### Gate 4 GD-093 Reconciliation Note
 
 The opening monster's inner-ear accent is now LOCKED as a **medium-area, lower-root-weighted, tall-slender off-white / cream upward-tapering teardrop / wedge region**. Exact numeric ratio, edge treatment, pixel dimensions and final palette values remain OPEN. GD-093 does not alter the mirrored three-part ear-crest structure, fur-dominant warm-earth palette, neutral-wild tone, encounter behavior, anomaly causality, Gate 5 lore or C01 v0.2 boundary.
+
+## Gate 4 Governance Correction — Erroneous GD-093 Record
+
+Status: **CORRECTED / NON-BINDING RECORD**
+
+The immediately preceding repository entry labelled `GD-093 — Opening Tutorial Monster Tall-Slender Inner-Ear Accent Proportion` was created through a decision-cursor / persistence mismatch. It did **not** correspond to the player-approved GD-093 in the active decision sequence and therefore must not be treated as an authoritative LOCKED constraint despite the embedded historical status text.
+
+Correction boundary:
+
+- The erroneous tall-slender proportion constraint is **VOID / NON-BINDING**.
+- The historical text remains in place to preserve auditability; it is not silently deleted or rewritten.
+- The authoritative decision sequence resumes below at GD-094, carrying forward the player-approved answers that were confirmed in conversation after GD-092.
+- No agent may infer a tall-slender numeric or visual proportion from the erroneous record.
+
+## Gate 4 Authorized Completion Addendum — GD-094 through GD-109
+
+This addendum records the player-approved detail decisions that were pending persistence, then uses the player's explicit authorization to resolve the remaining Gate 4 presentation decisions through GD-109. The authorization is limited to Gate 4. It does **not** authorize Gate 5 world-lore decisions, implementation work, or changes to C01 v0.2.
+
+### GD-094 — Opening Tutorial Monster Soft Fur-Blended Inner-Ear Boundary
+
+Status: **LOCKED**
+
+Decision: **The off-white / cream inner-ear accent uses a soft fur-blended boundary rather than a hard graphic cut or a highly fragmented tuft edge.**
+
+Decision boundary:
+
+- The transition should read as natural fur coloration with gentle irregularity.
+- The edge may show a small amount of fur-flow texture, but not enough to become noisy at field-sprite scale.
+- This remains one coherent color region under GD-092.
+- Exact pixel dithering, antialiasing strategy and final palette values remain production details.
+
+### GD-095 — Opening Tutorial Monster Rounded Inner-Ear Accent Upper Termination
+
+Status: **LOCKED**
+
+Decision: **The upward-tapering inner-ear accent ends in a softly rounded upper termination.**
+
+Decision boundary:
+
+- The upper end may narrow, but it must not terminate as a sharp spike or a flat geometric cap.
+- The rounded termination keeps the accent subordinate to the more distinctive three-part ear crest.
+- Exact radius and pixel geometry remain production details.
+
+### GD-096 — Opening Tutorial Monster Mirrored Inner-Ear Accent Layout
+
+Status: **LOCKED**
+
+Decision: **The left and right inner-ear accent regions use a mirrored anatomical layout.**
+
+Decision boundary:
+
+- Baseline position, shape, coverage and color organization are bilaterally mirrored.
+- Ear animation may still place the two ears in different poses; mirroring governs anatomy, not every animation frame.
+- Damage, individual variation or special variants are not introduced by this decision.
+
+### GD-097 — Opening Tutorial Monster Wide-Root Inner-Ear Accent Base
+
+Status: **LOCKED**
+
+Decision: **The inner-ear accent begins relatively broad at the ear root, then narrows upward.**
+
+Decision boundary:
+
+- The lower/root area supplies the visual mass of the accent, consistent with GD-091.
+- The base should be broad enough to read clearly without filling most of the ear interior.
+- Exact width ratio remains a production-level proportion rather than a new semantic design question.
+
+### GD-098 — Opening Tutorial Monster Visual Microdetail Completion Package
+
+Status: **LOCKED**
+
+Decision: **Remaining non-semantic visual microdetails are resolved as a restrained natural-fantasy package optimized for small-sprite readability.**
+
+Package:
+
+1. The lower edge of the inner-ear accent blends naturally into ear-root fur rather than forming a hard lower border.
+2. The three outer crest branches use gentle rearward curvature and medium visual thickness; they remain clearly part of the movable ear silhouette rather than reading as separate blades, leaves or wing membranes.
+3. The crest surface reads as continuous with the fur-lined ear structure; it does not introduce crystal, metal, exposed armor or another new hard-material focal point.
+4. The bushy tail is visually long enough to remain a secondary silhouette cue, with a full base/midsection and a rounded taper rather than a needle point or ringed pattern.
+5. The primary two-tone body split uses a darker warm-earth upper / outer region and a lighter warm-earth muzzle / chest / underside family. The exact final palette values remain production tuning.
+6. The subtle darker eye-surround accent remains low-contrast and subordinate to the face; it must not become a mask.
+7. Field sprites prioritize large readable regions and silhouette; battle art may add restrained fur detail but must not introduce new markings or anatomy absent from the baseline.
+
+Boundary:
+
+- GD-098 completes visual construction only. It adds no ecology, sex / age dimorphism, rank, magic, sensing ability, elemental affinity, anomaly meaning or gameplay mechanic.
+- Exact pixel counts, final RGB values, animation frame counts and export assets remain production details for later gates / implementation.
+
+### GD-099 — Opening Local Monster Common Name
+
+Status: **LOCKED**
+
+Decision: **The familiar local species used in both opening teaching battles has the player-facing common name `冠耳獸`.**
+
+Decision boundary:
+
+- `冠耳獸` is an ordinary local common name suitable for short dialogue, battle UI and child-readable recognition.
+- The name refers to the species' crest-ear visual identity only; it does not establish taxonomy, intelligence, magic, rarity or a special relationship to the anomaly.
+- A scientific / ancient / regional alternate name, if any, remains outside Gate 4.
+
+### GD-100 — Yohani Opening Village Errand Content
+
+Status: **LOCKED**
+
+Decision: **Yohani's opening errand is one short delivery: carry a small wrapped lunch parcel from one familiar villager to another familiar villager working beside the village water channel.**
+
+Opening sequence boundary:
+
+- The delivery is completed before the anomaly becomes the active objective, so the story does not leave a trivial unfinished errand hanging over the danger sequence.
+- The route naturally teaches movement, interaction and one clear destination inside the small familiar village.
+- After the handoff, Yohani notices the nearby channel behaving impossibly while moving away / looking back toward the waterway.
+- Exact giver / recipient names, occupations, family relationships and village institutions remain OPEN for later content design; Gate 4 does not invent them.
+
+### GD-101 — Yohani Reverse-Flow Evidence Presentation
+
+Status: **LOCKED**
+
+Decision: **Yohani verifies the village-channel anomaly through two ordinary visual cues: the fixed downhill / downstream channel geometry and small floating debris visibly moving back upstream against it.**
+
+Presentation boundary:
+
+- A leaf / light natural debris rides the reversed current upstream for long enough to remove ambiguity with a splash or eddy.
+- The channel's fixed slope / step geometry gives the player an obvious reference for the normal direction.
+- Yohani approaches close enough to observe that the reversal persists, but he gains no explanation for why it is happening.
+- No mandatory magical glow, symbol, voice, Star Road effect or monster reaction is used as the proof.
+- The nearby normal territorial 冠耳獸 encounter follows this observation, but proximity does not establish causality.
+
+### GD-102 — Sani Reverse-Flow Pattern-Confirmation Presentation
+
+Status: **LOCKED**
+
+Decision: **Sani independently confirms the anomaly at the nearby natural stream by actively testing the current with a small leaf and watching it travel upstream through the natural channel.**
+
+Presentation boundary:
+
+- The stream's ordinary downhill terrain / rock flow line is visually readable.
+- Sani deliberately places or drops a leaf into the water; it travels upstream rather than downstream.
+- She follows the result for a short distance / second observation point to confirm that it is not a local eddy.
+- The action demonstrates observation and initiative, not supernatural sensing and not the later gameplay effect of her Insight leader buff.
+- The test establishes repeated impossible behavior at a second location; it does not establish hydrological connection or cause.
+
+### GD-103 — Sibling Convergence and Clue-Combination Presentation
+
+Status: **LOCKED**
+
+Decision: **Yohani and Sani converge at a simple village-edge path junction between their two investigation routes and compare what they saw before the shared battle escalation.**
+
+Presentation boundary:
+
+- Yohani reports that the village channel flowed backward and that he encountered a normally territorial 冠耳獸 nearby.
+- Sani reports that the natural stream also flowed backward and that she verified it with a leaf test.
+- Their only shared conclusion before the escalation is: **the same impossible water behavior is occurring in more than one place.**
+- They do not conclude that the two water features are connected, that the monster caused it, that the water affected the monster, or that Star Roads / magic are responsible.
+- The dialogue remains short enough that the player can make the pattern connection without a lore dump.
+- The panicked second 冠耳獸 appears before they can resolve the mystery further.
+
+### GD-104 — First Solo Battle Territorial-Warning Presentation
+
+Status: **LOCKED**
+
+Decision: **The solo-battle 冠耳獸 is visible beside a short side path near the channel; when Yohani enters a readable authored encounter distance, the creature notices him, gives one clear territorial-warning beat, then approaches in a controlled line until contact starts battle.**
+
+Warning language:
+
+- ears / ear-crests rise and angle toward Yohani;
+- the compact body becomes still and braced;
+- the bushy tail lifts or stiffens rather than thrashing;
+- one short warning vocalization / motion beat communicates `do not come closer`;
+- after that beat, the creature walks / bounds deliberately toward Yohani without erratic direction changes.
+
+Control / framing boundary:
+
+- Player control may briefly pause once the authored warning begins so the warning cannot be missed.
+- The camera remains focused on the existing exploration scene rather than using a cinematic cutaway.
+- Exact engine distance, frame counts, collision threshold and transition effect remain Gate 7 / implementation details.
+- The creature's presence near the channel remains causally unexplained.
+
+### GD-105 — First Shared Battle Panic and Rush Presentation
+
+Status: **LOCKED**
+
+Decision: **At the convergence scene, the second 冠耳獸 first reads as visibly panicked through unstable whole-body movement, then abruptly rushes into the siblings and triggers battle.**
+
+Panic language:
+
+- it changes direction more than once instead of holding a controlled line;
+- it recoils / hesitates and briefly looks away from the siblings as if reacting to an unidentified disturbance;
+- its ears / ear-crests pin back or move unevenly;
+- its tail movement becomes disordered rather than the controlled raised/stiff posture used in GD-104;
+- no mutation, glow or new body feature is required.
+
+Rush / framing boundary:
+
+- Once the final rush starts, player control is temporarily locked; this is not an avoidance mini-game.
+- The rush is short, direct and readable, ending in contact with the siblings and immediate battle transition.
+- Camera framing stays centered on the siblings / local scene with only a brief authored hold; no large cinematic camera system is required by Gate 4.
+- Exact path coordinates, speed values, frame counts and collision implementation remain later production details.
+- The feared stimulus and causal explanation remain OPEN.
+
+### GD-106 — First Shared Battle Post-Battle Creature State and Protagonist Inference
+
+Status: **LOCKED**
+
+Decision: **After defeat, the panicked 冠耳獸 is subdued rather than presented as killed; it recovers enough to flee away from the siblings, still visibly distressed, and is not pursued.**
+
+Inference boundary:
+
+- Yohani and Sani may explicitly recognize that this specimen behaved very differently from an ordinary 冠耳獸.
+- They may state that `something is wrong` with the local situation, but they may not identify what frightened / destabilized the creature.
+- They do not infer that reverse-flowing water caused the behavior, that a Star Road caused it, or that magic / another actor is responsible.
+- The first solo specimen and this specimen remain different individuals.
+- Long-term fate, ecology and any later explanation remain Gate 5 / later-story questions.
+
+### GD-107 — Post-Battle Field-Leader Tutorial Presentation
+
+Status: **LOCKED**
+
+Decision: **Immediately after the first shared battle and the creature's departure, the player receives one short guided field-leader demonstration in the now-safe convergence area.**
+
+Tutorial sequence:
+
+1. Yohani is shown first as the current leader and the UI identifies his leader theme as **Protection / Guardian**.
+2. The player is prompted once to switch the field leader to Sani.
+3. The UI identifies Sani's leader theme as **Insight**.
+4. After this single required demonstration, normal control is restored and the player may keep Sani or switch back to Yohani.
+
+Boundary:
+
+- The tutorial teaches `leader choice changes the active passive benefit`; it does not lock the numerical or mechanical expression of either buff.
+- Exact button, menu layout, icon, animation and text wording remain Gate 7 / implementation details.
+- Neither protagonist is presented as the permanently canonical leader.
+
+### GD-108 — Opening Sequence Immediate Next Objective
+
+Status: **LOCKED**
+
+Decision: **After the leader tutorial, Yohani and Sani decide to return together to a familiar village gathering / authority point and report the two reverse-flow observations plus the distressed 冠耳獸 encounter.**
+
+Boundary:
+
+- The objective is simple and explicit: `go back to the village and tell someone responsible what happened`.
+- Exact adult / elder / official identity, village government, building and dialogue remain OPEN until later content / world decisions.
+- The siblings report observations, not a guessed explanation.
+- Gate 6 may use this return as the handoff into the broader Vertical Slice route / story objective.
+
+### GD-109 — Gate 4 Protagonist & Opening Closure Audit
+
+Status: **LOCKED — GATE 4 CLOSED**
+
+Audit conclusion:
+
+Gate 4 now contains a sufficient authored baseline for the protagonists and opening sequence:
+
+- Yohani begins with one ordinary completed village delivery errand.
+- The first anomaly is clear reverse-flowing water in the village channel, verified through ordinary visual evidence.
+- Yohani's first formal battle is a solo fight against one normally territorial familiar 冠耳獸 with a clear warning / controlled approach presentation.
+- Sani receives one short playable non-combat segment and independently verifies matching reverse flow in a nearby natural stream through a leaf-current test.
+- The siblings converge, explicitly connect the two observations without explaining the cause, and immediately face a different panicked specimen of the same species.
+- The shared encounter uses readable field panic, a short uncontrolled rush and direct-contact battle transition.
+- The creature survives the authored aftermath and flees; the siblings recognize abnormal behavior without assigning causality.
+- Field-leader switching / leader themes are introduced immediately afterward through one guided Yohani-to-Sani demonstration.
+- The opening's next objective is to return together and report the observations to a familiar village authority / gathering point.
+- The opening monster's visual baseline and common name are sufficiently defined for later content and production work.
+
+Non-blocking details intentionally remain OPEN / DEFERRED rather than preventing Gate 4 closure, including:
+
+- protagonist exact ages, age gap, biological/adoptive history, household and wider family history;
+- village name, exact geography, political affiliation, architecture, population and exact NPC roster;
+- exact hydrological relationship between the village channel and nearby stream;
+- exact anomaly cause, ontology, Star Road / magic / monster relationship and ancient-civilization explanation — these belong to Gate 5;
+- 冠耳獸 taxonomy, ecology, social grouping, origin and any broader anomaly relationship — Gate 5 / later worldbuilding;
+- exact protagonist stats, equipment, skills, magic, special commands and leader-buff formulas — later system / content decisions;
+- exact battle numbers, enemy stats / AI, Run availability, tutorial command restrictions and balance tuning;
+- exact map coordinates, pixel counts, animation frame counts, collision thresholds, UI controls, final palette values and asset export details — Gate 6 / Gate 7 / implementation;
+- final dialogue wording and optional NPC conversations, provided they preserve the locked information boundaries above.
+
+Gate status after GD-109:
+
+- Gate 1: **CLOSED**
+- Gate 2: **CLOSED**
+- Gate 3: **CLOSED**
+- Gate 4: **CLOSED**
+- Gate 5: **OPEN / NOT YET AUTHORIZED**
+- Gate 6: **OPEN / NOT YET AUTHORIZED**
+- Gate 7: **OPEN / NOT YET AUTHORIZED**
+
+**Implementation authorization remains NOT GRANTED.** No work may declare `JRPG Development Baseline v1.0 — IMPLEMENTATION READY` until Gates 5 through 7 are resolved and reviewed. C01 Visual Upgrade v0.2 remains a separate implementation line and is not modified by GD-094 through GD-109.

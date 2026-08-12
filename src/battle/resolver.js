@@ -45,6 +45,11 @@ export function resolveRound(currentGameState) {
   let rng = b.rngState;
   const events = [];
 
+  // 護援 (Guard Aid): resolve which ally is guarded for this round.
+  // The guard is set from the command phase; activeGuard.targetId is the protected ally.
+  // It provides damage reduction to the guarded ally on qualifying enemy actions this round.
+  const GUARD_AID_REDUCTION = 0.5;  // 50% damage reduction
+
   // Collect enemy commands before resolving (AI sees pre-round state)
   const enemyCmds = b.enemies.map((_, i) => {
     const { command, rngState: next } = selectEnemyCommand(i, b, rng);
@@ -76,6 +81,7 @@ export function resolveRound(currentGameState) {
 
       } else if (cmd.type === COMMAND_TYPES.ABILITY) {
         if (cmd.abilityId === ABILITY_IDS.GUARD_AID) {
+          // 護援: set active guard for this round — damage reduction applied during enemy action window
           const targetId = b.partyIds[cmd.targetIdx];
           b.activeGuard = { targetId };
           events.push({ kind: 'guard-aid', actorId: id, targetId });
@@ -83,6 +89,10 @@ export function resolveRound(currentGameState) {
         } else if (cmd.abilityId === ABILITY_IDS.STAR_FLAME) {
           const enemy = b.enemies[cmd.targetIdx];
           if (!enemy || enemy.hp <= 0) continue;
+          // Deduct MP before resolving
+          const mpCost = 3;
+          if (member.mp < mpCost) continue;
+          member.mp -= mpCost;
           rng = lcgNext(rng);
           const damage = Math.max(1, 6 + (member.level - 1) * 2 + lcgVariance(rng, 2));
           enemy.hp = Math.max(0, enemy.hp - damage);
@@ -90,6 +100,9 @@ export function resolveRound(currentGameState) {
           if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
 
         } else if (cmd.abilityId === ABILITY_IDS.MINOR_HEAL) {
+          const mpCost = 4;
+          if (member.mp < mpCost) continue;
+          member.mp -= mpCost;
           const targetId = b.partyIds[cmd.targetIdx];
           const target = state.party.members[targetId];
           const healAmt = 8 + (member.level - 1) * 2;
@@ -108,16 +121,7 @@ export function resolveRound(currentGameState) {
       const stats = ENEMY_STATS[b.enemyIds[enemyIdx]];
 
       if (cmd.type === COMMAND_TYPES.ATTACK) {
-        let targetId = b.partyIds[cmd.targetIdx];
-
-        // 護援 intercept: redirect to Yohani when guarded ally is targeted
-        if (b.activeGuard?.targetId === targetId) {
-          const guarderId = CHARACTER_IDS.YOHANI;
-          events.push({ kind: 'guard-intercept', guarderId, originalTargetId: targetId });
-          targetId = guarderId;
-          b.activeGuard = null;
-        }
-
+        const targetId = b.partyIds[cmd.targetIdx];
         const target = state.party.members[targetId];
         if (!target || target.hp <= 0) continue;
 
@@ -129,14 +133,21 @@ export function resolveRound(currentGameState) {
           damage = Math.ceil(damage / 2);
         }
 
-        // Yohani leader first-round protection (random encounters only)
+        // 護援 intercept: if the targeted ally is guarded, apply damage reduction
+        if (b.activeGuard?.targetId === targetId) {
+          const originalDamage = damage;
+          damage = Math.max(1, Math.floor(damage * GUARD_AID_REDUCTION));
+          events.push({ kind: 'guard-intercept', guarderId: CHARACTER_IDS.YOHANI, originalTargetId: targetId, originalDamage, reducedDamage: damage });
+          b.activeGuard = null;
+        }
+
+        // Yohani leader effect (random encounters only, round 1, from battle-entry snapshot)
+        // P0-03: round-1 incoming damage reduction — read from battle-entry snapshot, not live field
         if (b.context === 'random' && b.round === 1 && !b.leaderEffectUsed
-            && state.field.leaderId === CHARACTER_IDS.YOHANI) {
-          if (target.hp - damage <= 0) {
-            damage = Math.max(0, target.hp - 1);
-            b.leaderEffectUsed = true;
-            events.push({ kind: 'yohani-protection', targetId });
-          }
+            && b.snapshotLeaderId === CHARACTER_IDS.YOHANI && targetId === CHARACTER_IDS.YOHANI) {
+          damage = Math.max(1, Math.ceil(damage * 0.5));
+          b.leaderEffectUsed = true;
+          events.push({ kind: 'yohani-protection', targetId });
         }
 
         target.hp = Math.max(0, target.hp - damage);

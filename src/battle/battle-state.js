@@ -1,8 +1,9 @@
 import { ENCOUNTERS } from '../content/encounters.js';
 import { ENEMY_STATS } from '../content/enemies.js';
+import { CHARACTER_IDS } from '../content/ids.js';
 import { makeRng } from './rng.js';
 
-export function createBattleEntry(encounterId, seed = Date.now()) {
+export function createBattleEntry(encounterId, seed = Date.now(), fieldState) {
   const encounter = ENCOUNTERS[encounterId];
   if (!encounter) throw new RangeError(`Unknown encounter: ${encounterId}`);
 
@@ -22,5 +23,8 @@ export function createBattleEntry(encounterId, seed = Date.now()) {
     rngState: makeRng(seed),
     activeGuard: null,
     leaderEffectUsed: false,
+    // Snapshots taken at battle entry — never read live field state during combat
+    snapshotLeaderId: fieldState?.leaderId ?? CHARACTER_IDS.YOHANI,
+    snapshotRevivalPoint: fieldState?.revivalPoint ?? null,
   };
 }

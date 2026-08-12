@@ -22,6 +22,6 @@ export const ITEM_IDS = Object.freeze({
 
 export const ABILITY_IDS = Object.freeze({
   GUARD_AID: 'guard-aid',    // 護援 — Yohani
-  STAR_FLAME: 'star-flame',  // 星火 — Yohani
+  STAR_FLAME: 'star-flame',  // 星火 — Sani
   MINOR_HEAL: 'minor-heal',  // 微癒 — Sani
 });

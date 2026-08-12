@@ -52,6 +52,16 @@ test('createBattleEntry throws RangeError for unknown encounterId', () => {
   assert.throws(() => createBattleEntry('nonexistent-encounter'), RangeError);
 });
 
+test('createBattleEntry records snapshotLeaderId from fieldState', () => {
+  const b = createBattleEntry(SOLO_ENC, 1, { leaderId: CHARACTER_IDS.YOHANI });
+  assert.equal(b.snapshotLeaderId, CHARACTER_IDS.YOHANI);
+});
+
+test('createBattleEntry defaults snapshotLeaderId to Yohani when fieldState absent', () => {
+  const b = createBattleEntry(SOLO_ENC, 1);
+  assert.equal(b.snapshotLeaderId, CHARACTER_IDS.YOHANI);
+});
+
 // ── validateGameState — battle schema ────────────────────────────────────────
 
 test('validateGameState accepts valid solo battle state', () => {
@@ -83,6 +93,19 @@ test('validateGameState rejects authored-solo with two-member partyIds', () => {
   assert.equal(validateGameState(state), null);
 });
 
+test('validateGameState accepts mode=pause with battle present (battle-pause)', () => {
+  const state = makeSoloState();
+  state.mode = 'pause';
+  state.pause = { resumeMode: 'battle' };
+  assert.ok(validateGameState(state));
+});
+
+test('validateGameState rejects mode=field with battle present', () => {
+  const state = makeSoloState();
+  state.mode = 'field';
+  assert.equal(validateGameState(state), null);
+});
+
 // ── validateCommand ──────────────────────────────────────────────────────────
 
 test('validateCommand accepts attack with targetIdx', () => {
@@ -108,9 +131,31 @@ test('validateCommand rejects guard-aid for Sani', () => {
   assert.equal(validateCommand(cmd, CHARACTER_IDS.SANI), false);
 });
 
+test('validateCommand accepts star-flame for Sani with targetIdx', () => {
+  const cmd = { type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.STAR_FLAME, targetIdx: 0 };
+  assert.ok(validateCommand(cmd, CHARACTER_IDS.SANI));
+});
+
+test('validateCommand rejects star-flame for Yohani', () => {
+  const cmd = { type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.STAR_FLAME, targetIdx: 0 };
+  assert.equal(validateCommand(cmd, CHARACTER_IDS.YOHANI), false);
+});
+
 test('validateCommand accepts minor-heal for Sani with targetIdx', () => {
   const cmd = { type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.MINOR_HEAL, targetIdx: 0 };
   assert.ok(validateCommand(cmd, CHARACTER_IDS.SANI));
+});
+
+test('validateCommand accepts run in random context', () => {
+  assert.ok(validateCommand({ type: COMMAND_TYPES.RUN }, CHARACTER_IDS.YOHANI, 'random'));
+});
+
+test('validateCommand rejects run in authored-solo context', () => {
+  assert.equal(validateCommand({ type: COMMAND_TYPES.RUN }, CHARACTER_IDS.YOHANI, 'authored-solo'), false);
+});
+
+test('validateCommand rejects run in authored-shared context', () => {
+  assert.equal(validateCommand({ type: COMMAND_TYPES.RUN }, CHARACTER_IDS.SANI, 'authored-shared'), false);
 });
 
 // ── resolveRound — phase/precondition guards ─────────────────────────────────
@@ -189,12 +234,13 @@ test('defeat applies 25% money loss and restores HP/MP to full', () => {
   assert.equal(r.nextGameState.party.members[CHARACTER_IDS.YOHANI].mp, 4);   // maxMp at level 1
 });
 
-// ── resolveRound — guard-aid interception ────────────────────────────────────
+// ── resolveRound — guard-aid damage reduction ────────────────────────────────
 
-test('guard-aid redirects enemy attack away from guarded ally', () => {
+test('guard-aid reduces damage on guarded ally, does not redirect hit to Yohani', () => {
   // With seed=1 the crown-ear-beast targets Sani (index 1); Yohani guards Sani
   const state = makeSharedState(1);
-  const saniHpBefore = state.party.members[CHARACTER_IDS.SANI].hp;
+  const yohaniHpBefore = state.party.members[CHARACTER_IDS.YOHANI].hp;  // 24
+  const saniHpBefore = state.party.members[CHARACTER_IDS.SANI].hp;       // 18
   state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = {
     type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.GUARD_AID, targetIdx: 1,
   };
@@ -202,9 +248,40 @@ test('guard-aid redirects enemy attack away from guarded ally', () => {
   const r = resolveRound(state);
   assert.equal(r.ok, true);
   const events = r.roundResult.events;
+  // guard-intercept event emitted with originalTargetId = Sani
   assert.ok(events.some((e) => e.kind === 'guard-intercept' && e.originalTargetId === CHARACTER_IDS.SANI));
-  // Sani took no direct damage — her HP is unchanged
-  assert.equal(r.nextGameState.party.members[CHARACTER_IDS.SANI].hp, saniHpBefore);
-  // Yohani absorbed the hit — HP decreased
-  assert.ok(r.nextGameState.party.members[CHARACTER_IDS.YOHANI].hp < 24);
+  // Sani received reduced damage — HP decreased but Yohani did NOT absorb the hit
+  assert.ok(r.nextGameState.party.members[CHARACTER_IDS.SANI].hp < saniHpBefore);
+  assert.equal(r.nextGameState.party.members[CHARACTER_IDS.YOHANI].hp, yohaniHpBefore);
+});
+
+// ── resolveRound — ability MP cost ───────────────────────────────────────────
+
+test('star-flame deducts MP from Sani', () => {
+  const state = makeSharedState(42);
+  state.party.members[CHARACTER_IDS.SANI].mp = 12;
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
+  state.battle.pendingCommands[CHARACTER_IDS.SANI] = {
+    type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.STAR_FLAME, targetIdx: 0,
+  };
+  const r = resolveRound(state);
+  assert.equal(r.ok, true);
+  // Star Flame costs 3 MP
+  assert.equal(r.nextGameState.party.members[CHARACTER_IDS.SANI].mp, 9);
+});
+
+test('minor-heal deducts MP from Sani and heals target', () => {
+  const state = makeSharedState(42);
+  state.party.members[CHARACTER_IDS.SANI].mp = 12;
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;  // heavily damaged; heal=8 brings to 18, well above 10
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = DEFEND;
+  state.battle.pendingCommands[CHARACTER_IDS.SANI] = {
+    type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.MINOR_HEAL, targetIdx: 0,
+  };
+  const r = resolveRound(state);
+  assert.equal(r.ok, true);
+  // Minor Heal costs 4 MP
+  assert.equal(r.nextGameState.party.members[CHARACTER_IDS.SANI].mp, 8);
+  // Yohani healed from 10 — even after beast attacks (max 2 dmg to defender), hp is well above 10
+  assert.ok(r.nextGameState.party.members[CHARACTER_IDS.YOHANI].hp > 10);
 });

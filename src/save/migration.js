@@ -22,9 +22,10 @@ function migrateV1ToV2(raw) {
   // pause: new in v2
   if (!('pause' in s)) s.pause = null;
 
-  // battleCarry slots: v1 had plain arrays; v2 still allows empty arrays — no change needed
-  // battle: v1 only used m2Stub battles; drop any in-progress battle safely
+  // battle: v1 only ever stored m2Stub battles (m2Stub: true flag).
+  // Drop confirmed stubs silently. Any other in-progress battle is unexpected — refuse migration.
   if (s.battle !== null) {
+    if (!s.battle?.m2Stub) return null;  // unknown v1 battle — refuse
     s.battle = null;
     if (s.mode === 'battle') s.mode = 'field';
   }

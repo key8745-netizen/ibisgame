@@ -1,0 +1,102 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #08101d;
+  color: #f3f6fb;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: #08101d; }
+button { font: inherit; }
+
+body {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+}
+
+.app-shell { width: min(100%, 980px); display: grid; gap: 10px; }
+.topbar, .message-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #121d2d;
+  border: 1px solid #2a3b55;
+  border-radius: 10px;
+}
+.build-tag { margin-inline-start: 8px; opacity: .72; font-size: .8rem; }
+.text-button, .touch-controls button {
+  color: inherit;
+  background: #1a2940;
+  border: 1px solid #405879;
+  border-radius: 8px;
+  min-width: 44px;
+  min-height: 44px;
+}
+.text-button:focus-visible, .touch-controls button:focus-visible { outline: 3px solid #f4d06f; outline-offset: 2px; }
+
+.game-frame {
+  position: relative;
+  min-height: 270px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #05080f;
+  border: 1px solid #2a3b55;
+  border-radius: 12px;
+}
+
+#gameCanvas {
+  display: block;
+  width: 480px;
+  height: 270px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  touch-action: none;
+}
+
+.status-card {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 8px;
+  padding: 5px 8px;
+  background: rgb(5 10 18 / .84);
+  border: 1px solid rgb(255 255 255 / .18);
+  border-radius: 6px;
+  font-size: .78rem;
+  pointer-events: none;
+}
+.message-panel { justify-content: flex-start; min-height: 50px; }
+.message-panel p { margin: 0; }
+
+.touch-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  user-select: none;
+  touch-action: none;
+}
+.dpad, .action-pad { display: grid; grid-template-columns: repeat(2, minmax(56px, 1fr)); gap: 8px; }
+.touch-controls button.is-pressed, .touch-controls button:active { transform: translateY(1px); background: #314768; }
+.touch-controls button.primary { font-weight: 700; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 760px) {
+  .touch-controls { opacity: .42; }
+}
+
+@media (max-width: 560px) {
+  body { place-items: start center; }
+  .topbar { align-items: flex-start; }
+  .build-tag { display: block; margin: 2px 0 0; }
+  .touch-controls { gap: 10px; }
+  .dpad, .action-pad { grid-template-columns: repeat(2, minmax(44px, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}

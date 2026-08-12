@@ -1,19 +1,22 @@
-import { CHARACTER_IDS, MAP_IDS } from '../content/ids.js';
+import { CHARACTER_IDS, ITEM_IDS, MAP_IDS } from '../content/ids.js';
+import { OPENING_PHASE, OPENING_PHASES } from '../content/opening.js';
 import { isGameMode } from './modes.js';
 
 export const SAVE_VERSION = 1;
 const KNOWN_CHARACTERS = new Set(Object.values(CHARACTER_IDS));
 const KNOWN_MAPS = new Set(Object.values(MAP_IDS));
+const KNOWN_OPENING_PHASES = new Set(OPENING_PHASES);
 
 export function createInitialGameState() {
   return {
     version: SAVE_VERSION,
     mode: 'title',
-    sceneId: 'foundation',
+    sceneId: 'opening',
     field: {
       mapId: MAP_IDS.XISHI_VILLAGE,
-      x: 240,
-      y: 150,
+      x: 148,
+      y: 356,
+      controlledId: CHARACTER_IDS.YOHANI,
       leaderId: CHARACTER_IDS.YOHANI,
     },
     party: {
@@ -25,8 +28,16 @@ export function createInitialGameState() {
       },
     },
     economy: { money: 0 },
-    inventory: { shared: {}, battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] } },
-    progression: { flags: {} },
+    inventory: {
+      shared: { [ITEM_IDS.LUNCH_PARCEL]: 1 },
+      battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+    },
+    progression: {
+      openingPhase: OPENING_PHASE.DELIVERY,
+      leaderUnlocked: false,
+      flags: {},
+    },
+    battle: null,
   };
 }
 
@@ -37,6 +48,7 @@ export function validateGameState(candidate) {
   if (!isPlainObject(candidate) || candidate.version !== SAVE_VERSION || !isGameMode(candidate.mode)) return null;
   if (!isPlainObject(candidate.field) || !KNOWN_MAPS.has(candidate.field.mapId)) return null;
   if (!Number.isFinite(candidate.field.x) || !Number.isFinite(candidate.field.y)) return null;
+  if (!KNOWN_CHARACTERS.has(candidate.field.controlledId)) return null;
   if (!isPlainObject(candidate.party) || !Array.isArray(candidate.party.activeIds) || !Array.isArray(candidate.party.reserveIds)) return null;
   if (candidate.party.activeIds.length < 1 || candidate.party.activeIds.length > 4) return null;
 
@@ -56,7 +68,15 @@ export function validateGameState(candidate) {
   }
 
   if (!isPlainObject(candidate.economy) || !isFiniteInt(candidate.economy.money) || candidate.economy.money < 0) return null;
-  if (!isPlainObject(candidate.inventory) || !isPlainObject(candidate.progression)) return null;
+  if (!isPlainObject(candidate.inventory) || !isPlainObject(candidate.inventory.shared)) return null;
+  if (!isPlainObject(candidate.progression) || !isPlainObject(candidate.progression.flags)) return null;
+  if (!KNOWN_OPENING_PHASES.has(candidate.progression.openingPhase)) return null;
+  if (typeof candidate.progression.leaderUnlocked !== 'boolean') return null;
+
+  if (candidate.battle !== null) {
+    if (!isPlainObject(candidate.battle) || typeof candidate.battle.encounterId !== 'string') return null;
+    if (!Array.isArray(candidate.battle.enemyIds) || candidate.battle.enemyIds.length < 1) return null;
+  }
 
   return structuredClone(candidate);
 }

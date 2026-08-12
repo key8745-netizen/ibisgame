@@ -59,7 +59,7 @@ Scope: JRPG direction for work after C01 Visual Upgrade v0.2
 - Opening anomaly water-feature allocation: **Yohani = village water channel; Sani = nearby natural stream** — Yohani directly witnesses reverse flow in an artificial village waterway, while Sani independently confirms the same reverse-flow behavior in a natural stream near the village; exact positions and whether both features belong to one water system remain OPEN.
 - Opening anomaly temporal relationship: **overlapping manifestations** — the village-water-channel reverse flow and nearby-natural-stream reverse flow occur within an overlapping time window; exact onset, duration and stopping behavior remain OPEN, and overlap does not imply hydrological connection or causal propagation.
 - Opening clue relationship: **different clues from the same underlying anomaly** — Yohani and Sani independently encounter distinct evidence or perspectives that point to the same abnormal incident; their eventual convergence lets the player combine those pieces into one shared problem.
-- Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse-flow behavior in the nearby stream, establishing that the anomaly is not an isolated accident; exact evidence details and convergence dialogue remain OPEN.
+- Opening clue allocation: **Yohani witnesses the event; Sani establishes the repeated pattern** — Yohani directly encounters the reverse-flow anomaly and its first danger escalation, while Sani independently confirms matching reverse flow in the nearby stream, establishing that the anomaly is not an isolated accident; exact evidence details and convergence dialogue remain OPEN.
 - First battle timing: **Yohani fights the first real battle solo before the playable Sani segment and before sibling convergence**; the opening anomaly escalates enough during Yohani's line to introduce basic single-character battle grammar before later party combat.
 - First solo battle enemy familiarity: **familiar ordinary local monster** — Yohani's first formal battle uses a monster type already known to exist around the village / nearby area; the battle does not by itself establish that the monster is new, transformed or caused by the reverse-flow anomaly, and the exact species and causal relationship remain OPEN.
 - First solo battle enemy count: **1 enemy** — Yohani's first formal battle contains one familiar ordinary local monster, so the first combat lesson does not require multi-target selection; exact species, stats and behavior remain OPEN.
@@ -3160,3 +3160,192 @@ Gate status after GD-115:
 - Gate 7: **OPEN / NOT YET AUTHORIZED**
 
 **Implementation authorization remains NOT GRANTED.** `JRPG Development Baseline v1.0 — IMPLEMENTATION READY` may not be declared until Gates 6 and 7 are resolved and reviewed. C01 Visual Upgrade v0.2 remains a separate implementation line and receives no retroactive Star-Road / magic reinterpretation from GD-110 through GD-115.
+
+## Gate 6 Authorized Vertical Slice Addendum — GD-116 through GD-122
+
+This addendum records the player's explicit authorization to complete the Vertical Slice content baseline. The slice continues to use the **classic SFC-era Dragon Quest V adventure grammar as a reference for pacing, readable fantasy structure, preparation pressure and local-to-larger-world escalation**, while all locations, enemies, scenes, dialogue, lore expression and assets remain original to 《未完成的星路》. This authorization is limited to Gate 6 content. It does **not** authorize Gate 7 technical decisions or implementation work.
+
+### GD-116 — Vertical Slice Length, Party and Completion Shape
+
+Status: **LOCKED**
+
+Decision: **The Vertical Slice is one self-contained first-adventure chapter targeting approximately 60–75 minutes for a normal first clear, with Yohani and Sani as the only recruited / active party members throughout the slice.**
+
+Required completion flow:
+
+1. `溪石村` ordinary-life opening and GD-100 through GD-109 anomaly / tutorial sequence.
+2. Return to the village and report the reverse-flow and panicked 冠耳獸 observations.
+3. One clear preparation beat using village recovery / shopping / save services.
+4. Leave the village onto a compact walkable overworld connector.
+5. Traverse the outdoor route `舊石坡` with ordinary random encounters and optional treasure.
+6. Enter the small story dungeon `古石丘`, discover the forgotten ancient structure and reach the local 星標 chamber.
+7. Defeat one authored boss / guardian event and perform the local stabilization action.
+8. Return to 溪石村, confirm that the immediate disturbance has subsided, receive a modest reward and obtain the next-world hook.
+9. End the slice before travel to the next major settlement begins.
+
+Scope boundary:
+
+- Normal first-clear target is approximately 60–75 minutes; different reading speed, optional exploration and battle outcomes may move an individual run outside that band, but the slice must not be padded into a multi-hour chapter.
+- No third playable / recruited party member is introduced in this slice. The maximum-party-size system remains a future-game capability rather than a slice-content requirement.
+- No monster recruitment, casino / minigame, job system, large side-quest chain, world-scale vehicle or second town is part of this slice.
+- The slice must feel like a complete local adventure with a beginning, escalation, dungeon, boss and return, while clearly ending with a larger unresolved journey ahead.
+
+### GD-117 — Starting Village Content Package: 溪石村
+
+Status: **LOCKED**
+
+Decision: **The starting settlement is player-facing `溪石村`, a compact familiar village that supplies the complete preparation / recovery loop required by the slice without becoming a large hub.**
+
+Village package:
+
+- The required opening errand, water channel and initial 冠耳獸 encounter occur inside or immediately at the edge of 溪石村 under the Gate 4 decisions.
+- The village contains one central gathering / authority point, one compact general shop that covers basic consumables plus the slice's first equipment choices, one recovery / inn-equivalent service, and one designated formal-save interaction.
+- The slice requires four core speaking functions: the errand giver, the water-channel-side recipient, the village representative who receives the siblings' report, and an older route-keeper / local-history keeper who remembers old stone remains above `舊石坡`. One NPC may perform more than one function if later production benefits from a smaller cast.
+- A small set of optional villagers may provide short ordinary-life and post-resolution reactions, but exhaustive NPC conversation is not mandatory progression.
+- After GD-108, the siblings report what they actually observed. The village does not immediately identify Star Roads. The older route-keeper recalls that unusual old carved stones exist beyond 舊石坡 and that the place has been avoided / neglected for years, giving the party one plausible next location to inspect without explaining its true nature.
+- Before leaving, the player is explicitly allowed to heal, save, buy consumables, compare limited equipment upgrades and prepare battle-carry items.
+
+Boundary:
+
+- Detailed village politics, religion, kingdom affiliation, full culture, complete household history and full population remain outside this slice.
+- The exact prices, item statistics, equipment-slot formulas and save-system implementation remain Gate 7 / production tuning details.
+- 溪石村 is an original location name and carries no imported Dragon Quest setting meaning.
+
+### GD-118 — Overworld Connector, 舊石坡 Route and Ordinary Enemy Package
+
+Status: **LOCKED**
+
+Decision: **The slice validates classic travel grammar through a compact walkable overworld connector followed by one outdoor route, `舊石坡`, with ordinary random encounters, simple treasure detours and a clear return path to the village.**
+
+Travel / route package:
+
+- Leaving 溪石村 reveals a small overworld-scale field that clearly shows the village, the approach toward 舊石坡 and the `古石丘` destination area. It is a real walkable connector, not a menu-based stage select.
+- Ordinary random encounters become the baseline travel pressure after the opening's authored visible encounters.
+- The outdoor regular-enemy roster is **冠耳獸 / 苔甲蟲 / 風鈴鳥**. These are ordinary local monsters, not anomaly-created forms.
+- `冠耳獸` supplies the already-learned familiar balanced threat; `苔甲蟲` supplies a slower, sturdier defensive enemy read; `風鈴鳥` supplies a faster, lighter enemy read. Exact stats and attacks remain tuning details.
+- Encounter compositions may now include two enemies, so the route is where ordinary multi-target selection is first exercised after the single-enemy opening tutorials.
+- 舊石坡 contains at least one short optional detour with treasure and one visible environmental clue that the local directional disturbance grows less ordinary nearer 古石丘, without explicitly naming 星路 before the dungeon reveal.
+- The player may retreat back to 溪石村 to recover, shop and prepare before entering or re-entering 古石丘.
+
+Boundary:
+
+- Encounter rate, exact encounter tables, EXP / money yields, sprite assets and numerical difficulty are production / balance details.
+- 苔甲蟲 and 風鈴鳥 require original visual designs; their names and broad combat reads are LOCKED, but Gate 6 does not copy any Dragon Quest monster design or attack set.
+
+### GD-119 — Story Dungeon Package: 古石丘
+
+Status: **LOCKED**
+
+Decision: **The slice's single story dungeon is `古石丘`, a small ancient-fantasy ruin built around the forgotten 星標, designed for roughly 15–20 minutes of normal first-time exploration before the boss / climax.**
+
+Dungeon package:
+
+- First read: weathered stone, roots, shallow seep water, carved lines / stars and occasional old metal inlay. It must read as an ancient fantasy ruin, not a technological facility.
+- The dungeon uses an entrance layer plus two compact interior progression layers / chambers rather than a long maze.
+- Ordinary random encounters continue inside. The dungeon roster may reuse route monsters and adds one ruin-associated ordinary supernatural monster named `石縫靈`. 石縫靈 is not Star-Road-born and is not proof that the ruin is haunted by the ancient civilization; it is simply a creature commonly found in old stone places.
+- The dungeon contains two or three treasure opportunities and one loopback / shortcut that reduces the cost of retreating after meaningful progress.
+- The central required puzzle uses **three rotatable carved direction markers**. The player aligns their visible carved path / flow lines into one continuous route toward the central stone ring. The necessary clue is present in the same local environment; solving it must not require external lore, memorizing a long text or using one specific field leader.
+- Incorrect alignment gives clear local feedback and can be corrected without permanent loss. The puzzle is a one-dungeon authored device, not yet a global Star-Road traversal mechanic.
+- Completing the puzzle opens access to the inner chamber where a damaged / partly buried structure and inscription establish the word **`星標`** as an ancient term / label.
+
+Boundary:
+
+- The dungeon does not explain who created Star Roads, why the global network broke, or why this local segment became unstable now.
+- Exact room coordinates, tile counts, puzzle-input mechanics, chest contents and encounter numbers remain production details.
+- No C01 compass / glow mechanic is repurposed or assigned lore meaning here.
+
+### GD-120 — Boss and Local Stabilization Event
+
+Status: **LOCKED**
+
+Decision: **The Vertical Slice boss is `石環守衛`, an original non-humanoid enchanted stone guardian associated with the ancient 星標 site; defeating it grants access to the damaged marker, after which the siblings perform a simple physical stabilization action that stops the immediate local disturbance.**
+
+Boss package:
+
+- 石環守衛 was constructed by the 星衡文明 as part of protecting / maintaining access to this site; it is not a naturally occurring monster and it did not create the Star Road.
+- Its silhouette / final art must be original and non-humanoid enough to avoid reading as a copied classic golem or another franchise's guardian design.
+- Local instability has caused the guardian to activate defensively. The boss is not possessed by a revealed villain and defeating it does not reveal an antagonist.
+- The fight is a two-character Yohani / Sani test. Its authored behavior must include at least one clearly telegraphed stronger action that makes `Defend` an understandable useful response, plus a rhythm that gives healing / support / magic and ordinary resource preparation meaningful value.
+- The boss must be beatable through normal understanding of the slice's available systems; no hidden elemental trivia, mandatory grinding wall or one-solution gimmick is allowed.
+- After victory, the siblings reach the 星標 chamber. A displaced carved stone segment is visibly out of alignment with the same route / ring motif taught by the dungeon puzzle. Re-seating that segment is an obvious physical action, not a newly invented magical ability.
+- Re-seating the piece does **not repair the global Star Road**. It only steadies the local 星標 relationship enough for the acute directional distortion to subside: nearby water resumes ordinary flow and the immediate creature-disorientation pressure eases.
+
+Reveal boundary:
+
+- The player learns that the local event is genuinely connected to the old 星標 / damaged Star-Road site.
+- The player does not learn why the Star Road is damaged, why it became active now, whether someone caused it, or what the ultimate purpose / origin of Star Roads is.
+- Exact boss HP, damage, AI probabilities, turn counts, animation and combat formulas remain production / Gate 7 tuning details.
+
+### GD-121 — Return, Resolution, Reward and Larger-World Hook
+
+Status: **LOCKED**
+
+Decision: **The slice ends by returning to 溪石村, visibly confirming that the local anomaly has subsided, giving the siblings a modest village reward and one concrete reason to continue toward the wider world.**
+
+Resolution package:
+
+- On the return route / village entry, water is again moving in its ordinary direction and local creatures are no longer shown in the opening's panic state. This confirms a local result without claiming permanent global repair.
+- The siblings report the ruin, the word `星標`, the stone guardian and the change after re-seating the displaced marker segment.
+- They bring back one already-loose non-functional inscription fragment, player-facing key item `刻紋石片`; removing it is not what caused or solved the instability.
+- The older route-keeper recognizes the pattern from an old local tale / copied route record and supplies only the minimum larger-world vocabulary: old records connect structures called `星標` with mysterious old paths called **`星路`**. The keeper does not know the true mechanism or history.
+- The village provides a modest money reward / travel fund and free recovery. Exact amount is balance tuning; the reward must help but not let the player purchase every available upgrade under the locked trade-off economy.
+- Core village NPCs may receive short changed-state dialogue after resolution so the return feels consequential rather than a menu completion screen.
+- The next objective hook is to carry `刻紋石片` and the siblings' observations to a more knowledgeable person in the nearest larger settlement. The Vertical Slice ends before that journey begins, preserving the next-region expansion for later work.
+
+Boundary:
+
+- No third party member joins during the ending.
+- No chosen-one, hereditary key, protagonist-family destiny or special bloodline reveal occurs.
+- No global Star-Road failure cause, antagonist reveal or 星衡文明 fate is disclosed.
+- Exact next-town name, scholar identity and later chapter route remain outside Gate 6.
+
+### GD-122 — Gate 6 Vertical Slice Content Closure Audit
+
+Status: **LOCKED — GATE 6 CLOSED**
+
+Audit conclusion:
+
+Gate 6 now defines one bounded, implementable content loop:
+
+`溪石村 ordinary life / anomaly → opening solo + sibling tutorials → report / prepare → compact overworld → 舊石坡 random-encounter route → 古石丘 ancient-fantasy dungeon → direction-marker puzzle → 石環守衛 boss → 星標 local stabilization → return to 溪石村 → local resolution / travel hook`
+
+The slice validates:
+
+- ordinary village exploration and NPC interaction;
+- formal preparation, recovery, shopping and save ritual presence;
+- Yohani solo battle grammar and Yohani / Sani two-character party grammar;
+- leader switching / leader-theme introduction after the shared opening battle;
+- transition from authored visible event encounters to ordinary random encounter pressure;
+- single-target and multi-target combat;
+- EXP / money / equipment / consumable preparation pressure;
+- a compact walkable overworld connector;
+- one outdoor route with optional treasure / retreat loop;
+- one small story dungeon with random encounters, treasure, a recoverable direction puzzle and shortcut;
+- one authored two-character boss that rewards readable planning, Defend and resource use;
+- one local mystery answer that establishes 星標 / 星路 relevance without solving the wider cosmology;
+- return-to-home world-state change and a clear larger-world hook.
+
+Intentionally still OPEN / production-level rather than Gate-6 blockers:
+
+- exact dialogue wording and optional NPC line count;
+- exact map coordinates, tile dimensions, collision geometry and final room layouts;
+- exact item / equipment names beyond the locked key item `刻紋石片`, exact prices and numerical stats;
+- exact Yohani / Sani starting numbers, spell / skill lists and special commands;
+- exact leader-buff mechanical formulas;
+- exact encounter rates, encounter-table weights, enemy stats / attacks / EXP / money and boss numbers;
+- exact treasure contents and reward amount;
+- final art, animation, VFX, SFX and music;
+- exact autosave / suspend triggers and browser persistence implementation;
+- exact next-town / next-chapter content after the slice ending.
+
+Gate status after GD-122:
+
+- Gate 1: **CLOSED**
+- Gate 2: **CLOSED**
+- Gate 3: **CLOSED**
+- Gate 4: **CLOSED**
+- Gate 5: **CLOSED**
+- Gate 6: **CLOSED**
+- Gate 7: **OPEN / NOT YET AUTHORIZED**
+
+**Implementation authorization remains NOT GRANTED.** `JRPG Development Baseline v1.0 — IMPLEMENTATION READY` may not be declared until Gate 7 Production / Technical Baseline is resolved and reviewed. C01 Visual Upgrade v0.2 remains a separate implementation line and is not modified by GD-116 through GD-122.

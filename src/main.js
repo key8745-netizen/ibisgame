@@ -107,6 +107,7 @@ function update(dt) {
   if (state.mode === 'title' && input.wasPressed(ACTIONS.CONFIRM)) {
     setMode('field', '尤哈尼先完成日常送飯差事。');
   } else if (state.mode === 'battle') {
+    // TEMPORARY M3 INTEGRATION SCAFFOLD — to be replaced in M3-D with full battle UI
     if (input.wasPressed(ACTIONS.CONFIRM) && resolveM2BattleStub(state)) {
       const phase = state.progression.openingPhase;
       message = phase === OPENING_PHASE.SANI_STREAM

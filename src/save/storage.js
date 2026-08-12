@@ -1,4 +1,5 @@
 import { validateGameState } from '../state/game-state.js';
+import { tryMigrate } from './migration.js';
 
 export const SAVE_NAMESPACE = 'ibisgame-jrpg-v1';
 export const MANUAL_SLOT_COUNT = 3;
@@ -37,7 +38,12 @@ export class SaveStore {
     try {
       const raw = this.storage.getItem(key);
       if (!raw) return null;
-      return validateGameState(JSON.parse(raw));
+      const parsed = JSON.parse(raw);
+      const direct = validateGameState(parsed);
+      if (direct) return direct;
+      const migrated = tryMigrate(parsed);
+      if (!migrated) return null;
+      return validateGameState(migrated);
     } catch {
       return null;
     }

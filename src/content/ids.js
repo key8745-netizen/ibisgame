@@ -19,3 +19,9 @@ export const ITEM_IDS = Object.freeze({
   LUNCH_PARCEL: 'lunch-parcel',
   INSCRIBED_STONE_FRAGMENT: 'inscribed-stone-fragment',
 });
+
+export const ABILITY_IDS = Object.freeze({
+  GUARD_AID: 'guard-aid',    // 護援 — Yohani
+  STAR_FLAME: 'star-flame',  // 星火 — Yohani
+  MINOR_HEAL: 'minor-heal',  // 微癒 — Sani
+});

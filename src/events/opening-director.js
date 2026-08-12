@@ -1,5 +1,6 @@
 import { CHARACTER_IDS, ITEM_IDS } from '../content/ids.js';
 import { OPENING_ENCOUNTERS, OPENING_PHASE } from '../content/opening.js';
+import { createBattleEntry } from '../battle/battle-state.js';
 
 export const OPENING_EVENT = Object.freeze({
   DELIVERED: 'delivered',
@@ -22,7 +23,7 @@ function setFieldActor(state, id, x, y) {
 
 function beginBattle(state, encounter) {
   state.mode = 'battle';
-  state.battle = { encounterId: encounter.id, enemyIds: [...encounter.enemyIds], m2Stub: true };
+  state.battle = createBattleEntry(encounter.id);
 }
 
 export function applyOpeningEvent(state, event) {
@@ -105,8 +106,11 @@ export function switchLeader(state) {
   return true;
 }
 
+// Test utility: fast-forward an authored opening encounter to its resolved state.
+// Used by the M3 integration scaffold in main.js and the opening event graph tests.
+// M3-D will replace the main.js call-site with the full resolveRound → battle-UI flow.
 export function resolveM2BattleStub(state) {
-  if (!state.battle?.m2Stub) return false;
+  if (!state.battle) return false;
   if (state.battle.encounterId === OPENING_ENCOUNTERS.SOLO.id) {
     return applyOpeningEvent(state, OPENING_EVENT.SOLO_BATTLE_RESOLVED);
   }

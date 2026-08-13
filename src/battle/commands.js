@@ -1,4 +1,5 @@
 import { ABILITY_IDS, CHARACTER_IDS } from '../content/ids.js';
+import { ITEM_DEFS } from '../content/items.js';
 
 export const COMMAND_TYPES = Object.freeze({
   ATTACK: 'attack',
@@ -85,4 +86,24 @@ export function validateCommand(command, characterId, battleCtx) {
     default:
       return false;
   }
+}
+
+// Authoritative ITEM semantic validator — shared by submitCommand and validateBattle.
+// Called AFTER validateCommand (structural) passes. Checks that the carry slot exists,
+// the item is battle-eligible, and the target (for 'ally'-targeted items) is alive.
+export function validateItemSemantic(command, charId, inventory, partyIds, partyMembers) {
+  const carry = inventory?.battleCarry?.[charId] ?? [];
+  const slot = carry[command.slotIdx];
+  if (!slot || slot.uses <= 0) return false;
+  const itemDef = ITEM_DEFS[slot.itemId];
+  if (!itemDef || itemDef.battleTarget === null) return false;
+  if (itemDef.battleTarget === 'ally') {
+    const tIdx = command.targetIdx;
+    if (!Number.isInteger(tIdx) || tIdx < 0) return false;
+    const targetId = partyIds?.[tIdx];
+    if (!targetId) return false;
+    const targetMember = partyMembers?.[targetId];
+    if (!targetMember || targetMember.hp <= 0) return false;
+  }
+  return true;
 }

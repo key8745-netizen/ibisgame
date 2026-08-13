@@ -1,4 +1,4 @@
-import { EQUIPMENT_DEFS } from '../content/equipment-defs.js';
+import { EQUIPMENT_DEFS, EQUIPMENT_SLOTS } from '../content/equipment-defs.js';
 
 // Sum all attackBonus values across a character's equipped items.
 export function getAttackBonus(equipment, charId) {
@@ -22,11 +22,29 @@ export function getDefenseBonus(equipment, charId) {
   return bonus;
 }
 
-// Return a new equipment object with slot updated to itemId (pass null to unequip).
-// Does not validate slot name or item ID — caller responsibility.
-export function setEquipmentSlot(equipment, charId, slot, itemId) {
+// Equip itemId on charId. Validates: character known, item known, item slot valid for character,
+// item compatible with character. Returns { ok: true, equipment } or { ok: false, reason }.
+export function equipItem(equipment, charId, itemId) {
+  const charSlots = EQUIPMENT_SLOTS[charId];
+  if (!charSlots) return { ok: false, reason: 'unknown-character' };
+  const def = EQUIPMENT_DEFS[itemId];
+  if (!def) return { ok: false, reason: 'unknown-item' };
+  if (!charSlots.includes(def.slot)) return { ok: false, reason: 'incompatible-slot' };
+  if (!def.compatibleCharacterIds.includes(charId)) return { ok: false, reason: 'incompatible-character' };
   return {
-    ...equipment,
-    [charId]: { ...equipment[charId], [slot]: itemId },
+    ok: true,
+    equipment: { ...equipment, [charId]: { ...equipment[charId], [def.slot]: itemId } },
+  };
+}
+
+// Unequip the item in slot on charId. Validates: character known, slot valid for character.
+// Returns { ok: true, equipment } or { ok: false, reason }.
+export function unequipItem(equipment, charId, slot) {
+  const charSlots = EQUIPMENT_SLOTS[charId];
+  if (!charSlots) return { ok: false, reason: 'unknown-character' };
+  if (!charSlots.includes(slot)) return { ok: false, reason: 'invalid-slot' };
+  return {
+    ok: true,
+    equipment: { ...equipment, [charId]: { ...equipment[charId], [slot]: null } },
   };
 }

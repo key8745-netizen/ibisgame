@@ -18,6 +18,7 @@ export const ENEMY_IDS = Object.freeze({
 export const ITEM_IDS = Object.freeze({
   LUNCH_PARCEL: 'lunch-parcel',
   INSCRIBED_STONE_FRAGMENT: 'inscribed-stone-fragment',
+  HEALING_HERB: 'healing-herb',
 });
 
 export const ABILITY_IDS = Object.freeze({

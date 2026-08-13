@@ -2,13 +2,22 @@ import { CHARACTER_IDS, ITEM_IDS, MAP_IDS } from '../content/ids.js';
 import { OPENING_PHASE, OPENING_PHASES } from '../content/opening.js';
 import { ENCOUNTERS, KNOWN_ENCOUNTER_IDS } from '../content/encounters.js';
 import { ENEMY_STATS } from '../content/enemies.js';
+import { ITEM_DEFS } from '../content/items.js';
+import { EQUIPMENT_DEFS, EQUIPMENT_SLOTS } from '../content/equipment-defs.js';
 import { GAME_MODES, isGameMode } from './modes.js';
-import { validateCommand } from '../battle/commands.js';
+import { COMMAND_TYPES, validateCommand, validateItemSemantic } from '../battle/commands.js';
 
 export const SAVE_VERSION = 2;
 const KNOWN_CHARACTERS = new Set(Object.values(CHARACTER_IDS));
 const KNOWN_MAPS = new Set(Object.values(MAP_IDS));
 const KNOWN_OPENING_PHASES = new Set(OPENING_PHASES);
+
+// Known battle-eligible item IDs: only these may appear in inventory.battleCarry slots.
+const BATTLE_ELIGIBLE_ITEMS = new Set(
+  Object.values(ITEM_DEFS)
+    .filter((def) => def.battleTarget !== null)
+    .map((def) => def.id),
+);
 
 const VALID_BATTLE_CONTEXTS = new Set(['authored-solo', 'authored-shared', 'random', 'boss']);
 const VALID_BATTLE_PHASES = new Set(['command-selection']);
@@ -105,6 +114,10 @@ function validateBattle(b, state) {
         partyIds: b.partyIds,
       };
       if (!validateCommand(cmd, charId, battleCtx)) return false;
+      // ITEM commands require semantic validation: slot exists, item battle-eligible, target alive
+      if (cmd.type === COMMAND_TYPES.ITEM) {
+        if (!validateItemSemantic(cmd, charId, state.inventory, b.partyIds, state.party?.members)) return false;
+      }
     }
   }
 
@@ -195,18 +208,48 @@ export function validateGameState(candidate) {
   if (!isPlainObject(candidate.economy) || !isFiniteInt(candidate.economy.money) || candidate.economy.money < 0) return null;
 
   if (!isPlainObject(candidate.inventory) || !isPlainObject(candidate.inventory.shared)) return null;
+  // Shared inventory values must be positive integers (zero-count keys should be deleted)
+  for (const [, count] of Object.entries(candidate.inventory.shared)) {
+    if (!isFiniteInt(count) || count < 1) return null;
+  }
   if (!isPlainObject(candidate.inventory.battleCarry)) return null;
+  // battleCarry keys must exactly match KNOWN_CHARACTERS — no extra keys allowed
+  const carryKeys = new Set(Object.keys(candidate.inventory.battleCarry));
+  if (carryKeys.size !== KNOWN_CHARACTERS.size) return null;
+  if ([...KNOWN_CHARACTERS].some((id) => !carryKeys.has(id))) return null;
   for (const id of KNOWN_CHARACTERS) {
     const carry = candidate.inventory.battleCarry[id];
     if (!Array.isArray(carry) || carry.length > 3) return null;
     for (const slot of carry) {
-      if (!isPlainObject(slot) || typeof slot.itemId !== 'string' || !isFiniteInt(slot.uses) || slot.uses < 0) return null;
+      if (!isPlainObject(slot) || typeof slot.itemId !== 'string') return null;
+      if (!BATTLE_ELIGIBLE_ITEMS.has(slot.itemId)) return null; // must be battle-eligible
+      if (!isFiniteInt(slot.uses) || slot.uses < 1 || slot.uses > 2) return null; // 1 or 2 uses only
     }
   }
 
+  // equipment keys must exactly match KNOWN_CHARACTERS
   if (!isPlainObject(candidate.equipment)) return null;
+  const equipKeys = new Set(Object.keys(candidate.equipment));
+  if (equipKeys.size !== KNOWN_CHARACTERS.size) return null;
+  if ([...KNOWN_CHARACTERS].some((id) => !equipKeys.has(id))) return null;
   for (const id of KNOWN_CHARACTERS) {
-    if (!isPlainObject(candidate.equipment[id])) return null;
+    const slots = candidate.equipment[id];
+    if (!isPlainObject(slots)) return null;
+    const validSlots = EQUIPMENT_SLOTS[id];
+    if (!validSlots) return null;
+    const slotKeys = Object.keys(slots);
+    if (slotKeys.length !== validSlots.length) return null;
+    for (const slotName of validSlots) {
+      if (!(slotName in slots)) return null;
+      const itemId = slots[slotName];
+      if (itemId !== null) {
+        if (typeof itemId !== 'string') return null;
+        const def = EQUIPMENT_DEFS[itemId];
+        if (!def) return null;
+        if (def.slot !== slotName) return null;
+        if (!def.compatibleCharacterIds.includes(id)) return null;
+      }
+    }
   }
 
   if (!isPlainObject(candidate.progression) || !isPlainObject(candidate.progression.flags)) return null;

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ABILITY_IDS, CHARACTER_IDS, ENEMY_IDS, MAP_IDS } from '../src/content/ids.js';
+import { ABILITY_IDS, CHARACTER_IDS, ENEMY_IDS, ITEM_IDS, MAP_IDS } from '../src/content/ids.js';
 import { OPENING_PHASE, OPENING_ENCOUNTERS } from '../src/content/opening.js';
 import { createBattleEntry } from '../src/battle/battle-state.js';
 import { COMMAND_TYPES, validateCommand } from '../src/battle/commands.js';
@@ -1116,10 +1116,10 @@ test('getSaniConditionBand returns 危急 on invalid input', () => {
 
 // ── M3-B: ITEM command (submitCommand) ───────────────────────────────────────
 
-test('submitCommand: ITEM with valid LUNCH_PARCEL slot accepted', () => {
+test('submitCommand: ITEM with valid healing-herb slot accepted', () => {
   const state = makeTestRandomBattleState(42);
   state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
-  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 1 }];
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
   const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
   const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
   assert.equal(ok, true);
@@ -1128,7 +1128,16 @@ test('submitCommand: ITEM with valid LUNCH_PARCEL slot accepted', () => {
 
 test('submitCommand: ITEM with non-battle-usable item (INSCRIBED_STONE_FRAGMENT) rejected', () => {
   const state = makeTestRandomBattleState(42);
-  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'inscribed-stone-fragment', uses: 1 }];
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.INSCRIBED_STONE_FRAGMENT, uses: 1 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  assert.equal(ok, false);
+  assert.equal(result, 'invalid-command');
+});
+
+test('submitCommand: ITEM with LUNCH_PARCEL (non-battle quest item) rejected', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.LUNCH_PARCEL, uses: 1 }];
   const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
   const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
   assert.equal(ok, false);
@@ -1148,7 +1157,7 @@ test('submitCommand: ITEM targeting a dead party member rejected', () => {
   const state = makeTestRandomBattleState(42, { shared: true });
   state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
   state.party.members[CHARACTER_IDS.SANI].hp = 0; // Sani fallen
-  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 1 }];
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
   const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 1 }; // target Sani
   const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
   assert.equal(ok, false);
@@ -1157,13 +1166,13 @@ test('submitCommand: ITEM targeting a dead party member rejected', () => {
 
 // ── M3-B: ITEM command (resolveRound) ────────────────────────────────────────
 
-test('resolveRound: LUNCH_PARCEL heals target and removes slot when uses=1 (seed=42)', () => {
-  // Yohani HP=10, uses LUNCH_PARCEL on self (targetIdx=0), healHp=12
+test('resolveRound: healing-herb heals target and removes slot when uses=1 (seed=42)', () => {
+  // Yohani HP=10, uses healing-herb on self (targetIdx=0), healHp=12
   // Beast attacks: variance=2, raw=max(1,6-4+2)=4, round-1 leader protection halves → ceil(4*0.5)=2
   // Final HP = 10+12-2 = 20
   const state = makeTestRandomBattleState(42);
   state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
-  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 1 }];
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
   const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
   const { nextGameState: s1 } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
   const { ok, result, nextGameState, roundResult } = resolveRound(s1);
@@ -1172,16 +1181,16 @@ test('resolveRound: LUNCH_PARCEL heals target and removes slot when uses=1 (seed
   assert.equal(roundResult.outcome, 'ongoing');
   const useEvent = roundResult.events.find((e) => e.kind === 'item-use');
   assert.ok(useEvent, 'item-use event emitted');
-  assert.equal(useEvent.itemId, 'lunch-parcel');
+  assert.equal(useEvent.itemId, ITEM_IDS.HEALING_HERB);
   assert.equal(useEvent.healAmt, 12);
   assert.equal(nextGameState.party.members[CHARACTER_IDS.YOHANI].hp, 20); // 10+12-2
   assert.equal(nextGameState.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 0); // slot removed
 });
 
-test('resolveRound: LUNCH_PARCEL with uses=2 decrements to 1, slot preserved (seed=42)', () => {
+test('resolveRound: healing-herb with uses=2 decrements to 1, slot preserved (seed=42)', () => {
   const state = makeTestRandomBattleState(42);
   state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
-  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 2 }];
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 2 }];
   const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
   const { nextGameState: s1 } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
   const { ok, nextGameState } = resolveRound(s1);
@@ -1224,4 +1233,110 @@ test('resolveRound: iron-shield (+3 def) reduces incoming enemy damage (seed=1)'
   const { roundResult: rr2 } = resolveRound(stateWithShield);
   const beastAtkWithShield = rr2.events.find((e) => e.kind === 'enemy-attack');
   assert.equal(beastAtkWithShield.damage, 1); // iron-shield absorbs 3 def → raw 1, protection still 1
+});
+
+// ── M3-B: validateGameState — battleCarry schema ─────────────────────────────
+
+test('validateGameState rejects battleCarry slot with uses=0 (exhausted slots must be removed)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 0 }];
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects battleCarry slot with uses=3 (max is 2)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 3 }];
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects LUNCH_PARCEL in battleCarry (non-battle item)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.LUNCH_PARCEL, uses: 1 }];
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects unknown itemId in battleCarry', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'no-such-item', uses: 1 }];
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState accepts valid healing-herb in battleCarry (uses=1)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
+  assert.ok(validateGameState(state));
+});
+
+test('validateGameState accepts valid healing-herb in battleCarry (uses=2)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 2 }];
+  assert.ok(validateGameState(state));
+});
+
+// ── M3-B: validateGameState — equipment schema ───────────────────────────────
+
+test('validateGameState rejects equipment with invalid slot for character (Yohani has focus)', () => {
+  const state = createInitialGameState();
+  // Yohani does not have a 'focus' slot — inject one to break the schema
+  state.equipment[CHARACTER_IDS.YOHANI] = { weapon: null, armor: null, focus: null, accessory: null };
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects equipment with item in wrong slot (focus-crystal in Yohani shield slot)', () => {
+  const state = createInitialGameState();
+  // focus-crystal belongs in 'focus' slot (Sani only); placing it in Yohani's shield slot is invalid
+  state.equipment[CHARACTER_IDS.YOHANI].shield = 'focus-crystal';
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState rejects equipment with incompatible item (iron-shield on Sani)', () => {
+  const state = createInitialGameState();
+  // iron-shield is only compatible with Yohani (slot=shield); Sani has no shield slot at all,
+  // but even if we inject it, the compatibleCharacterIds check must catch incompatibility.
+  // We test via the slot check: Sani has 'focus' not 'shield', so iron-shield (slot=shield) mismatches.
+  state.equipment[CHARACTER_IDS.SANI] = { weapon: null, armor: null, shield: 'iron-shield', accessory: null };
+  assert.equal(validateGameState(state), null);
+});
+
+test('validateGameState accepts initial game state (all null equipment slots)', () => {
+  const state = createInitialGameState();
+  assert.ok(validateGameState(state));
+});
+
+test('validateGameState accepts crude-blade on Yohani weapon slot', () => {
+  const state = createInitialGameState();
+  state.equipment[CHARACTER_IDS.YOHANI].weapon = 'crude-blade';
+  assert.ok(validateGameState(state));
+});
+
+test('validateGameState accepts iron-shield on Yohani shield slot', () => {
+  const state = createInitialGameState();
+  state.equipment[CHARACTER_IDS.YOHANI].shield = 'iron-shield';
+  assert.ok(validateGameState(state));
+});
+
+test('validateGameState accepts focus-crystal on Sani focus slot', () => {
+  const state = createInitialGameState();
+  state.equipment[CHARACTER_IDS.SANI].focus = 'focus-crystal';
+  assert.ok(validateGameState(state));
+});
+
+// ── M3-B: item-failed event (defensive code path) ────────────────────────────
+
+test('resolveRound: item-use fires and item IS consumed when target is alive (normal path)', () => {
+  // Complementary test for the item-failed code path. item-failed fires when the target
+  // falls during round resolution before the ITEM actor's turn. With current game content
+  // (crown-ear-beast speed=6 < Yohani speed=8), enemies always act after party members,
+  // making the item-failed path unreachable in normal play — it is defensive coverage for
+  // M4+ content with faster enemies. This test verifies the normal (target-alive) path.
+  const state = makeTestRandomBattleState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { nextGameState: s1 } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  const { ok, roundResult, nextGameState } = resolveRound(s1);
+  assert.equal(ok, true);
+  assert.ok(roundResult.events.some((e) => e.kind === 'item-use'), 'item-use fires on live target');
+  assert.ok(!roundResult.events.some((e) => e.kind === 'item-failed'), 'no item-failed on live target');
+  assert.equal(nextGameState.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 0, 'slot consumed');
 });

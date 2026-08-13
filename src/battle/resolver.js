@@ -6,7 +6,7 @@ import { applyVictoryRewards, applyDefeatPenalties } from '../rpg/economy.js';
 import { getAttackBonus, getDefenseBonus } from '../rpg/equipment.js';
 import { consumeBattleCarrySlot } from '../rpg/inventory.js';
 import { validateGameState } from '../state/game-state.js';
-import { COMMAND_TYPES, validateCommand } from './commands.js';
+import { COMMAND_TYPES, validateCommand, validateItemSemantic } from './commands.js';
 import { selectEnemyCommand } from './ai.js';
 import { lcgNext, lcgVariance } from './rng.js';
 import { applyOpeningEvent, OPENING_EVENT } from '../events/opening-director.js';
@@ -49,7 +49,7 @@ function applyTargetHits(b, state, enemyIdx, targetId, hitCount, rngIn, guardCon
 
   for (let hit = 0; hit < hitCount; hit++) {
     rng = lcgNext(rng);
-    const def = defenseAtLevel(targetId, target.level) + getDefenseBonus(state.equipment, targetId);
+    const def = defenseAtLevel(targetId, target.level) + getDefenseBonus(state.equipment, targetId); // physical attacks only
     let damage = physDamage(stats.attack, def, lcgVariance(rng, 2));
 
     if (b.pendingCommands[targetId]?.type === COMMAND_TYPES.DEFEND) {
@@ -208,18 +208,8 @@ export function submitCommand(currentGameState, characterId, command) {
   }
 
   if (command.type === COMMAND_TYPES.ITEM) {
-    const carry = currentGameState.inventory?.battleCarry?.[characterId] ?? [];
-    const slot = carry[command.slotIdx];
-    if (!slot || slot.uses <= 0) return { ok: false, result: 'invalid-command' };
-    const itemDef = ITEM_DEFS[slot.itemId];
-    if (!itemDef || itemDef.battleTarget === null) return { ok: false, result: 'invalid-command' };
-    if (itemDef.battleTarget === 'ally') {
-      const tIdx = command.targetIdx;
-      if (!Number.isInteger(tIdx) || tIdx < 0) return { ok: false, result: 'invalid-command' };
-      const targetId = battle.partyIds[tIdx];
-      if (!targetId) return { ok: false, result: 'invalid-command' };
-      const targetMember = currentGameState.party.members[targetId];
-      if (!targetMember || targetMember.hp <= 0) return { ok: false, result: 'invalid-command' };
+    if (!validateItemSemantic(command, characterId, currentGameState.inventory, battle.partyIds, currentGameState.party.members)) {
+      return { ok: false, result: 'invalid-command' };
     }
   }
 
@@ -342,7 +332,11 @@ export function resolveRound(currentGameState) {
         const targetId = b.partyIds[targetIdx];
         if (!targetId) continue;
         const target = state.party.members[targetId];
-        if (!target || target.hp <= 0) continue; // target fell this round — skip
+        if (!target || target.hp <= 0) {
+          // Target fell during this round before the actor's turn — item NOT consumed.
+          events.push({ kind: 'item-failed', actorId: id, itemId: slot.itemId, reason: 'target-fallen' });
+          continue;
+        }
 
         const itemId = slot.itemId;
         let healAmt = 0;

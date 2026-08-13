@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CHARACTER_IDS } from '../src/content/ids.js';
+import { CHARACTER_IDS, ITEM_IDS } from '../src/content/ids.js';
 import { maxHpAtLevel, maxMpAtLevel, attackAtLevel, defenseAtLevel, speedOf } from '../src/rpg/stats.js';
 import { expThreshold, applyExp } from '../src/rpg/progression.js';
 import { calcDefeatMoneyLoss } from '../src/rpg/economy.js';
-import { addToSharedInventory, removeFromSharedInventory, consumeBattleCarrySlot } from '../src/rpg/inventory.js';
-import { getAttackBonus, getDefenseBonus, setEquipmentSlot } from '../src/rpg/equipment.js';
+import { addToSharedInventory, removeFromSharedInventory, consumeBattleCarrySlot, prepareBattleCarry, unprepareBattleCarry } from '../src/rpg/inventory.js';
+import { getAttackBonus, getDefenseBonus, equipItem, unequipItem } from '../src/rpg/equipment.js';
 import { createInitialGameState, validateGameState, SAVE_VERSION } from '../src/state/game-state.js';
 import { SaveStore } from '../src/save/storage.js';
 
@@ -111,54 +111,68 @@ test('v1 save migrates to v2 on read', () => {
 
 test('addToSharedInventory: creates entry for new item', () => {
   const inv = { shared: {}, battleCarry: {} };
-  addToSharedInventory(inv, 'test-item', 2);
-  assert.equal(inv.shared['test-item'], 2);
+  addToSharedInventory(inv, ITEM_IDS.HEALING_HERB, 2);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 2);
 });
 
 test('addToSharedInventory: accumulates on existing entry', () => {
-  const inv = { shared: { 'test-item': 3 }, battleCarry: {} };
-  addToSharedInventory(inv, 'test-item', 2);
-  assert.equal(inv.shared['test-item'], 5);
+  const inv = { shared: { [ITEM_IDS.HEALING_HERB]: 3 }, battleCarry: {} };
+  addToSharedInventory(inv, ITEM_IDS.HEALING_HERB, 2);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 5);
+});
+
+test('addToSharedInventory: rejects unknown itemId', () => {
+  const inv = { shared: {}, battleCarry: {} };
+  const ok = addToSharedInventory(inv, 'no-such-item', 1);
+  assert.equal(ok, false);
+  assert.equal('no-such-item' in inv.shared, false);
+});
+
+test('addToSharedInventory: rejects non-positive qty', () => {
+  const inv = { shared: {}, battleCarry: {} };
+  assert.equal(addToSharedInventory(inv, ITEM_IDS.HEALING_HERB, 0), false);
+  assert.equal(addToSharedInventory(inv, ITEM_IDS.HEALING_HERB, -1), false);
+  assert.equal(addToSharedInventory(inv, ITEM_IDS.HEALING_HERB, 1.5), false);
 });
 
 test('removeFromSharedInventory: decrements count correctly', () => {
-  const inv = { shared: { 'test-item': 5 }, battleCarry: {} };
-  const ok = removeFromSharedInventory(inv, 'test-item', 3);
+  const inv = { shared: { [ITEM_IDS.HEALING_HERB]: 5 }, battleCarry: {} };
+  const ok = removeFromSharedInventory(inv, ITEM_IDS.HEALING_HERB, 3);
   assert.equal(ok, true);
-  assert.equal(inv.shared['test-item'], 2);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 2);
 });
 
 test('removeFromSharedInventory: deletes key when count reaches 0', () => {
-  const inv = { shared: { 'test-item': 2 }, battleCarry: {} };
-  const ok = removeFromSharedInventory(inv, 'test-item', 2);
+  const inv = { shared: { [ITEM_IDS.HEALING_HERB]: 2 }, battleCarry: {} };
+  const ok = removeFromSharedInventory(inv, ITEM_IDS.HEALING_HERB, 2);
   assert.equal(ok, true);
-  assert.equal('test-item' in inv.shared, false);
+  assert.equal(ITEM_IDS.HEALING_HERB in inv.shared, false);
 });
 
 test('removeFromSharedInventory: returns false if insufficient quantity', () => {
-  const inv = { shared: { 'test-item': 1 }, battleCarry: {} };
-  const ok = removeFromSharedInventory(inv, 'test-item', 2);
+  const inv = { shared: { [ITEM_IDS.HEALING_HERB]: 1 }, battleCarry: {} };
+  const ok = removeFromSharedInventory(inv, ITEM_IDS.HEALING_HERB, 2);
   assert.equal(ok, false);
-  assert.equal(inv.shared['test-item'], 1); // unchanged
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 1); // unchanged
 });
 
 test('consumeBattleCarrySlot: decrements uses and preserves slot', () => {
-  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: 'lunch-parcel', uses: 2 }] } };
+  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 2 }] } };
   const consumed = consumeBattleCarrySlot(inv, 'yohani', 0);
-  assert.equal(consumed, 'lunch-parcel');
+  assert.equal(consumed, ITEM_IDS.HEALING_HERB);
   assert.equal(inv.battleCarry.yohani.length, 1);
   assert.equal(inv.battleCarry.yohani[0].uses, 1);
 });
 
 test('consumeBattleCarrySlot: removes slot when uses reach 0', () => {
-  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: 'lunch-parcel', uses: 1 }] } };
+  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }] } };
   const consumed = consumeBattleCarrySlot(inv, 'yohani', 0);
-  assert.equal(consumed, 'lunch-parcel');
+  assert.equal(consumed, ITEM_IDS.HEALING_HERB);
   assert.equal(inv.battleCarry.yohani.length, 0);
 });
 
 test('consumeBattleCarrySlot: returns null for out-of-range slotIdx', () => {
-  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: 'lunch-parcel', uses: 1 }] } };
+  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }] } };
   const consumed = consumeBattleCarrySlot(inv, 'yohani', 5);
   assert.equal(consumed, null);
   assert.equal(inv.battleCarry.yohani.length, 1); // unchanged
@@ -166,14 +180,17 @@ test('consumeBattleCarrySlot: returns null for out-of-range slotIdx', () => {
 
 // ── M3-B: Equipment ───────────────────────────────────────────────────────────
 
+const FULL_EQUIPMENT = {
+  yohani: { weapon: null, armor: null, shield: null, accessory: null },
+  sani:   { weapon: null, armor: null, focus:  null, accessory: null },
+};
+
 test('getAttackBonus: returns 0 for all-null equipment', () => {
-  const equipment = { yohani: { weapon: null, armor: null, shield: null, accessory: null } };
-  assert.equal(getAttackBonus(equipment, CHARACTER_IDS.YOHANI), 0);
+  assert.equal(getAttackBonus(FULL_EQUIPMENT, CHARACTER_IDS.YOHANI), 0);
 });
 
 test('getDefenseBonus: returns 0 for all-null equipment', () => {
-  const equipment = { sani: { weapon: null, armor: null, focus: null, accessory: null } };
-  assert.equal(getDefenseBonus(equipment, CHARACTER_IDS.SANI), 0);
+  assert.equal(getDefenseBonus(FULL_EQUIPMENT, CHARACTER_IDS.SANI), 0);
 });
 
 test('getAttackBonus: returns weapon attackBonus when weapon equipped', () => {
@@ -191,15 +208,152 @@ test('getDefenseBonus: returns 0 for unknown item ID in slot', () => {
   assert.equal(getDefenseBonus(equipment, CHARACTER_IDS.YOHANI), 0);
 });
 
-test('setEquipmentSlot: returns new equipment with updated slot', () => {
-  const equipment = { yohani: { weapon: null, armor: null, shield: null, accessory: null } };
-  const updated = setEquipmentSlot(equipment, CHARACTER_IDS.YOHANI, 'weapon', 'crude-blade');
+test('equipItem: equips item to correct slot and returns new equipment', () => {
+  const { ok, equipment: updated } = equipItem(FULL_EQUIPMENT, CHARACTER_IDS.YOHANI, 'crude-blade');
+  assert.equal(ok, true);
   assert.equal(updated.yohani.weapon, 'crude-blade');
-  assert.equal(equipment.yohani.weapon, null); // original unchanged
+  assert.equal(FULL_EQUIPMENT.yohani.weapon, null); // original unchanged
 });
 
-test('setEquipmentSlot: unequips item when passed null', () => {
-  const equipment = { yohani: { weapon: 'crude-blade', armor: null, shield: null, accessory: null } };
-  const updated = setEquipmentSlot(equipment, CHARACTER_IDS.YOHANI, 'weapon', null);
+test('equipItem: Sani can equip focus-crystal to focus slot', () => {
+  const { ok, equipment: updated } = equipItem(FULL_EQUIPMENT, CHARACTER_IDS.SANI, 'focus-crystal');
+  assert.equal(ok, true);
+  assert.equal(updated.sani.focus, 'focus-crystal');
+});
+
+test('equipItem: rejects unknown item', () => {
+  const { ok, reason } = equipItem(FULL_EQUIPMENT, CHARACTER_IDS.YOHANI, 'no-such-item');
+  assert.equal(ok, false);
+  assert.equal(reason, 'unknown-item');
+});
+
+test('equipItem: rejects unknown character', () => {
+  const { ok, reason } = equipItem(FULL_EQUIPMENT, 'unknown-char', 'crude-blade');
+  assert.equal(ok, false);
+  assert.equal(reason, 'unknown-character');
+});
+
+test('equipItem: rejects focus-crystal on Yohani (incompatible-slot: Yohani has no focus slot)', () => {
+  const { ok, reason } = equipItem(FULL_EQUIPMENT, CHARACTER_IDS.YOHANI, 'focus-crystal');
+  assert.equal(ok, false);
+  assert.equal(reason, 'incompatible-slot');
+});
+
+test('equipItem: rejects iron-shield on Sani (incompatible slot — Sani has focus not shield)', () => {
+  const { ok, reason } = equipItem(FULL_EQUIPMENT, CHARACTER_IDS.SANI, 'iron-shield');
+  assert.equal(ok, false);
+  assert.equal(reason, 'incompatible-slot');
+});
+
+test('unequipItem: clears slot and returns new equipment', () => {
+  const equipped = { yohani: { weapon: 'crude-blade', armor: null, shield: null, accessory: null }, sani: { weapon: null, armor: null, focus: null, accessory: null } };
+  const { ok, equipment: updated } = unequipItem(equipped, CHARACTER_IDS.YOHANI, 'weapon');
+  assert.equal(ok, true);
   assert.equal(updated.yohani.weapon, null);
+  assert.equal(equipped.yohani.weapon, 'crude-blade'); // original unchanged
+});
+
+test('unequipItem: rejects invalid slot for character', () => {
+  const { ok, reason } = unequipItem(FULL_EQUIPMENT, CHARACTER_IDS.YOHANI, 'focus');
+  assert.equal(ok, false);
+  assert.equal(reason, 'invalid-slot');
+});
+
+test('unequipItem: rejects unknown character', () => {
+  const { ok, reason } = unequipItem(FULL_EQUIPMENT, 'unknown-char', 'weapon');
+  assert.equal(ok, false);
+  assert.equal(reason, 'unknown-character');
+});
+
+// ── M3-B: prepareBattleCarry / unprepareBattleCarry ──────────────────────────
+
+test('prepareBattleCarry: transfers uses from shared to carry', () => {
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 3 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+  const ok = prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 2);
+  assert.equal(ok, true);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 1); // 3 - 2 = 1 remaining in shared
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 1);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI][0].itemId, ITEM_IDS.HEALING_HERB);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI][0].uses, 2);
+});
+
+test('prepareBattleCarry: deletes shared key when all transferred', () => {
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 1 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+  prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 1);
+  assert.equal(ITEM_IDS.HEALING_HERB in inv.shared, false);
+});
+
+test('prepareBattleCarry: returns false if insufficient shared quantity', () => {
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 1 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+  const ok = prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 2);
+  assert.equal(ok, false);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 1); // unchanged
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 0);
+});
+
+test('prepareBattleCarry: returns false if carry is full (3 slots)', () => {
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 5 },
+    battleCarry: {
+      [CHARACTER_IDS.YOHANI]: [
+        { itemId: ITEM_IDS.HEALING_HERB, uses: 1 },
+        { itemId: ITEM_IDS.HEALING_HERB, uses: 1 },
+        { itemId: ITEM_IDS.HEALING_HERB, uses: 1 },
+      ],
+      [CHARACTER_IDS.SANI]: [],
+    },
+  };
+  const ok = prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 1);
+  assert.equal(ok, false);
+});
+
+test('prepareBattleCarry: rejects non-battle item (LUNCH_PARCEL)', () => {
+  const inv = {
+    shared: { [ITEM_IDS.LUNCH_PARCEL]: 1 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+  const ok = prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.LUNCH_PARCEL, 1);
+  assert.equal(ok, false);
+  assert.equal(inv.shared[ITEM_IDS.LUNCH_PARCEL], 1); // unchanged
+});
+
+test('prepareBattleCarry: rejects uses out of range (0, 3)', () => {
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 5 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+  assert.equal(prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 0), false);
+  assert.equal(prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 3), false);
+});
+
+test('unprepareBattleCarry: returns slot uses to shared inventory', () => {
+  const inv = {
+    shared: {},
+    battleCarry: {
+      [CHARACTER_IDS.YOHANI]: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 2 }],
+      [CHARACTER_IDS.SANI]: [],
+    },
+  };
+  const ok = unprepareBattleCarry(inv, CHARACTER_IDS.YOHANI, 0);
+  assert.equal(ok, true);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 2); // 2 uses returned to shared
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 0); // slot removed
+});
+
+test('unprepareBattleCarry: returns false for out-of-range slotIdx', () => {
+  const inv = {
+    shared: {},
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }], [CHARACTER_IDS.SANI]: [] },
+  };
+  assert.equal(unprepareBattleCarry(inv, CHARACTER_IDS.YOHANI, 5), false);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 1); // unchanged
 });

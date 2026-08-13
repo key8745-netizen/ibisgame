@@ -362,7 +362,9 @@ export function resolveRound(currentGameState) {
     b.round += 1;
     b.phase = 'command-selection';
     b.pendingCommands = Object.fromEntries(b.partyIds.map((id) => [id, null]));
-    // activeGuard is NOT cleared — it persists if no qualifying enemy action consumed it
+    // Policy B (SSOT: "current or next resolved enemy action window"): activeGuard is NOT
+    // cleared at round end. If the enemy did not target the guarded character this round,
+    // the guard carries forward and fires on the next qualifying enemy action window.
     state.battle = b;
   } else if (outcome === 'victory') {
     state.battle = b;

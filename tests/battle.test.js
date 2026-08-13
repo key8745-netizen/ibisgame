@@ -806,6 +806,36 @@ test('guard is pre-initialized before initiative loop (guard-aid event emitted)'
   assert.ok(r.roundResult.events.some((e) => e.kind === 'guard-aid'));
 });
 
+test('guard-aid (Policy B): unconsumed guard persists into next round and intercepts first qualifying attack', () => {
+  // Round 1: Yohani guards Sani; beast targets Yohani (seed=2) → guard NOT consumed, persists.
+  // Round 2: carried guard fires and is consumed when enemy attacks Sani.
+  const state = makeSharedState(2);
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = {
+    type: COMMAND_TYPES.ABILITY, abilityId: ABILITY_IDS.GUARD_AID, targetIdx: 1,
+  };
+  state.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
+
+  const r1 = resolveRound(state);
+  assert.equal(r1.ok, true);
+  assert.ok(!r1.roundResult.events.some((e) => e.kind === 'guard-intercept'),
+    'Round 1: no interception — beast targeted Yohani, not Sani');
+
+  const r2State = r1.nextGameState;
+  assert.ok(r2State.battle.activeGuard !== null,
+    'Policy B: unconsumed guard carries into Round 2');
+  assert.equal(r2State.battle.activeGuard.targetId, CHARACTER_IDS.SANI,
+    'guard target preserved across round boundary');
+
+  // Verify the carried guard fires on the next qualifying enemy action in Round 2.
+  const { events } = resolveEnemyActionWindow(
+    r2State.battle, r2State, 0, [{ targetId: CHARACTER_IDS.SANI, hitCount: 1 }], r2State.battle.rngState,
+  );
+  assert.ok(events.some((e) => e.kind === 'guard-intercept' && e.originalTargetId === CHARACTER_IDS.SANI),
+    'Round 2: carried guard intercepts attack on Sani');
+  assert.equal(r2State.battle.activeGuard, null,
+    'guard consumed after first qualifying enemy action window in Round 2');
+});
+
 // ── resolveEnemyAction — direct action-window tests ─────────────────────────
 
 test('resolveEnemyAction: guard applies to all hits in window, consumed after window', () => {
@@ -1033,6 +1063,31 @@ test('SaveStore: partial battle commands survive writeSuspend → readSuspend ro
   assert.equal(recovered.battle.pendingCommands[CHARACTER_IDS.SANI], null, 'null command preserved');
   assert.equal(recovered.battle.encounterId, state.battle.encounterId, 'encounterId preserved');
   assert.equal(recovered.battle.round, 1, 'round preserved');
+  assert.equal(recovered.battle.rngState, state.battle.rngState, 'rngState preserved through JSON round-trip');
+  assert.equal(recovered.mode, 'battle', 'mode preserved through JSON round-trip');
+});
+
+test('SaveStore: persisted activeGuard survives writeSuspend → readSuspend round-trip', () => {
+  const storage = new Map();
+  const mockStorage = {
+    setItem(key, value) { storage.set(key, value); },
+    getItem(key) { return storage.get(key) ?? null; },
+  };
+  const store = new SaveStore(mockStorage);
+
+  const state = makeSharedState(42);
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  state.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
+  state.battle.activeGuard = { guarderId: CHARACTER_IDS.YOHANI, targetId: CHARACTER_IDS.SANI };
+
+  store.writeSuspend(state);
+  const recovered = store.readSuspend();
+
+  assert.ok(recovered.battle.activeGuard, 'activeGuard preserved through JSON round-trip');
+  assert.equal(recovered.battle.activeGuard.guarderId, CHARACTER_IDS.YOHANI, 'guarderId preserved');
+  assert.equal(recovered.battle.activeGuard.targetId, CHARACTER_IDS.SANI, 'targetId preserved');
+  assert.equal(recovered.mode, 'battle', 'mode preserved');
+  assert.equal(recovered.battle.rngState, state.battle.rngState, 'rngState preserved');
 });
 
 // ── getSaniConditionBand ─────────────────────────────────────────────────────

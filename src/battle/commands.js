@@ -75,7 +75,9 @@ export function validateCommand(command, characterId, battleCtx) {
       return true;
     }
     case COMMAND_TYPES.ITEM:
-      return isNonNegInt(command.slotIdx);
+      if (!isNonNegInt(command.slotIdx)) return false;
+      if (command.targetIdx !== undefined && !isNonNegInt(command.targetIdx)) return false;
+      return true;
     case COMMAND_TYPES.RUN:
       // Requires explicit context — silently omitting context is NOT allowed
       if (!ctx || !RUN_ALLOWED_CONTEXTS.has(ctx)) return false;

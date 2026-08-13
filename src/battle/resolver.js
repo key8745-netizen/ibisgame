@@ -1,7 +1,10 @@
 import { ABILITY_IDS, CHARACTER_IDS } from '../content/ids.js';
 import { ENEMY_STATS } from '../content/enemies.js';
+import { ITEM_DEFS } from '../content/items.js';
 import { attackAtLevel, defenseAtLevel, maxHpAtLevel, speedOf } from '../rpg/stats.js';
 import { applyVictoryRewards, applyDefeatPenalties } from '../rpg/economy.js';
+import { getAttackBonus, getDefenseBonus } from '../rpg/equipment.js';
+import { consumeBattleCarrySlot } from '../rpg/inventory.js';
 import { validateGameState } from '../state/game-state.js';
 import { COMMAND_TYPES, validateCommand } from './commands.js';
 import { selectEnemyCommand } from './ai.js';
@@ -46,7 +49,7 @@ function applyTargetHits(b, state, enemyIdx, targetId, hitCount, rngIn, guardCon
 
   for (let hit = 0; hit < hitCount; hit++) {
     rng = lcgNext(rng);
-    const def = defenseAtLevel(targetId, target.level);
+    const def = defenseAtLevel(targetId, target.level) + getDefenseBonus(state.equipment, targetId);
     let damage = physDamage(stats.attack, def, lcgVariance(rng, 2));
 
     if (b.pendingCommands[targetId]?.type === COMMAND_TYPES.DEFEND) {
@@ -204,6 +207,22 @@ export function submitCommand(currentGameState, characterId, command) {
     return { ok: false, result: 'invalid-command' };
   }
 
+  if (command.type === COMMAND_TYPES.ITEM) {
+    const carry = currentGameState.inventory?.battleCarry?.[characterId] ?? [];
+    const slot = carry[command.slotIdx];
+    if (!slot || slot.uses <= 0) return { ok: false, result: 'invalid-command' };
+    const itemDef = ITEM_DEFS[slot.itemId];
+    if (!itemDef || itemDef.battleTarget === null) return { ok: false, result: 'invalid-command' };
+    if (itemDef.battleTarget === 'ally') {
+      const tIdx = command.targetIdx;
+      if (!Number.isInteger(tIdx) || tIdx < 0) return { ok: false, result: 'invalid-command' };
+      const targetId = battle.partyIds[tIdx];
+      if (!targetId) return { ok: false, result: 'invalid-command' };
+      const targetMember = currentGameState.party.members[targetId];
+      if (!targetMember || targetMember.hp <= 0) return { ok: false, result: 'invalid-command' };
+    }
+  }
+
   const state = structuredClone(currentGameState);
   state.battle.pendingCommands[characterId] = command;
 
@@ -278,7 +297,8 @@ export function resolveRound(currentGameState) {
         if (!enemy || enemy.hp <= 0) continue;
         const enemyStats = ENEMY_STATS[b.enemyIds[cmd.targetIdx]];
         rng = lcgNext(rng);
-        const damage = physDamage(attackAtLevel(id, member.level), enemyStats.defense, lcgVariance(rng, 2));
+        const atk = attackAtLevel(id, member.level) + getAttackBonus(state.equipment, id);
+        const damage = physDamage(atk, enemyStats.defense, lcgVariance(rng, 2));
         enemy.hp = Math.max(0, enemy.hp - damage);
         events.push({ kind: 'attack', actorId: id, targetKind: 'enemy', targetIdx: cmd.targetIdx, damage });
         if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
@@ -310,6 +330,29 @@ export function resolveRound(currentGameState) {
           target.hp = Math.min(target.hp + healAmt, cap);
           events.push({ kind: 'ability', abilityId: ABILITY_IDS.MINOR_HEAL, actorId: id, targetId, healAmt });
         }
+
+      } else if (cmd.type === COMMAND_TYPES.ITEM) {
+        const carry = state.inventory.battleCarry[id] ?? [];
+        const slot = carry[cmd.slotIdx];
+        if (!slot || slot.uses <= 0) continue;
+        const def = ITEM_DEFS[slot.itemId];
+        if (!def || def.battleTarget === null) continue;
+
+        const targetIdx = cmd.targetIdx ?? b.partyIds.indexOf(id);
+        const targetId = b.partyIds[targetIdx];
+        if (!targetId) continue;
+        const target = state.party.members[targetId];
+        if (!target || target.hp <= 0) continue; // target fell this round — skip
+
+        const itemId = slot.itemId;
+        let healAmt = 0;
+        if (def.healHp) {
+          const cap = maxHpAtLevel(targetId, target.level);
+          healAmt = Math.min(def.healHp, cap - target.hp);
+          target.hp = Math.min(target.hp + def.healHp, cap);
+        }
+        consumeBattleCarrySlot(state.inventory, id, cmd.slotIdx);
+        events.push({ kind: 'item-use', actorId: id, itemId, targetId, healAmt });
 
       } else if (cmd.type === COMMAND_TYPES.RUN) {
         if (b.context !== 'random') {

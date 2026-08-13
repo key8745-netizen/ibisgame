@@ -4,6 +4,8 @@ import { CHARACTER_IDS } from '../src/content/ids.js';
 import { maxHpAtLevel, maxMpAtLevel, attackAtLevel, defenseAtLevel, speedOf } from '../src/rpg/stats.js';
 import { expThreshold, applyExp } from '../src/rpg/progression.js';
 import { calcDefeatMoneyLoss } from '../src/rpg/economy.js';
+import { addToSharedInventory, removeFromSharedInventory, consumeBattleCarrySlot } from '../src/rpg/inventory.js';
+import { getAttackBonus, getDefenseBonus, setEquipmentSlot } from '../src/rpg/equipment.js';
 import { createInitialGameState, validateGameState, SAVE_VERSION } from '../src/state/game-state.js';
 import { SaveStore } from '../src/save/storage.js';
 
@@ -103,4 +105,101 @@ test('v1 save migrates to v2 on read', () => {
   assert.equal(read.economy.money, 42);
   assert.ok(read.equipment);
   assert.ok(read.progression.revivalPoint);
+});
+
+// ── M3-B: Inventory ──────────────────────────────────────────────────────────
+
+test('addToSharedInventory: creates entry for new item', () => {
+  const inv = { shared: {}, battleCarry: {} };
+  addToSharedInventory(inv, 'test-item', 2);
+  assert.equal(inv.shared['test-item'], 2);
+});
+
+test('addToSharedInventory: accumulates on existing entry', () => {
+  const inv = { shared: { 'test-item': 3 }, battleCarry: {} };
+  addToSharedInventory(inv, 'test-item', 2);
+  assert.equal(inv.shared['test-item'], 5);
+});
+
+test('removeFromSharedInventory: decrements count correctly', () => {
+  const inv = { shared: { 'test-item': 5 }, battleCarry: {} };
+  const ok = removeFromSharedInventory(inv, 'test-item', 3);
+  assert.equal(ok, true);
+  assert.equal(inv.shared['test-item'], 2);
+});
+
+test('removeFromSharedInventory: deletes key when count reaches 0', () => {
+  const inv = { shared: { 'test-item': 2 }, battleCarry: {} };
+  const ok = removeFromSharedInventory(inv, 'test-item', 2);
+  assert.equal(ok, true);
+  assert.equal('test-item' in inv.shared, false);
+});
+
+test('removeFromSharedInventory: returns false if insufficient quantity', () => {
+  const inv = { shared: { 'test-item': 1 }, battleCarry: {} };
+  const ok = removeFromSharedInventory(inv, 'test-item', 2);
+  assert.equal(ok, false);
+  assert.equal(inv.shared['test-item'], 1); // unchanged
+});
+
+test('consumeBattleCarrySlot: decrements uses and preserves slot', () => {
+  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: 'lunch-parcel', uses: 2 }] } };
+  const consumed = consumeBattleCarrySlot(inv, 'yohani', 0);
+  assert.equal(consumed, 'lunch-parcel');
+  assert.equal(inv.battleCarry.yohani.length, 1);
+  assert.equal(inv.battleCarry.yohani[0].uses, 1);
+});
+
+test('consumeBattleCarrySlot: removes slot when uses reach 0', () => {
+  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: 'lunch-parcel', uses: 1 }] } };
+  const consumed = consumeBattleCarrySlot(inv, 'yohani', 0);
+  assert.equal(consumed, 'lunch-parcel');
+  assert.equal(inv.battleCarry.yohani.length, 0);
+});
+
+test('consumeBattleCarrySlot: returns null for out-of-range slotIdx', () => {
+  const inv = { shared: {}, battleCarry: { yohani: [{ itemId: 'lunch-parcel', uses: 1 }] } };
+  const consumed = consumeBattleCarrySlot(inv, 'yohani', 5);
+  assert.equal(consumed, null);
+  assert.equal(inv.battleCarry.yohani.length, 1); // unchanged
+});
+
+// ── M3-B: Equipment ───────────────────────────────────────────────────────────
+
+test('getAttackBonus: returns 0 for all-null equipment', () => {
+  const equipment = { yohani: { weapon: null, armor: null, shield: null, accessory: null } };
+  assert.equal(getAttackBonus(equipment, CHARACTER_IDS.YOHANI), 0);
+});
+
+test('getDefenseBonus: returns 0 for all-null equipment', () => {
+  const equipment = { sani: { weapon: null, armor: null, focus: null, accessory: null } };
+  assert.equal(getDefenseBonus(equipment, CHARACTER_IDS.SANI), 0);
+});
+
+test('getAttackBonus: returns weapon attackBonus when weapon equipped', () => {
+  const equipment = { yohani: { weapon: 'crude-blade', armor: null, shield: null, accessory: null } };
+  assert.equal(getAttackBonus(equipment, CHARACTER_IDS.YOHANI), 2);
+});
+
+test('getDefenseBonus: sums bonuses from multiple slots', () => {
+  const equipment = { yohani: { weapon: null, armor: null, shield: 'iron-shield', accessory: null } };
+  assert.equal(getDefenseBonus(equipment, CHARACTER_IDS.YOHANI), 3);
+});
+
+test('getDefenseBonus: returns 0 for unknown item ID in slot', () => {
+  const equipment = { yohani: { weapon: 'no-such-item', armor: null, shield: null, accessory: null } };
+  assert.equal(getDefenseBonus(equipment, CHARACTER_IDS.YOHANI), 0);
+});
+
+test('setEquipmentSlot: returns new equipment with updated slot', () => {
+  const equipment = { yohani: { weapon: null, armor: null, shield: null, accessory: null } };
+  const updated = setEquipmentSlot(equipment, CHARACTER_IDS.YOHANI, 'weapon', 'crude-blade');
+  assert.equal(updated.yohani.weapon, 'crude-blade');
+  assert.equal(equipment.yohani.weapon, null); // original unchanged
+});
+
+test('setEquipmentSlot: unequips item when passed null', () => {
+  const equipment = { yohani: { weapon: 'crude-blade', armor: null, shield: null, accessory: null } };
+  const updated = setEquipmentSlot(equipment, CHARACTER_IDS.YOHANI, 'weapon', null);
+  assert.equal(updated.yohani.weapon, null);
 });

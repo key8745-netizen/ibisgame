@@ -1113,3 +1113,115 @@ test('getSaniConditionBand returns 危急 on invalid input', () => {
   assert.equal(getSaniConditionBand(10, -1), '危急');
   assert.equal(getSaniConditionBand(Infinity, 18), '危急');
 });
+
+// ── M3-B: ITEM command (submitCommand) ───────────────────────────────────────
+
+test('submitCommand: ITEM with valid LUNCH_PARCEL slot accepted', () => {
+  const state = makeTestRandomBattleState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 1 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  assert.equal(ok, true);
+  assert.equal(result, 'submitted');
+});
+
+test('submitCommand: ITEM with non-battle-usable item (INSCRIBED_STONE_FRAGMENT) rejected', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'inscribed-stone-fragment', uses: 1 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  assert.equal(ok, false);
+  assert.equal(result, 'invalid-command');
+});
+
+test('submitCommand: ITEM with out-of-range slotIdx rejected', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  assert.equal(ok, false);
+  assert.equal(result, 'invalid-command');
+});
+
+test('submitCommand: ITEM targeting a dead party member rejected', () => {
+  const state = makeTestRandomBattleState(42, { shared: true });
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.party.members[CHARACTER_IDS.SANI].hp = 0; // Sani fallen
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 1 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 1 }; // target Sani
+  const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  assert.equal(ok, false);
+  assert.equal(result, 'invalid-command');
+});
+
+// ── M3-B: ITEM command (resolveRound) ────────────────────────────────────────
+
+test('resolveRound: LUNCH_PARCEL heals target and removes slot when uses=1 (seed=42)', () => {
+  // Yohani HP=10, uses LUNCH_PARCEL on self (targetIdx=0), healHp=12
+  // Beast attacks: variance=2, raw=max(1,6-4+2)=4, round-1 leader protection halves → ceil(4*0.5)=2
+  // Final HP = 10+12-2 = 20
+  const state = makeTestRandomBattleState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 1 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { nextGameState: s1 } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  const { ok, result, nextGameState, roundResult } = resolveRound(s1);
+  assert.equal(ok, true);
+  assert.equal(result, 'resolved');
+  assert.equal(roundResult.outcome, 'ongoing');
+  const useEvent = roundResult.events.find((e) => e.kind === 'item-use');
+  assert.ok(useEvent, 'item-use event emitted');
+  assert.equal(useEvent.itemId, 'lunch-parcel');
+  assert.equal(useEvent.healAmt, 12);
+  assert.equal(nextGameState.party.members[CHARACTER_IDS.YOHANI].hp, 20); // 10+12-2
+  assert.equal(nextGameState.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 0); // slot removed
+});
+
+test('resolveRound: LUNCH_PARCEL with uses=2 decrements to 1, slot preserved (seed=42)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: 'lunch-parcel', uses: 2 }];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { nextGameState: s1 } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  const { ok, nextGameState } = resolveRound(s1);
+  assert.equal(ok, true);
+  const carry = nextGameState.inventory.battleCarry[CHARACTER_IDS.YOHANI];
+  assert.equal(carry.length, 1);
+  assert.equal(carry[0].uses, 1);
+});
+
+// ── M3-B: Equipment stat bonuses in resolver ─────────────────────────────────
+
+test('resolveRound: crude-blade (+2 atk) increases party attack damage (seed=1)', () => {
+  // seed=1: Yohani ATK variance=-1 → base dmg=6 (no weapon), blade dmg=8
+  const stateNoEquip = makeTestRandomBattleState(1);
+  stateNoEquip.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  const { roundResult: rr1 } = resolveRound(stateNoEquip);
+  const atkNoEquip = rr1.events.find((e) => e.kind === 'attack');
+  assert.equal(atkNoEquip.damage, 6);
+
+  const stateWithBlade = makeTestRandomBattleState(1);
+  stateWithBlade.equipment[CHARACTER_IDS.YOHANI].weapon = 'crude-blade';
+  stateWithBlade.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  const { roundResult: rr2 } = resolveRound(stateWithBlade);
+  const atkWithBlade = rr2.events.find((e) => e.kind === 'attack');
+  assert.equal(atkWithBlade.damage, 8);
+});
+
+test('resolveRound: iron-shield (+3 def) reduces incoming enemy damage (seed=1)', () => {
+  // seed=1: beast variance=2 → raw=max(1,6-4+2)=4; round-1 leader protection: ceil(4*0.5)=2 (no shield)
+  // iron-shield: raw=max(1,6-7+2)=1; round-1 protection: ceil(1*0.5)=1 (with shield)
+  const stateNoShield = makeTestRandomBattleState(1);
+  stateNoShield.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  const { roundResult: rr1 } = resolveRound(stateNoShield);
+  const beastAtkNoShield = rr1.events.find((e) => e.kind === 'enemy-attack');
+  assert.equal(beastAtkNoShield.damage, 2); // raw 4, halved by round-1 protection
+
+  const stateWithShield = makeTestRandomBattleState(1);
+  stateWithShield.equipment[CHARACTER_IDS.YOHANI].shield = 'iron-shield';
+  stateWithShield.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+  const { roundResult: rr2 } = resolveRound(stateWithShield);
+  const beastAtkWithShield = rr2.events.find((e) => e.kind === 'enemy-attack');
+  assert.equal(beastAtkWithShield.damage, 1); // iron-shield absorbs 3 def → raw 1, protection still 1
+});

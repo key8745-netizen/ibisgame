@@ -208,8 +208,9 @@ export function validateGameState(candidate) {
   if (!isPlainObject(candidate.economy) || !isFiniteInt(candidate.economy.money) || candidate.economy.money < 0) return null;
 
   if (!isPlainObject(candidate.inventory) || !isPlainObject(candidate.inventory.shared)) return null;
-  // Shared inventory values must be positive integers (zero-count keys should be deleted)
-  for (const [, count] of Object.entries(candidate.inventory.shared)) {
+  // Shared inventory: keys must be known items, values must be positive integers
+  for (const [itemId, count] of Object.entries(candidate.inventory.shared)) {
+    if (!ITEM_DEFS[itemId]) return null;
     if (!isFiniteInt(count) || count < 1) return null;
   }
   if (!isPlainObject(candidate.inventory.battleCarry)) return null;
@@ -224,6 +225,7 @@ export function validateGameState(candidate) {
       if (!isPlainObject(slot) || typeof slot.itemId !== 'string') return null;
       if (!BATTLE_ELIGIBLE_ITEMS.has(slot.itemId)) return null; // must be battle-eligible
       if (!isFiniteInt(slot.uses) || slot.uses < 1 || slot.uses > 2) return null; // 1 or 2 uses only
+      if (Object.keys(slot).length !== 2) return null; // exact schema: only {itemId, uses}
     }
   }
 

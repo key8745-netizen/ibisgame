@@ -357,3 +357,42 @@ test('unprepareBattleCarry: returns false for out-of-range slotIdx', () => {
   assert.equal(unprepareBattleCarry(inv, CHARACTER_IDS.YOHANI, 5), false);
   assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 1); // unchanged
 });
+
+// ── M3-B: unknown-character boundary (Patch 2 closure) ───────────────────────
+
+test('prepareBattleCarry: returns false for unknown charId', () => {
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 3 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+  const ok = prepareBattleCarry(inv, 'unknown-char', ITEM_IDS.HEALING_HERB, 1);
+  assert.equal(ok, false);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 3); // shared inventory unchanged
+});
+
+test('unprepareBattleCarry: returns false for unknown charId', () => {
+  const inv = {
+    shared: {},
+    battleCarry: {
+      [CHARACTER_IDS.YOHANI]: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }],
+      [CHARACTER_IDS.SANI]: [],
+    },
+  };
+  const ok = unprepareBattleCarry(inv, 'unknown-char', 0);
+  assert.equal(ok, false);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 1); // unchanged
+});
+
+// ── M3-B: equipment malformed-source precondition (Patch 2 closure) ──────────
+
+test('equipItem: returns malformed-source for null equipment', () => {
+  const { ok, reason } = equipItem(null, CHARACTER_IDS.YOHANI, 'crude-blade');
+  assert.equal(ok, false);
+  assert.equal(reason, 'malformed-source');
+});
+
+test('unequipItem: returns malformed-source for null equipment', () => {
+  const { ok, reason } = unequipItem(null, CHARACTER_IDS.YOHANI, 'weapon');
+  assert.equal(ok, false);
+  assert.equal(reason, 'malformed-source');
+});

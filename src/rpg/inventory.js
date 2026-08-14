@@ -1,4 +1,7 @@
+import { CHARACTER_IDS } from '../content/ids.js';
 import { ITEM_DEFS } from '../content/items.js';
+
+const KNOWN_CHARACTERS = new Set(Object.values(CHARACTER_IDS));
 
 // Inventory management for shared inventory and battle carry.
 // All functions operate on a mutable inventory object (caller's structuredClone).
@@ -48,6 +51,7 @@ export function consumeBattleCarrySlot(inventory, charId, slotIdx) {
 // uses must be 1 or 2. Carry must have room (< 3 slots). Shared must have enough.
 // Returns true on success, false on any validation failure.
 export function prepareBattleCarry(inventory, charId, itemId, uses) {
+  if (!KNOWN_CHARACTERS.has(charId)) return false;
   if (!Number.isInteger(uses) || uses < 1 || uses > 2) return false;
   if (typeof itemId !== 'string') return false;
   const def = ITEM_DEFS[itemId];
@@ -69,6 +73,7 @@ export function prepareBattleCarry(inventory, charId, itemId, uses) {
 // Return remaining uses from slotIdx in charId's carry back to shared inventory.
 // Returns true on success, false if slot index is invalid.
 export function unprepareBattleCarry(inventory, charId, slotIdx) {
+  if (!KNOWN_CHARACTERS.has(charId)) return false;
   const carry = inventory.battleCarry?.[charId];
   if (!Array.isArray(carry)) return false;
   if (!Number.isInteger(slotIdx) || slotIdx < 0 || slotIdx >= carry.length) return false;

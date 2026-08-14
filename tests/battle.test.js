@@ -1090,6 +1090,29 @@ test('SaveStore: persisted activeGuard survives writeSuspend → readSuspend rou
   assert.equal(recovered.battle.rngState, state.battle.rngState, 'rngState preserved');
 });
 
+// ── M3-B: persistence regression (Patch 2 closure) ───────────────────────────
+
+test('SaveStore: battleCarry items survive writeSuspend → readSuspend round-trip', () => {
+  const storage = new Map();
+  const mockStorage = {
+    setItem(key, value) { storage.set(key, value); },
+    getItem(key) { return storage.get(key) ?? null; },
+  };
+  const store = new SaveStore(mockStorage);
+
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 2 }];
+
+  store.writeSuspend(state);
+  const recovered = store.readSuspend();
+
+  assert.ok(recovered, 'readSuspend returns valid state');
+  const carry = recovered.inventory.battleCarry[CHARACTER_IDS.YOHANI];
+  assert.equal(carry.length, 1, 'carry slot count preserved');
+  assert.equal(carry[0].itemId, ITEM_IDS.HEALING_HERB, 'itemId preserved through JSON round-trip');
+  assert.equal(carry[0].uses, 2, 'uses preserved through JSON round-trip');
+});
+
 // ── getSaniConditionBand ─────────────────────────────────────────────────────
 
 test('getSaniConditionBand returns 穩定 above 50% HP', () => {
@@ -1160,6 +1183,20 @@ test('submitCommand: ITEM targeting a dead party member rejected', () => {
   state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
   const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 1 }; // target Sani
   const { ok, result } = submitCommand(state, CHARACTER_IDS.YOHANI, cmd);
+  assert.equal(ok, false);
+  assert.equal(result, 'invalid-command');
+});
+
+// ── M3-B: ITEM ownership regression (Patch 2 closure) ────────────────────────
+
+test('submitCommand: ITEM ownership — Sani submit uses Sani carry, not Yohani carry', () => {
+  // Yohani has healing herb; Sani's carry is empty.
+  // Sani submits ITEM slotIdx=0 → must look up Sani's own carry, not Yohani's.
+  const state = makeTestRandomBattleState(42, { shared: true });
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
+  state.inventory.battleCarry[CHARACTER_IDS.SANI] = [];
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const { ok, result } = submitCommand(state, CHARACTER_IDS.SANI, cmd);
   assert.equal(ok, false);
   assert.equal(result, 'invalid-command');
 });
@@ -1318,6 +1355,34 @@ test('validateGameState accepts iron-shield on Yohani shield slot', () => {
 test('validateGameState accepts focus-crystal on Sani focus slot', () => {
   const state = createInitialGameState();
   state.equipment[CHARACTER_IDS.SANI].focus = 'focus-crystal';
+  assert.ok(validateGameState(state));
+});
+
+// ── M3-B: validateGameState — shared inventory schema (Patch 2 closure) ──────
+
+test('validateGameState rejects unknown itemId in shared inventory', () => {
+  const state = createInitialGameState();
+  state.inventory.shared['no-such-item'] = 3;
+  assert.equal(validateGameState(state), null);
+});
+
+// ── M3-B: validateGameState — battleCarry exact slot schema (Patch 2 closure) ─
+
+test('validateGameState rejects battleCarry slot with extra property', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1, extra: 'data' }];
+  assert.equal(validateGameState(state), null);
+});
+
+// ── M3-B: validateGameState — persisted ITEM regression (Patch 2 closure) ────
+
+test('validateGameState accepts persisted ITEM command in pendingCommands', () => {
+  // Verifies that a state with an ITEM command in pendingCommands survives validateGameState,
+  // which calls validateItemSemantic inside validateBattle.
+  const state = makeTestRandomBattleState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
   assert.ok(validateGameState(state));
 });
 

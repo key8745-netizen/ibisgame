@@ -4,7 +4,7 @@ import { ABILITY_IDS, CHARACTER_IDS, ENEMY_IDS, ITEM_IDS, MAP_IDS } from '../src
 import { OPENING_PHASE, OPENING_ENCOUNTERS } from '../src/content/opening.js';
 import { createBattleEntry } from '../src/battle/battle-state.js';
 import { COMMAND_TYPES, validateCommand } from '../src/battle/commands.js';
-import { resolveRound, submitCommand, resolveEnemyAction, resolveEnemyActionWindow } from '../src/battle/resolver.js';
+import { resolveRound, submitCommand, resolveEnemyAction, resolveEnemyActionWindow, applyPartyItemAction } from '../src/battle/resolver.js';
 import { SaveStore } from '../src/save/storage.js';
 import { makeRng, lcgNext } from '../src/battle/rng.js';
 import { createInitialGameState, validateGameState } from '../src/state/game-state.js';
@@ -1404,4 +1404,106 @@ test('resolveRound: item-use fires and item IS consumed when target is alive (no
   assert.ok(roundResult.events.some((e) => e.kind === 'item-use'), 'item-use fires on live target');
   assert.ok(!roundResult.events.some((e) => e.kind === 'item-failed'), 'no item-failed on live target');
   assert.equal(nextGameState.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 0, 'slot consumed');
+});
+
+// ── M3-B: applyPartyItemAction — deterministic item-failed coverage (Patch 3) ──
+
+test('applyPartyItemAction: emits item-failed when target hp=0, does NOT consume slot', () => {
+  // Synthetic state with dead target — bypasses validateGameState so we can test the
+  // item-failed path deterministically without needing a faster enemy in production content.
+  const b = {
+    partyIds: [CHARACTER_IDS.YOHANI],
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    enemies: [{ instanceId: 'crown-ear-beast-0', hp: 18, maxHp: 18 }],
+  };
+  const state = {
+    party: { members: { [CHARACTER_IDS.YOHANI]: { level: 1, hp: 0 } } }, // target dead
+    inventory: {
+      battleCarry: {
+        [CHARACTER_IDS.YOHANI]: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }],
+      },
+    },
+    equipment: {},
+  };
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const events = applyPartyItemAction(CHARACTER_IDS.YOHANI, cmd, b, state);
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].kind, 'item-failed');
+  assert.equal(events[0].actorId, CHARACTER_IDS.YOHANI);
+  assert.equal(events[0].itemId, ITEM_IDS.HEALING_HERB);
+  assert.equal(events[0].reason, 'target-fallen');
+  // Slot NOT consumed
+  assert.equal(state.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 1);
+  assert.equal(state.inventory.battleCarry[CHARACTER_IDS.YOHANI][0].uses, 1);
+});
+
+test('applyPartyItemAction: emits item-use and consumes slot when target alive', () => {
+  const b = {
+    partyIds: [CHARACTER_IDS.YOHANI],
+    enemyIds: [ENEMY_IDS.CROWN_EAR_BEAST],
+    enemies: [{ instanceId: 'crown-ear-beast-0', hp: 18, maxHp: 18 }],
+  };
+  const state = {
+    party: { members: { [CHARACTER_IDS.YOHANI]: { level: 1, hp: 10 } } },
+    inventory: {
+      battleCarry: {
+        [CHARACTER_IDS.YOHANI]: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }],
+      },
+    },
+    equipment: {},
+  };
+  const cmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 0 };
+  const events = applyPartyItemAction(CHARACTER_IDS.YOHANI, cmd, b, state);
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].kind, 'item-use');
+  assert.equal(events[0].actorId, CHARACTER_IDS.YOHANI);
+  assert.equal(events[0].itemId, ITEM_IDS.HEALING_HERB);
+  assert.equal(events[0].healAmt, 12);
+  // Slot consumed (uses=1 → removed)
+  assert.equal(state.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 0);
+  // HP increased
+  assert.equal(state.party.members[CHARACTER_IDS.YOHANI].hp, 22); // 10+12
+});
+
+// ── M3-B: validateGameState — ITEM slotIdx regression (Patch 3) ──────────────
+
+test('validateGameState rejects persisted ITEM command with invalid slotIdx (999)', () => {
+  const state = makeTestRandomBattleState(42);
+  state.party.members[CHARACTER_IDS.YOHANI].hp = 10;
+  state.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
+  // slotIdx=999 points to non-existent slot in a 1-slot carry → validateItemSemantic rejects
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = { type: COMMAND_TYPES.ITEM, slotIdx: 999, targetIdx: 0 };
+  assert.equal(validateGameState(state), null);
+});
+
+// ── M3-B: validateGameState — battleCarry extra character key (Patch 3) ───────
+
+test('validateGameState rejects battleCarry with extra unknown character key', () => {
+  const state = makeTestRandomBattleState(42);
+  state.inventory.battleCarry['unknown-char'] = [];
+  assert.equal(validateGameState(state), null);
+});
+
+// ── M3-B: SaveStore — equipment weapon round-trip (Patch 3) ──────────────────
+
+test('SaveStore: equipment weapon slot survives writeSuspend → readSuspend round-trip', () => {
+  const storage = new Map();
+  const mockStorage = {
+    setItem(key, value) { storage.set(key, value); },
+    getItem(key) { return storage.get(key) ?? null; },
+  };
+  const store = new SaveStore(mockStorage);
+
+  const state = makeTestRandomBattleState(42);
+  state.equipment[CHARACTER_IDS.YOHANI].weapon = 'crude-blade';
+  state.battle.pendingCommands[CHARACTER_IDS.YOHANI] = ATK0;
+
+  store.writeSuspend(state);
+  const recovered = store.readSuspend();
+
+  assert.ok(recovered, 'readSuspend returns valid state');
+  assert.equal(recovered.equipment[CHARACTER_IDS.YOHANI].weapon, 'crude-blade', 'weapon slot preserved through JSON round-trip');
+  assert.equal(recovered.equipment[CHARACTER_IDS.SANI].weapon, null, 'other character equipment preserved as null');
 });

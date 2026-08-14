@@ -6,6 +6,7 @@ import { expThreshold, applyExp } from '../src/rpg/progression.js';
 import { calcDefeatMoneyLoss } from '../src/rpg/economy.js';
 import { addToSharedInventory, removeFromSharedInventory, consumeBattleCarrySlot, prepareBattleCarry, unprepareBattleCarry } from '../src/rpg/inventory.js';
 import { getAttackBonus, getDefenseBonus, equipItem, unequipItem } from '../src/rpg/equipment.js';
+import { EQUIPMENT_SLOTS } from '../src/content/equipment-defs.js';
 import { createInitialGameState, validateGameState, SAVE_VERSION } from '../src/state/game-state.js';
 import { SaveStore } from '../src/save/storage.js';
 
@@ -393,6 +394,82 @@ test('equipItem: returns malformed-source for null equipment', () => {
 
 test('unequipItem: returns malformed-source for null equipment', () => {
   const { ok, reason } = unequipItem(null, CHARACTER_IDS.YOHANI, 'weapon');
+  assert.equal(ok, false);
+  assert.equal(reason, 'malformed-source');
+});
+
+// ── M3-B: consumeBattleCarrySlot unknown-charId boundary (Patch 3) ───────────
+
+test('consumeBattleCarrySlot: returns null for unknown charId', () => {
+  const inv = {
+    shared: {},
+    battleCarry: {
+      [CHARACTER_IDS.YOHANI]: [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }],
+      [CHARACTER_IDS.SANI]: [],
+    },
+  };
+  const result = consumeBattleCarrySlot(inv, 'unknown-char', 0);
+  assert.equal(result, null);
+  // Yohani's carry must be untouched
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 1);
+});
+
+// ── M3-B: EQUIPMENT_SLOTS schema (Patch 3) ───────────────────────────────────
+
+test('EQUIPMENT_SLOTS: Yohani has exactly [weapon, armor, shield, accessory]', () => {
+  assert.deepEqual(EQUIPMENT_SLOTS[CHARACTER_IDS.YOHANI], ['weapon', 'armor', 'shield', 'accessory']);
+});
+
+test('EQUIPMENT_SLOTS: Sani has exactly [weapon, armor, focus, accessory]', () => {
+  assert.deepEqual(EQUIPMENT_SLOTS[CHARACTER_IDS.SANI], ['weapon', 'armor', 'focus', 'accessory']);
+});
+
+// ── M3-B: inventory accounting — prepare→consume→unprepare (Patch 3) ─────────
+
+test('inventory ownership accounting: prepare→consume→unprepare conserves total uses', () => {
+  // shared=3 → prepare 2 → shared=1,carry=2 → consume 1 → carry=1 → unprepare → shared=2
+  const inv = {
+    shared: { [ITEM_IDS.HEALING_HERB]: 3 },
+    battleCarry: { [CHARACTER_IDS.YOHANI]: [], [CHARACTER_IDS.SANI]: [] },
+  };
+
+  // prepare 2 uses
+  assert.equal(prepareBattleCarry(inv, CHARACTER_IDS.YOHANI, ITEM_IDS.HEALING_HERB, 2), true);
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 1);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI][0].uses, 2);
+
+  // consume 1 use from slotIdx=0
+  const consumed = consumeBattleCarrySlot(inv, CHARACTER_IDS.YOHANI, 0);
+  assert.equal(consumed, ITEM_IDS.HEALING_HERB);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI][0].uses, 1); // slot preserved at 1 use
+
+  // unprepare remaining 1 use back to shared
+  assert.equal(unprepareBattleCarry(inv, CHARACTER_IDS.YOHANI, 0), true);
+  assert.equal(inv.battleCarry[CHARACTER_IDS.YOHANI].length, 0); // slot removed
+  assert.equal(inv.shared[ITEM_IDS.HEALING_HERB], 2); // 1 (shared) + 1 (returned) = 2
+});
+
+// ── M3-B: equipItem malformed-source for charEquip structure (Patch 3) ───────
+
+test('equipItem: rejects when equipment[charId] is missing (empty source object)', () => {
+  // {} has no yohani key → equipment[yohani] is undefined → malformed-source
+  const { ok, reason } = equipItem({}, CHARACTER_IDS.YOHANI, 'crude-blade');
+  assert.equal(ok, false);
+  assert.equal(reason, 'malformed-source');
+});
+
+test('equipItem: rejects when equipment[charId] has incomplete slot schema', () => {
+  // Only weapon present, missing armor/shield/accessory → schema mismatch
+  const incomplete = { [CHARACTER_IDS.YOHANI]: { weapon: null } };
+  const { ok, reason } = equipItem(incomplete, CHARACTER_IDS.YOHANI, 'crude-blade');
+  assert.equal(ok, false);
+  assert.equal(reason, 'malformed-source');
+});
+
+test('unequipItem: rejects when equipment[charId] has incomplete slot schema', () => {
+  // Empty charEquip object → schema mismatch
+  const incomplete = { [CHARACTER_IDS.YOHANI]: {} };
+  const { ok, reason } = unequipItem(incomplete, CHARACTER_IDS.YOHANI, 'weapon');
   assert.equal(ok, false);
   assert.equal(reason, 'malformed-source');
 });

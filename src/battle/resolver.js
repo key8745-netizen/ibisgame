@@ -184,6 +184,32 @@ function applyEscapeTransition(state) {
   state.mode = 'field';
 }
 
+// Apply a single party ITEM action during round resolution.
+// Returns an events array (empty on guard-condition no-ops). Mutates state on success.
+export function applyPartyItemAction(actorId, cmd, b, state) {
+  const carry = state.inventory.battleCarry[actorId] ?? [];
+  const slot = carry[cmd.slotIdx];
+  if (!slot || slot.uses <= 0) return [];
+  const def = ITEM_DEFS[slot.itemId];
+  if (!def || def.battleTarget === null) return [];
+  const targetIdx = cmd.targetIdx ?? b.partyIds.indexOf(actorId);
+  const targetId = b.partyIds[targetIdx];
+  if (!targetId) return [];
+  const target = state.party.members[targetId];
+  if (!target || target.hp <= 0) {
+    return [{ kind: 'item-failed', actorId, itemId: slot.itemId, reason: 'target-fallen' }];
+  }
+  const itemId = slot.itemId;
+  let healAmt = 0;
+  if (def.healHp) {
+    const cap = maxHpAtLevel(targetId, target.level);
+    healAmt = Math.min(def.healHp, cap - target.hp);
+    target.hp = Math.min(target.hp + def.healHp, cap);
+  }
+  consumeBattleCarrySlot(state.inventory, actorId, cmd.slotIdx);
+  return [{ kind: 'item-use', actorId, itemId, targetId, healAmt }];
+}
+
 // Submit a single player command into a battle's pending-command slot.
 // Validates the command authoritatively against the current battle context.
 // Returns { ok, result, nextGameState? }.
@@ -322,31 +348,7 @@ export function resolveRound(currentGameState) {
         }
 
       } else if (cmd.type === COMMAND_TYPES.ITEM) {
-        const carry = state.inventory.battleCarry[id] ?? [];
-        const slot = carry[cmd.slotIdx];
-        if (!slot || slot.uses <= 0) continue;
-        const def = ITEM_DEFS[slot.itemId];
-        if (!def || def.battleTarget === null) continue;
-
-        const targetIdx = cmd.targetIdx ?? b.partyIds.indexOf(id);
-        const targetId = b.partyIds[targetIdx];
-        if (!targetId) continue;
-        const target = state.party.members[targetId];
-        if (!target || target.hp <= 0) {
-          // Target fell during this round before the actor's turn — item NOT consumed.
-          events.push({ kind: 'item-failed', actorId: id, itemId: slot.itemId, reason: 'target-fallen' });
-          continue;
-        }
-
-        const itemId = slot.itemId;
-        let healAmt = 0;
-        if (def.healHp) {
-          const cap = maxHpAtLevel(targetId, target.level);
-          healAmt = Math.min(def.healHp, cap - target.hp);
-          target.hp = Math.min(target.hp + def.healHp, cap);
-        }
-        consumeBattleCarrySlot(state.inventory, id, cmd.slotIdx);
-        events.push({ kind: 'item-use', actorId: id, itemId, targetId, healAmt });
+        events.push(...applyPartyItemAction(id, cmd, b, state));
 
       } else if (cmd.type === COMMAND_TYPES.RUN) {
         if (b.context !== 'random') {

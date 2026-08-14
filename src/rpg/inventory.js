@@ -37,6 +37,7 @@ export function removeFromSharedInventory(inventory, itemId, qty = 1) {
 // Removes the slot from the array when uses reach 0.
 // Returns the itemId consumed, or null if the slot is invalid or empty.
 export function consumeBattleCarrySlot(inventory, charId, slotIdx) {
+  if (!KNOWN_CHARACTERS.has(charId)) return null;
   const carry = inventory.battleCarry[charId];
   if (!carry) return null;
   const slot = carry[slotIdx];

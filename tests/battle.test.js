@@ -1406,6 +1406,55 @@ test('resolveRound: item-use fires and item IS consumed when target is alive (no
   assert.equal(nextGameState.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 0, 'slot consumed');
 });
 
+// ── RT-M3B-001: actor-sequencing / ITEM integration boundary ─────────────────
+
+test('RT-M3B-001: enemy kills ITEM target before ITEM actor turn → item-failed, no consumption', () => {
+  // Full actor-sequencing / ITEM integration regression.
+  // Uses resolveEnemyActionWindow (existing export) as the "fast actor" seam to kill the
+  // target in production game logic, then exercises applyPartyItemAction as the ITEM handler.
+  // Production enemy stats and party speeds are not modified.
+
+  // Step 1: commit ITEM command while target (Sani) is alive
+  const baseState = makeTestRandomBattleState(42, { shared: true });
+  baseState.party.members[CHARACTER_IDS.SANI].hp = 1; // alive at commit time
+  baseState.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
+  baseState.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
+
+  const itemCmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 1 }; // target Sani
+  const { ok, nextGameState: s1 } = submitCommand(baseState, CHARACTER_IDS.YOHANI, itemCmd);
+  assert.equal(ok, true, 'ITEM command accepted — Sani alive at commit time');
+  assert.equal(s1.party.members[CHARACTER_IDS.SANI].hp, 1, 'Sani alive post-commit');
+
+  // Step 2: clone for mutable resolution; enemy acts first (synthetic ordering)
+  const state = structuredClone(s1);
+  const b = state.battle;
+
+  // crown-ear-beast attacks Sani (HP=1 → physDamage minimum is 1, kills deterministically)
+  const { events: enemyEvents } = resolveEnemyActionWindow(
+    b, state, 0, [{ targetId: CHARACTER_IDS.SANI, hitCount: 1 }], b.rngState,
+  );
+  assert.ok(enemyEvents.some((e) => e.kind === 'enemy-attack' && e.targetId === CHARACTER_IDS.SANI),
+    'enemy-attack event emitted');
+  assert.equal(state.party.members[CHARACTER_IDS.SANI].hp, 0, 'Sani falls after enemy action');
+
+  // Step 3: Yohani's ITEM actor turn — production code delegates to applyPartyItemAction
+  const resolvedEvents = applyPartyItemAction(CHARACTER_IDS.YOHANI, itemCmd, b, state);
+
+  assert.equal(resolvedEvents.length, 1, 'exactly one event');
+  assert.equal(resolvedEvents[0].kind, 'item-failed');
+  assert.equal(resolvedEvents[0].actorId, CHARACTER_IDS.YOHANI);
+  assert.equal(resolvedEvents[0].itemId, ITEM_IDS.HEALING_HERB);
+  assert.equal(resolvedEvents[0].reason, 'target-fallen');
+  assert.ok(!resolvedEvents.some((e) => e.kind === 'item-use'), 'no item-use on fallen target');
+
+  // item NOT consumed
+  assert.equal(state.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 1, 'slot preserved');
+  assert.equal(state.inventory.battleCarry[CHARACTER_IDS.YOHANI][0].uses, 1, 'uses unchanged');
+
+  // original committed state untouched
+  assert.equal(s1.party.members[CHARACTER_IDS.SANI].hp, 1, 'committed state not mutated');
+});
+
 // ── M3-B: applyPartyItemAction — deterministic item-failed coverage (Patch 3) ──
 
 test('applyPartyItemAction: emits item-failed when target hp=0, does NOT consume slot', () => {

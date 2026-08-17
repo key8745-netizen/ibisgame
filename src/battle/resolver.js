@@ -210,6 +210,99 @@ export function applyPartyItemAction(actorId, cmd, b, state) {
   return [{ kind: 'item-use', actorId, itemId, targetId, healAmt }];
 }
 
+// Actor execution loop extracted from resolveRound for testable deterministic ordering.
+// Mutates b and state in place. Returns { events, rng, runEscaped }.
+export function resolveActorSequence(actors, b, state, enemyCmds, rng) {
+  const events = [];
+  let runEscaped = false;
+
+  for (const actor of actors) {
+    if (runEscaped) break;
+
+    if (actor.kind === 'party') {
+      const id = actor.id;
+      const member = state.party.members[id];
+      if (member.hp <= 0) continue;
+      const cmd = b.pendingCommands[id];
+
+      if (cmd.type === COMMAND_TYPES.ATTACK) {
+        const enemy = b.enemies[cmd.targetIdx];
+        if (!enemy || enemy.hp <= 0) continue;
+        const enemyStats = ENEMY_STATS[b.enemyIds[cmd.targetIdx]];
+        rng = lcgNext(rng);
+        const atk = attackAtLevel(id, member.level) + getAttackBonus(state.equipment, id);
+        const damage = physDamage(atk, enemyStats.defense, lcgVariance(rng, 2));
+        enemy.hp = Math.max(0, enemy.hp - damage);
+        events.push({ kind: 'attack', actorId: id, targetKind: 'enemy', targetIdx: cmd.targetIdx, damage });
+        if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
+
+      } else if (cmd.type === COMMAND_TYPES.DEFEND) {
+        events.push({ kind: 'defend', actorId: id });
+
+      } else if (cmd.type === COMMAND_TYPES.ABILITY) {
+        if (cmd.abilityId === ABILITY_IDS.GUARD_AID) {
+          const targetId = b.partyIds[cmd.targetIdx];
+          events.push({ kind: 'guard-aid', actorId: id, targetId });
+
+        } else if (cmd.abilityId === ABILITY_IDS.STAR_FLAME) {
+          const enemy = b.enemies[cmd.targetIdx];
+          if (!enemy || enemy.hp <= 0) continue;
+          member.mp -= 3;
+          rng = lcgNext(rng);
+          const damage = Math.max(1, 6 + (member.level - 1) * 2 + lcgVariance(rng, 2));
+          enemy.hp = Math.max(0, enemy.hp - damage);
+          events.push({ kind: 'ability', abilityId: ABILITY_IDS.STAR_FLAME, actorId: id, targetKind: 'enemy', targetIdx: cmd.targetIdx, damage });
+          if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
+
+        } else if (cmd.abilityId === ABILITY_IDS.MINOR_HEAL) {
+          member.mp -= 4;
+          const targetId = b.partyIds[cmd.targetIdx];
+          const target = state.party.members[targetId];
+          const healAmt = 8 + (member.level - 1) * 2;
+          const cap = maxHpAtLevel(targetId, target.level);
+          target.hp = Math.min(target.hp + healAmt, cap);
+          events.push({ kind: 'ability', abilityId: ABILITY_IDS.MINOR_HEAL, actorId: id, targetId, healAmt });
+        }
+
+      } else if (cmd.type === COMMAND_TYPES.ITEM) {
+        events.push(...applyPartyItemAction(id, cmd, b, state));
+
+      } else if (cmd.type === COMMAND_TYPES.RUN) {
+        if (b.context !== 'random') {
+          events.push({ kind: 'run-blocked', actorId: id, reason: 'not-random-encounter' });
+        } else {
+          rng = lcgNext(rng);
+          const escaped = (rng % 4) !== 0;
+          events.push({ kind: 'run-attempt', actorId: id, escaped });
+          if (escaped) {
+            runEscaped = true;
+            break;
+          }
+        }
+      }
+
+    } else {
+      const enemyIdx = actor.idx;
+      const enemy = b.enemies[enemyIdx];
+      if (enemy.hp <= 0) continue;
+      const cmd = enemyCmds[enemyIdx];
+
+      if (cmd.type === COMMAND_TYPES.ATTACK) {
+        const targetId = b.partyIds[cmd.targetIdx];
+        const target = state.party.members[targetId];
+        if (!target || target.hp <= 0) continue;
+
+        const hitCount = cmd.hitCount ?? 1;
+        const { events: actionEvents, rng: nextRng } = resolveEnemyActionWindow(b, state, enemyIdx, [{ targetId, hitCount }], rng);
+        rng = nextRng;
+        events.push(...actionEvents);
+      }
+    }
+  }
+
+  return { events, rng, runEscaped };
+}
+
 // Submit a single player command into a battle's pending-command slot.
 // Validates the command authoritatively against the current battle context.
 // Returns { ok, result, nextGameState? }.
@@ -270,7 +363,6 @@ export function resolveRound(currentGameState) {
   b.phase = 'resolving';
 
   let rng = b.rngState;
-  const events = [];
 
   // ── PRE-ROUND EFFECT INITIALIZATION ──────────────────────────────────────────
   // Guard Aid (護援) is established from the committed command set BEFORE any
@@ -297,92 +389,8 @@ export function resolveRound(currentGameState) {
   });
 
   const actors = buildActors(b);
-  let runEscaped = false;
-
-  for (const actor of actors) {
-    if (runEscaped) break; // successful escape terminates the encounter resolution
-
-    if (actor.kind === 'party') {
-      const id = actor.id;
-      const member = state.party.members[id];
-      if (member.hp <= 0) continue;
-      const cmd = b.pendingCommands[id];
-
-      if (cmd.type === COMMAND_TYPES.ATTACK) {
-        const enemy = b.enemies[cmd.targetIdx];
-        if (!enemy || enemy.hp <= 0) continue;
-        const enemyStats = ENEMY_STATS[b.enemyIds[cmd.targetIdx]];
-        rng = lcgNext(rng);
-        const atk = attackAtLevel(id, member.level) + getAttackBonus(state.equipment, id);
-        const damage = physDamage(atk, enemyStats.defense, lcgVariance(rng, 2));
-        enemy.hp = Math.max(0, enemy.hp - damage);
-        events.push({ kind: 'attack', actorId: id, targetKind: 'enemy', targetIdx: cmd.targetIdx, damage });
-        if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
-
-      } else if (cmd.type === COMMAND_TYPES.DEFEND) {
-        events.push({ kind: 'defend', actorId: id });
-
-      } else if (cmd.type === COMMAND_TYPES.ABILITY) {
-        if (cmd.abilityId === ABILITY_IDS.GUARD_AID) {
-          const targetId = b.partyIds[cmd.targetIdx];
-          events.push({ kind: 'guard-aid', actorId: id, targetId });
-
-        } else if (cmd.abilityId === ABILITY_IDS.STAR_FLAME) {
-          const enemy = b.enemies[cmd.targetIdx];
-          if (!enemy || enemy.hp <= 0) continue;
-          member.mp -= 3;
-          rng = lcgNext(rng);
-          const damage = Math.max(1, 6 + (member.level - 1) * 2 + lcgVariance(rng, 2));
-          enemy.hp = Math.max(0, enemy.hp - damage);
-          events.push({ kind: 'ability', abilityId: ABILITY_IDS.STAR_FLAME, actorId: id, targetKind: 'enemy', targetIdx: cmd.targetIdx, damage });
-          if (enemy.hp === 0) events.push({ kind: 'enemy-defeated', enemyIdx: cmd.targetIdx });
-
-        } else if (cmd.abilityId === ABILITY_IDS.MINOR_HEAL) {
-          member.mp -= 4;
-          const targetId = b.partyIds[cmd.targetIdx];
-          const target = state.party.members[targetId];
-          const healAmt = 8 + (member.level - 1) * 2;
-          const cap = maxHpAtLevel(targetId, target.level);
-          target.hp = Math.min(target.hp + healAmt, cap);
-          events.push({ kind: 'ability', abilityId: ABILITY_IDS.MINOR_HEAL, actorId: id, targetId, healAmt });
-        }
-
-      } else if (cmd.type === COMMAND_TYPES.ITEM) {
-        events.push(...applyPartyItemAction(id, cmd, b, state));
-
-      } else if (cmd.type === COMMAND_TYPES.RUN) {
-        if (b.context !== 'random') {
-          events.push({ kind: 'run-blocked', actorId: id, reason: 'not-random-encounter' });
-        } else {
-          rng = lcgNext(rng);
-          const escaped = (rng % 4) !== 0;
-          events.push({ kind: 'run-attempt', actorId: id, escaped });
-          if (escaped) {
-            runEscaped = true;
-            break; // stop all further actions immediately
-          }
-        }
-      }
-
-    } else {
-      // ── ENEMY TURN ────────────────────────────────────────────────────────────
-      const enemyIdx = actor.idx;
-      const enemy = b.enemies[enemyIdx];
-      if (enemy.hp <= 0) continue;
-      const cmd = enemyCmds[enemyIdx];
-
-      if (cmd.type === COMMAND_TYPES.ATTACK) {
-        const targetId = b.partyIds[cmd.targetIdx];
-        const target = state.party.members[targetId];
-        if (!target || target.hp <= 0) continue;
-
-        const hitCount = cmd.hitCount ?? 1;
-        const { events: actionEvents, rng: nextRng } = resolveEnemyActionWindow(b, state, enemyIdx, [{ targetId, hitCount }], rng);
-        rng = nextRng;
-        events.push(...actionEvents);
-      }
-    }
-  }
+  const { events, rng: resolvedRng, runEscaped } = resolveActorSequence(actors, b, state, enemyCmds, rng);
+  rng = resolvedRng;
 
   const allEnemiesDead = b.enemies.every((e) => e.hp <= 0);
   const allPartyDown = b.partyIds.every((id) => state.party.members[id].hp <= 0);

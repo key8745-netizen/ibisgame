@@ -4,7 +4,7 @@ import { ABILITY_IDS, CHARACTER_IDS, ENEMY_IDS, ITEM_IDS, MAP_IDS } from '../src
 import { OPENING_PHASE, OPENING_ENCOUNTERS } from '../src/content/opening.js';
 import { createBattleEntry } from '../src/battle/battle-state.js';
 import { COMMAND_TYPES, validateCommand } from '../src/battle/commands.js';
-import { resolveRound, submitCommand, resolveEnemyAction, resolveEnemyActionWindow, applyPartyItemAction } from '../src/battle/resolver.js';
+import { resolveRound, submitCommand, resolveEnemyAction, resolveEnemyActionWindow, applyPartyItemAction, resolveActorSequence } from '../src/battle/resolver.js';
 import { SaveStore } from '../src/save/storage.js';
 import { makeRng, lcgNext } from '../src/battle/rng.js';
 import { createInitialGameState, validateGameState } from '../src/state/game-state.js';
@@ -1408,44 +1408,39 @@ test('resolveRound: item-use fires and item IS consumed when target is alive (no
 
 // ── RT-M3B-001: actor-sequencing / ITEM integration boundary ─────────────────
 
-test('RT-M3B-001: enemy kills ITEM target before ITEM actor turn → item-failed, no consumption', () => {
-  // Full actor-sequencing / ITEM integration regression.
-  // Uses resolveEnemyActionWindow (existing export) as the "fast actor" seam to kill the
-  // target in production game logic, then exercises applyPartyItemAction as the ITEM handler.
-  // Production enemy stats and party speeds are not modified.
-
-  // Step 1: commit ITEM command while target (Sani) is alive
+test('RT-M3B-001 FINAL: resolveActorSequence synthetic enemy-first ordering → item-failed, no consumption', () => {
+  // Step 1: commit ITEM command (target Sani alive at commit time)
   const baseState = makeTestRandomBattleState(42, { shared: true });
-  baseState.party.members[CHARACTER_IDS.SANI].hp = 1; // alive at commit time
+  baseState.party.members[CHARACTER_IDS.SANI].hp = 1;
   baseState.inventory.battleCarry[CHARACTER_IDS.YOHANI] = [{ itemId: ITEM_IDS.HEALING_HERB, uses: 1 }];
   baseState.battle.pendingCommands[CHARACTER_IDS.SANI] = DEFEND;
 
-  const itemCmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 1 }; // target Sani
+  const itemCmd = { type: COMMAND_TYPES.ITEM, slotIdx: 0, targetIdx: 1 };
   const { ok, nextGameState: s1 } = submitCommand(baseState, CHARACTER_IDS.YOHANI, itemCmd);
   assert.equal(ok, true, 'ITEM command accepted — Sani alive at commit time');
   assert.equal(s1.party.members[CHARACTER_IDS.SANI].hp, 1, 'Sani alive post-commit');
 
-  // Step 2: clone for mutable resolution; enemy acts first (synthetic ordering)
+  // Step 2: drive resolution through the production actor dispatch loop with synthetic ordering
   const state = structuredClone(s1);
   const b = state.battle;
 
-  // crown-ear-beast attacks Sani (HP=1 → physDamage minimum is 1, kills deterministically)
-  const { events: enemyEvents } = resolveEnemyActionWindow(
-    b, state, 0, [{ targetId: CHARACTER_IDS.SANI, hitCount: 1 }], b.rngState,
-  );
-  assert.ok(enemyEvents.some((e) => e.kind === 'enemy-attack' && e.targetId === CHARACTER_IDS.SANI),
-    'enemy-attack event emitted');
-  assert.equal(state.party.members[CHARACTER_IDS.SANI].hp, 0, 'Sani falls after enemy action');
+  // synthetic ordering: enemy acts first (speed 99), then Yohani (speed 8), Sani skipped
+  const syntheticActors = [
+    { kind: 'enemy', idx: 0, speed: 99 },
+    { kind: 'party', id: CHARACTER_IDS.YOHANI, idx: 0, speed: 8 },
+  ];
+  const syntheticEnemyCmds = [{ type: COMMAND_TYPES.ATTACK, targetIdx: 1 }]; // attack Sani
 
-  // Step 3: Yohani's ITEM actor turn — production code delegates to applyPartyItemAction
-  const resolvedEvents = applyPartyItemAction(CHARACTER_IDS.YOHANI, itemCmd, b, state);
+  const { events } = resolveActorSequence(syntheticActors, b, state, syntheticEnemyCmds, b.rngState);
 
-  assert.equal(resolvedEvents.length, 1, 'exactly one event');
-  assert.equal(resolvedEvents[0].kind, 'item-failed');
-  assert.equal(resolvedEvents[0].actorId, CHARACTER_IDS.YOHANI);
-  assert.equal(resolvedEvents[0].itemId, ITEM_IDS.HEALING_HERB);
-  assert.equal(resolvedEvents[0].reason, 'target-fallen');
-  assert.ok(!resolvedEvents.some((e) => e.kind === 'item-use'), 'no item-use on fallen target');
+  // enemy-attack precedes item-failed
+  const enemyAttackIdx = events.findIndex((e) => e.kind === 'enemy-attack' && e.targetId === CHARACTER_IDS.SANI);
+  const itemFailedIdx = events.findIndex((e) => e.kind === 'item-failed');
+  assert.ok(enemyAttackIdx >= 0, 'enemy-attack event present');
+  assert.ok(itemFailedIdx >= 0, 'item-failed event present');
+  assert.ok(enemyAttackIdx < itemFailedIdx, 'enemy-attack before item-failed');
+  assert.equal(events[itemFailedIdx].reason, 'target-fallen');
+  assert.ok(!events.some((e) => e.kind === 'item-use'), 'no item-use on fallen target');
 
   // item NOT consumed
   assert.equal(state.inventory.battleCarry[CHARACTER_IDS.YOHANI].length, 1, 'slot preserved');

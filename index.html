@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <title>未完成的星路 — JRPG Vertical Slice</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app-shell" id="appShell">
+    <header class="topbar">
+      <div>
+        <strong>未完成的星路</strong>
+        <span class="build-tag">JRPG M2 Opening</span>
+      </div>
+      <button id="menuButton" class="text-button" type="button">選單</button>
+    </header>
+
+    <section class="game-frame" id="gameFrame" aria-label="遊戲畫面">
+      <canvas id="gameCanvas" width="480" height="270" aria-label="像素遊戲畫面"></canvas>
+      <div class="status-card" id="statusCard" aria-live="polite">
+        <strong id="modeLabel">TITLE</strong>
+        <span id="leaderLabel">操作：尤哈尼</span>
+      </div>
+    </section>
+
+    <section class="message-panel" aria-live="polite">
+      <strong>目前目標</strong>
+      <p id="objectiveText">把包好的午飯送到村裡水渠旁。</p>
+      <p id="messageText">鄰居把包好的午飯交給尤哈尼。送到水渠旁的熟人手上吧。</p>
+    </section>
+
+    <section class="touch-controls" id="touchControls" aria-label="觸控操作">
+      <div class="dpad" aria-label="方向鍵">
+        <button type="button" data-action="up" aria-label="上">▲</button>
+        <button type="button" data-action="left" aria-label="左">◀</button>
+        <button type="button" data-action="down" aria-label="下">▼</button>
+        <button type="button" data-action="right" aria-label="右">▶</button>
+      </div>
+      <div class="action-pad">
+        <button type="button" data-action="menu">選單</button>
+        <button type="button" data-action="leader">領隊</button>
+        <button type="button" data-action="cancel">取消</button>
+        <button type="button" data-action="confirm" class="primary">確認</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

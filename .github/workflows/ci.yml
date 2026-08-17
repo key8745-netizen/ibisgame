@@ -1,0 +1,21 @@
+name: JRPG CI
+
+on:
+  push:
+    branches: [agent/jrpg-vertical-slice-v1]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  logic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runtime
+        run: node --version
+      - name: Syntax checks
+        run: npm run check
+      - name: Logic tests
+        run: npm test
